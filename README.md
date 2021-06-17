@@ -15,7 +15,7 @@
 
 Working on the Repo:
 
-Use this link to get the steps provided Steps: https://docs.google.com/document/d/13NLovOfR2qgon7Hbh6_H2YVNCzuDP_5Uau7BgeMr6Eg/edit?ts=60c60827
+Use this link to get the Github Steps provided By CP: https://docs.google.com/document/d/13NLovOfR2qgon7Hbh6_H2YVNCzuDP_5Uau7BgeMr6Eg/edit?ts=60c60827
 
 
 
