@@ -15,7 +15,7 @@
 
 Working on the Repo:
 
-Steps as provided:
+Steps:
 
 Editor 
 	1. Create github account(Done)
@@ -34,12 +34,13 @@ Editor
 	14. Send a pull request.
 	
 Debugger
-	1.\ Check Pull request
-	2.\ Create Virtual Environment
-	3.\ Clone the repo to local machine
-	4.\ Install requiremnets.txt
-	5.\ Test the project
-	6.\ Merge the changes  - add comments.
+	1. Check Pull request
+	2. Create Virtual Environment
+	3. Clone the repo to local machine
+	4. Install requiremnets.txt
+	5. Test the project
+
+
 
 
 "The best error message is the one that never shows up.✨" - Thomas Fuchs
