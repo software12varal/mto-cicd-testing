@@ -20,7 +20,7 @@ Use this link to get the steps provided Steps: https://docs.google.com/document/
 
 
 
-✨✨✨✨✨✨✨✨✨✨✨✨ "The best error message is the one that never shows up." - Thomas Fuchs✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
+✨✨✨ "The best error message is the one that never shows up." - Thomas Fuchs✨✨✨
 
 #####Have Fun Coding😀 #####
 
