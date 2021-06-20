@@ -39,6 +39,6 @@ I have managed to add 3 databases to the project. All ot them working fine in th
 -This is because of cross relationships of the databases(foreign key) which django currently does no allow.
 -This is not perfect but it is a solid start.
 
-2. 
+2. Updated database can now save
 
 
