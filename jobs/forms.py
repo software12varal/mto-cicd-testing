@@ -1,10 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import MTOAdminUser
 
+
 class MTOAdminSignUpForm(UserCreationForm):
     class Meta:
         model = MTOAdminUser
-        fields = ['full_name','username','email','varal_role_id']
+        fields = ['full_name', 'username', 'email', 'varal_role_id']
 
     def save(self, commit=True):
         user = super().save(commit=False)
