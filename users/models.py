@@ -53,8 +53,3 @@ class User(AbstractBaseUser):
         # Simplest possible answer: Yes, always
         return True
 
-    def save(self, *args, **kwargs):
-        try:
-            super(User, self).save(using='varal_job_posting_db')
-        except:
-            super(User, self).save(using='vendor_os_db')
