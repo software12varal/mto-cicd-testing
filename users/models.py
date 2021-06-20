@@ -55,6 +55,6 @@ class User(AbstractBaseUser):
 
     def save(self, *args, **kwargs):
         try:
-            super(User, self).save(using='vendor_os_db')
-        except:
             super(User, self).save(using='varal_job_posting_db')
+        except:
+            super(User, self).save(using='vendor_os_db')
