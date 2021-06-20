@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Admin Registration {% endblock title %}
+{% load static %}
+
+{% block content %}
+<div class="card-body">
+	<div id="info" class="text-info"></div>
+	<div id="error" class="text-danger"></div>
+	<h4 class="card-title">Admin Register</h4>
+	<form id="sign-up" method="POST" novalidate>
+		{% csrf_token %}
+		{{ form.non_field_errors}}
+		{% for fm in form %}
+			{{fm.label_tag}}
+			{{fm}}
+			<span class="text-danger m-0">{{fm.errors|striptags}}</span><br>
+		{% endfor %}
+		<div class="form-group m-0">
+			<button type="submit" class="btn btn-primary btn-block">
+				Register
+			</button>
+		</div>
+	</form>
+</div>
+{% endblock content %}
