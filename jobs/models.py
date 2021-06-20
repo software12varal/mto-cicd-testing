@@ -26,6 +26,7 @@ class MicroTask(models.Model):
                                        help_text='e.g car website', )
     job_sample = models.FileField(upload_to='job_documents/job_samples/', )
     job_instructions = models.FileField(upload_to='job_documents/job_instructions/', )
+    quantity_job = models.PositiveIntegerField(default=1,)
     tc_type = models.CharField(_('type of tc to be done'), max_length=500,
                                help_text='e.g Senior developer, tester & client')
 
