@@ -16,7 +16,7 @@ class SignUpForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_mto = True
-        user.is_active = True
+        user.is_active = False
         user.save()
         return user
 
