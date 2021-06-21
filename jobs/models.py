@@ -26,7 +26,7 @@ class MicroTask(models.Model):
                                        help_text='e.g car website', )
     job_sample = models.FileField(upload_to='job_documents/job_samples/', )
     job_instructions = models.FileField(upload_to='job_documents/job_instructions/', )
-    quantity_job = models.PositiveIntegerField(default=1,)
+    quantity_job = models.PositiveIntegerField(default=1, )
     tc_type = models.CharField(_('type of tc to be done'), max_length=500,
                                help_text='e.g Senior developer, tester & client')
 
@@ -64,20 +64,28 @@ class MTOJob(models.Model):
 
 class MALRequirement(models.Model):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
-    identification_number = models.CharField(max_length=50, blank=False, validators=[alphanumeric],
-                                             help_text="Mal identification")
+    identification_number = models.CharField(max_length=50, blank=False, validators=[alphanumeric])
     assembly_line_id = models.CharField(max_length=50, blank=False, validators=[alphanumeric])
     assembly_line_name = models.TextField()
     person_name = models.TextField(help_text="Name of the person in charge")
+    person_email = models.EmailField()
     output = models.FilePathField(path='job_documents/output', help_text="Link of the output folder")
-    micro_task = models.ForeignKey(MicroTask, max_length=100, on_delete=models.CASCADE)
+    micro_task = models.CharField(max_length=300)
+    micro_task_category = models.CharField(max_length=300)
     target_date = models.DateField()
     total_budget = models.IntegerField(help_text="Total budget allocated for the job")
     job_description = models.TextField()
-    job_sample = models.FileField(upload_to='job sample')
-    job_instructions = models.FileField(upload_to='jobs instruction')
+    job_sample = models.FileField(upload_to='job_documents/sample')
+    job_instructions = models.FileField(upload_to='job_documents/instruction')
     job_quantity = models.IntegerField()
     input_folder = models.FilePathField(path='job_documents/input', help_text="Link of the Input folder")
+
+    class Meta:
+        verbose_name = 'Mal Requirement'
+        verbose_name_plural = 'Mal Requirements'
+
+    def __str__(self):
+        return self.job_description
 
 
 class MTORoles(models.Model):
@@ -101,6 +109,5 @@ class MTOAdminUser(User):
 
     def save(self, *args, **kwargs):
         super(MTOAdminUser, self).save(using='varal_job_posting_db')
-
 
 # trial session
