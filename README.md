@@ -9,7 +9,7 @@
 	6. If you have an issue that needs everyone's attention, create issue on the main repository
 
 
-Steps to Follow while Working on the Main MTO Repository: https://docs.google.com/document/d/1oCzU9akIE8H6M5IfRvJun5PpOY-C5vkPQNmFdg5_qVg/edit
+Steps to Follow while Working on the Main MTO Repository: https://docs.google.com/document/d/1oCzU9akIE8H6M5IfRvJun5PpOY-C5vkPQNmFdg5_qVg/edit?usp=sharing
 	
 #Goal : Push quality, maintainable code 💡
 
