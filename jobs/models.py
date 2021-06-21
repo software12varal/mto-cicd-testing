@@ -101,3 +101,6 @@ class MTOAdminUser(User):
 
     def save(self, *args, **kwargs):
         super(MTOAdminUser, self).save(using='varal_job_posting_db')
+
+
+# trial session
