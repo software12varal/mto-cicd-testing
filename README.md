@@ -10,6 +10,9 @@
 
 
 Steps to Follow while Working on the Main MTO Repository: https://docs.google.com/document/d/1oCzU9akIE8H6M5IfRvJun5PpOY-C5vkPQNmFdg5_qVg/edit?usp=sharing
+DJANGO TESTING GUIDE: https://docs.google.com/document/d/1tcCUpPzNdOoyIE_qmXgnM7H6r90hlWD292Ja0JwA7sM/edit?usp=sharing
+
+
 	
 #Goal : Push quality, maintainable code 💡
 
