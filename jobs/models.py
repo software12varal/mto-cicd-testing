@@ -85,7 +85,7 @@ class MALRequirement(models.Model):
         verbose_name_plural = 'Mal Requirements'
 
     def __str__(self):
-        return self.job_description
+        return self.micro_task
 
 
 class MTORoles(models.Model):
