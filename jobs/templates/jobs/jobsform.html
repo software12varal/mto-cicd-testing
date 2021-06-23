@@ -1,0 +1,154 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+    <title>Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+
+  <body>
+
+    <header>
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="/">Habot</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            {% if not request.user.is_authenticated %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'mto:login' %}">Mto-SignUp/Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:adm-reg' %} ">Varal Admin SignUp</a>
+            </li>
+            {% endif %}
+          </ul>
+          {% if request.user.is_authenticated %}
+          <form class="form-inline mt-2 mt-md-0" method="post" action="{% url 'mto:logout' %}">
+            {% csrf_token %}
+            <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Logout</button>
+          </form>
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+
+    <!-- Begin page content -->
+    <main role="main" class="container mt-5">
+		<div class="mt-5">
+			<div class="card-body">
+				<h4 class="mt-5">Job Addition Form</h4>
+			</div>
+		</div>
+        <div class="card">
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-body">
+                  
+                    <form action="" method="post" enctype="multipart/form-data" novalidate>
+                        {{form.non_field_errors}}
+                        {% csrf_token %}
+                            {% if messages %}
+                            <div class="form-group">
+                              {% for mes in messages %}
+                                  {% if mes.tags == success %}
+                                    <span class="alert alert-success" role="alert"> {{mes}} </span>
+                                  {% else %}
+                                    <span class="alert alert-danger" role="alert"> {{mes}} </span>
+                                  {% endif %}
+                              {% endfor %}
+                              </div>
+                            {% endif %}
+                        <div class="form-group">
+		                    	<label>Job Name</label>
+		                    	{{ form.job_name }}
+                          <span class="h6 text-danger m-0"> {{form.job_name.errors|striptags}} </span>
+		                    </div>
+
+		                    <div class="form-group">
+		                    	<label>Category ID</label>
+		                    	{{ form.cat_id }}
+                          <span class="h6 text-danger m-0"> {{form.cat_id.errors|striptags}} </span>
+		                    </div>
+		                    <div class="form-group">
+		                    	<label>Target Date</label>
+		                    	<input type="datetime-local" name="target_date" class="form-control" required="" id="id_target_date">
+                          <span class="h6 text-danger m-0"> {{form.target_date.errors|striptags}} </span>
+		                    </div>
+
+		                    <div class="form-group">
+		                    	<label>Job Description</label>
+		                    	{{ form.job_description }}
+                          <span class="h6 text-danger m-0"> {{form.job_description.errors|striptags}} </span>
+		                    </div>
+
+		                    <div class="form-group">
+		                    	<label>Job Sample</label>
+		                    	{{ form.job_sample }}
+                          <span class="h6 text-danger m-0"> {{form.job_sample.errors|striptags}} </span>
+		                    </div>
+
+		                    <div class="form-group">
+		                    	<label>Job Quantity</label>
+		                    	{{ form.job_quantity }}
+                          <span class="h6 text-danger m-0"> {{form.job_quantity.errors|striptags}} </span>
+		                    </div>
+
+                        <div class="form-group">
+		                    	<label>People Required</label>
+		                    	{{ form.people_required }}
+                          <span class="h6 text-danger m-0"> {{form.people_required.errors|striptags}} </span>
+		                    </div>
+
+		                    <div class="form-group">
+		                    	<label>Skills</label>
+		                    	{{ form.skills }}
+                          <span class="h6 text-danger m-0"> {{form.skills.errors|striptags}} </span>
+		                    </div>
+
+		                    <div class="form-group">
+		                    	<label>Job Quantity</label>
+		                    	{{ form.job_cost }}
+                          <span class="h6 text-danger m-0"> {{form.job_cost.errors|striptags}} </span>
+		                    </div>
+                        
+		                    <div class="form-group">
+		                    	<button type="submit" class="btn btn-primary btn-block">
+		                    		Register
+		                    	</button>
+		                    </div>
+                        
+                    </form>
+                    
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </main>
+
+
+      <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+  </body>
+</html>

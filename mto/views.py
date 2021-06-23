@@ -3,6 +3,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import CreateView
+from django.views import View
+from django.conf import settings
+import random
+from django.core.mail import send_mail
+from django.contrib.sites.shortcuts import get_current_site
+
 # from django.views.generic.base import View
 #
 # from jobs.models import MALRequirement, MicroTask, MTOJobCategory
@@ -32,9 +38,37 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.save()
+        domain_name = get_current_site(self.request).domain
+        token = str(random.random()).split('.')[1]
+        user.token = token
+        user.save()
+        link = f'http://{domain_name}/verify/{token}'
+        send_mail(
+            'Verify your email',
+            f'Click on this {link} to verify your account.',
+            settings.EMAIL_HOST_USER,
+            [user.email],
+            fail_silently=False
+
+
+        )
+        
         messages.success(self.request, f"Hi {user.full_name}, your account was created successfully.")
         context = {'redirect': '/mto/login'}
         return JsonResponse(context, status=200)
+
+def verify(request,token):
+    try:
+        user = MTO.objects.get(token=token)
+        if user:
+            user.is_active = True
+            user.save()
+            return redirect('/mto/login')
+    except:
+        print("5")
+        msg = "Invalid token"
+        return redirect('error.html',{'msg':msg})
+
 
 
 # class SignUpView(View):

@@ -68,10 +68,10 @@ class MALRequirement(models.Model):
     assembly_line_id = models.CharField(max_length=50, blank=False, validators=[alphanumeric])
     assembly_line_name = models.TextField()
     person_name = models.TextField(help_text="Name of the person in charge")
-    person_email = models.EmailField()
+    person_email = models.EmailField(null = True)
     output = models.FilePathField(path='job_documents/output', help_text="Link of the output folder")
     micro_task = models.CharField(max_length=300)
-    micro_task_category = models.CharField(max_length=300)
+    micro_task_category = models.CharField(max_length=300,null = True)
     target_date = models.DateField()
     total_budget = models.IntegerField(help_text="Total budget allocated for the job")
     job_description = models.TextField()
@@ -111,3 +111,18 @@ class MTOAdminUser(User):
         super(MTOAdminUser, self).save(using='varal_job_posting_db')
 
 # trial session
+
+class Jobs(models.Model):
+    job_name = models.CharField(max_length=300, help_text='e.g develop website')
+    cat_id = models.ForeignKey(MALRequirement, on_delete=models.CASCADE)
+    target_date = models.DateTimeField(null=True, help_text='e.g 2021-10-25 14:30:59')
+    job_description = models.CharField(_('job description'), max_length=1000, help_text='e.g car website')
+    job_sample = models.FileField(upload_to='images/job_documents/job_samples')
+    job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
+    people_required = models.PositiveIntegerField(validators=[MinValueValidator(1)],
+                                                  help_text='e.g number of people required e.g 2')
+    skills = models.CharField(_('skills'), max_length=500, help_text='e.g coding, data entry')
+    job_cost = models.PositiveIntegerField(help_text="e.g currency AED")
+
+    def __str__(self):
+        return f'{self.job_name}'

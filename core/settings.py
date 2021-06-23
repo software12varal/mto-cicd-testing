@@ -142,3 +142,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = reverse_lazy("mto:login")
 LOGOUT_REDIRECT_URL = LOGIN_URL
 LOGIN_REDIRECT_URL = "/"
+
+#smpt config
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'email'
+EMAIL_HOST_PASSWORD = 'password'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'email'
