@@ -1,5 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
-from .models import MTOAdminUser,Jobs
+from django.forms import ModelForm
+
+from .models import MTOAdminUser, Jobs, MALRequirement
 from django import forms
 
 
@@ -39,6 +41,7 @@ class AdminUpdateProfileForm(forms.ModelForm):
         model = MTOAdminUser
         fields = ['full_name', 'varal_role_id']
 
+
 class JobsForm(forms.ModelForm):
     class Meta:
         model = Jobs
@@ -57,3 +60,11 @@ class JobsForm(forms.ModelForm):
         self.fields['people_required'].widget.attrs['class'] = 'form-control'
         self.fields['skills'].widget.attrs['class'] = 'form-control'
         self.fields['job_cost'].widget.attrs['class'] = 'form-control'
+
+
+class MALRequirementForm(ModelForm):
+    class Meta:
+        model = MALRequirement
+        fields = ['identification_number', 'assembly_line_id', 'assembly_line_name', 'person_name',
+                  'person_email', 'output', 'micro_task', 'micro_task_category', 'target_date', 'total_budget',
+                  'job_description', 'job_sample', 'job_instructions', 'job_quantity', 'input_folder']
