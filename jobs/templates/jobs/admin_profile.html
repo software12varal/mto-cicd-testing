@@ -1,0 +1,35 @@
+{% extends 'jobs/base.html' %} {% load widget_tweaks %}
+
+{% block content %}
+<div class="mt-5">
+			<div class="card-body">
+				<h4 class="mt-5">Admin Profile <br>
+    Welcome, {{request.user.mtoadminuser.full_name}}<br></h4>
+			</div>
+		</div>
+        <div class="card">
+          <div class="card-body">
+    <form method="post">
+        {% csrf_token %}
+         <div class="form-group">
+            <label>Full Name</label> {{form.full_name|add_class:"form-control"}}
+             <div class="text-danger">
+                 {{form.errors.full_name}}
+             </div>
+        </div>
+         <div class="form-group">
+            <label>Varal Role</label> {{form.varal_role_id|add_class:"form-control"}}
+              <div class="text-danger">
+                {{form.errors.varal_role_id}}
+             </div>
+        </div>
+        <button type="submit" class="btn btn-primary">submit</button>
+    </form>
+            <!--<h6>{{ forloop.counter }} - Name: <br/>{{ job.mto.full_name }} {{ job.mto.user.username }}</h6>-->
+          </div>
+        </div>
+
+
+
+
+{% endblock %}

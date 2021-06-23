@@ -26,18 +26,22 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            {% if not request.user.is_authenticated %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'mto:login' %}">Mto-SignUp/Login</a>
+              <a class="nav-link" href="{% url 'jobs:adminDashboard' %}">Admin Dashboard<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="admin-login">Varal Admin SignUp</a>
+              <a class="nav-link" href="{% url 'jobs:mto_bank' %}">MTO bank</a>
             </li>
-            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:microtask' %}">Microtask Page</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:requirements' %}">MAL requirements</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:admin_profile' %}">View Profile</a>
+            </li>
           </ul>
-          {% if request.user.is_authenticated and request.user.is_mto %}
+          {% if request.user.is_authenticated %}
           <form class="form-inline mt-2 mt-md-0" method="post" action="{% url 'mto:logout' %}">
             {% csrf_token %}
             <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Logout</button>
@@ -49,30 +53,16 @@
 
     <!-- Begin page content -->
     <main role="main" class="container mt-5">
-		<div class="mt-5">
-			<div class="card-body">
-				<h4 class="mt-5">This is MTOJob table data</h4>
-				<p>you can use the admin to populate MTOJob table</p>
-			</div>
-		</div>
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              {% for job in jobs %}
-              <div class="col-sm-6">
-                <h5>{{forloop.counter}}.</h5>
-                <div class="card">
-                  <div class="card-body">
-                    <p class="card-title"><b>Job Name :: </b> {{job.job_id.job_name}} <small class="text-info">from varal jo posting db</small></p>
-                    <p class="card-text"><b>MTO :: </b>  {{ job.mto.full_name }} {{ job.mto.user.username }}. <small class="text-info">from vendorOS db</small></p>
-                  </div>
-                </div>
-              </div>
-              {% endfor %}
-            </div>
-            <!--<h6>{{ forloop.counter }} - Name: <br/>{{ job.mto.full_name }} {{ job.mto.user.username }}</h6>-->
-          </div>
-        </div>
+      {% if messages %}
+                  {% for message in messages %}
+                      <div class="alert alert-{{ message.tags }} mt-3">
+                        <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
+                        <span data-notify="message">{{ message }}</span>
+                      </div>
+                  {% endfor %}
+              {% endif %}
+		{% block content %}
+      {% endblock %}
     </main>
 
 
