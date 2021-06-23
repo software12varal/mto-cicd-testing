@@ -10,7 +10,8 @@ class MTOAdminSignUpForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.is_staff = True
+        user.is_staff = False
+        user.is_admin = True
         user.set_password(self.cleaned_data['password1'])
         # user.save()
         if commit:
@@ -32,6 +33,11 @@ class MTOAdminSignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm password'
 
+
+class AdminUpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = MTOAdminUser
+        fields = ['full_name', 'varal_role_id']
 
 class JobsForm(forms.ModelForm):
     class Meta:

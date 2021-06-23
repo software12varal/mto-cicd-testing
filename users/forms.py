@@ -1,9 +1,15 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import ReadOnlyPasswordHashField, AuthenticationForm
 from django import forms
 
 User = get_user_model()
 
+class MTOAdminAuthenticationForm(AuthenticationForm):
+
+    def clean(self):
+        super().clean()
+        if self.user_cache is not None and self.user_cache.is_mto:
+            raise forms.ValidationError('Invalid username or password', code='invalid login')
 
 class UserAdminCreationForm(forms.ModelForm):
     '''A form for creating new users. Includes all required fields plus
@@ -45,6 +51,7 @@ class UserAdminChangeForm(forms.ModelForm):
         This is done here rather than on the field, because the field does
         not have access to the initial value. '''
         return self.initial['password']
+
 
 
 # class SignUpForm(forms.Form):

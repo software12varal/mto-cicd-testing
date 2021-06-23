@@ -69,7 +69,7 @@ class MALRequirement(models.Model):
     assembly_line_name = models.TextField()
     person_name = models.TextField(help_text="Name of the person in charge")
     person_email = models.EmailField(null = True)
-    output = models.FilePathField(path='job_documents/output', help_text="Link of the output folder")
+    output = models.FilePathField(path='media/documents/job_documents/output', help_text="Link of the output folder")
     micro_task = models.CharField(max_length=300)
     micro_task_category = models.CharField(max_length=300,null = True)
     target_date = models.DateField()
@@ -78,14 +78,14 @@ class MALRequirement(models.Model):
     job_sample = models.FileField(upload_to='job_documents/sample')
     job_instructions = models.FileField(upload_to='job_documents/instruction')
     job_quantity = models.IntegerField()
-    input_folder = models.FilePathField(path='job_documents/input', help_text="Link of the Input folder")
+    input_folder = models.FilePathField(path='media/documents/job_documents/input', help_text="Link of the Input folder")
 
     class Meta:
         verbose_name = 'Mal Requirement'
         verbose_name_plural = 'Mal Requirements'
 
     def __str__(self):
-        return self.job_description
+        return self.micro_task
 
 
 class MTORoles(models.Model):
