@@ -8,10 +8,7 @@
 </div>
 <div class="card">
     <div class="card-body">
-        <form method="post" action="#">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">add requirements</button>
-        </form>
+        <a href="{% url 'jobs:add_mal' %}" class="btn btn-primary">add requirements</a>
     </div>
 </div>
 {% endblock %}
