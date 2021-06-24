@@ -1,11 +1,15 @@
-from django.shortcuts import render,redirect
-from jobs.models import MTOJob,Jobs
-from .forms import MTOAdminSignUpForm
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.views.generic import CreateView
+
+from jobs.models import MTOJob, Jobs
+from .forms import MTOAdminSignUpForm, MALRequirementForm
 from django.contrib import messages
 from jobs.forms import JobsForm
 
 from jobs.models import MTOJob, MicroTask, MTOAdminUser
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
+
 
 def home(request):
     context = {'jobs': MTOJob.objects.all(), }
@@ -30,7 +34,7 @@ def mto_admin_signup(request):
         'form': MTOAdminSignUpForm()
     }
     return render(request, 'jobs/admin-register.html', context)
-     
+
 
 def add_job(request):
     if request.method == 'POST':
@@ -71,16 +75,40 @@ def mal_requirement(request):
 
 def admin_profile(request):
     data = {}
-    form = AdminUpdateProfileForm( instance=request.user.mtoadminuser)
+    form = AdminUpdateProfileForm(instance=request.user.mtoadminuser)
     if request.method == "POST":
         form = AdminUpdateProfileForm(request.POST, instance=request.user.mtoadminuser)
         if form.is_valid():
             form.save()
             messages.success(request, "Your Profile has been updated!")
-            #return redirect(request, 'jobs/admin_profile.html')
+            # return redirect(request, 'jobs/admin_profile.html')
         else:
             messages.info(request, "sorry profile is not updated!")
-            #return redirect(request, 'jobs/admin_profile.html')
+            # return redirect(request, 'jobs/admin_profile.html')
     data['form'] = form
-    return render(request, 'jobs/admin_profile.html',data)
+    return render(request, 'jobs/admin_profile.html', data)
 
+
+class MALRequirementCreateView(CreateView):
+    form_class = MALRequirementForm
+    template_name = 'jobs/mal_requirement_creation.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(MALRequirementCreateView, self).get_form_kwargs()
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_invalid(self, form):
+        return JsonResponse(form.errors, status=200)
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        instance.save()
+        context = {'message': f" {instance.micro_task}, has been created successfully."}
+        return JsonResponse(context, status=200)
