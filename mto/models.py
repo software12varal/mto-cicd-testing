@@ -5,6 +5,9 @@ User = get_user_model()
 
 
 class MTO(User):
+    contact_number = models.IntegerField()
+    location = models.CharField(max_length=20)
+    job_category = models.CharField(max_length=100,null=True)
     paypal_id = models.CharField(max_length=100)
     token = models.CharField(max_length=100,null = True)
 

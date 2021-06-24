@@ -35,38 +35,37 @@ class MicroTask(models.Model):
 
 
 class EvaluationStatus(models.Model):
-    description = models.ForeignKey(MicroTask, on_delete=models.CASCADE)
+    description = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.description.job_name
+        return self.description
 
-
-class MTOJob(models.Model):
-    job_id = models.ForeignKey(MicroTask, on_delete=models.PROTECT)
-    assigned_to = models.IntegerField(help_text='related to MTO')
-    due_date = models.DateField()
-    assigned_date = models.DateField()
-    fees = models.FloatField()
-    rating_evaluation = models.IntegerField()
-    payment_status = models.IntegerField()  # select a relationship
-    completed_date = models.DateField()
-    output_path = models.FileField()
-    evaluation_status = models.ForeignKey(EvaluationStatus, on_delete=models.CASCADE)
-
-    @property
-    def mto(self):
-        mto = MTO.objects.filter(id=self.assigned_to).first()
-        return mto
+class Jobstatus(models.Model):
+    STATUS = (
+        ('Assigned','Assigned'),
+        ('Completed','Completed'),
+        ('Approved','Approved'),
+    )
+    job_status_name = models.CharField(max_length=200,choices=STATUS)
 
     def __str__(self):
-        return f"{self.job_id.job_name} :: {self.mto.full_name}"
+        return self.job_status_name
 
+class PaymentStatus(models.Model):
+    Status = (
+        ('Paid','Paid'),
+        ('Not Paid','Not Paid'),
+    )
+    payment_status = models.CharField(max_length=200,choices=Status)
+
+    def __str__(self):
+        return self.payment_status
 
 class MALRequirement(models.Model):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
-    identification_number = models.CharField(max_length=50, blank=False, validators=[alphanumeric])
-    assembly_line_id = models.CharField(max_length=50, blank=False, validators=[alphanumeric])
-    assembly_line_name = models.TextField()
+    identification_number = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
+    assembly_line_id = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
+    assembly_line_name = models.TextField(blank=True)
     person_name = models.TextField(help_text="Name of the person in charge")
     person_email = models.EmailField(null = True)
     output = models.FilePathField(path='media/documents/job_documents/output', help_text="Link of the output folder")
@@ -85,32 +84,7 @@ class MALRequirement(models.Model):
         verbose_name_plural = 'Mal Requirements'
 
     def __str__(self):
-        return self.micro_task
-
-
-class MTORoles(models.Model):
-    description = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.description
-
-    def save(self, *args, **kwargs):
-        super(MTORoles, self).save(using='varal_job_posting_db')
-
-
-class MTOAdminUser(User):
-    varal_role_id = models.ForeignKey(MTORoles, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return self.full_name
-
-    class Meta:
-        verbose_name_plural = 'MTO Admin Users'
-
-    def save(self, *args, **kwargs):
-        super(MTOAdminUser, self).save(using='varal_job_posting_db')
-
-# trial session
+        return self.micro_task_category
 
 class Jobs(models.Model):
     job_name = models.CharField(max_length=300, help_text='e.g develop website')
@@ -118,6 +92,7 @@ class Jobs(models.Model):
     target_date = models.DateTimeField(null=True, help_text='e.g 2021-10-25 14:30:59')
     job_description = models.CharField(_('job description'), max_length=1000, help_text='e.g car website')
     job_sample = models.FileField(upload_to='images/job_documents/job_samples')
+    job_instructions = models.FileField(upload_to='images/job_documents/job_instructions', max_length=100,null=True)
     job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
     people_required = models.PositiveIntegerField(validators=[MinValueValidator(1)],
                                                   help_text='e.g number of people required e.g 2')
@@ -126,3 +101,51 @@ class Jobs(models.Model):
 
     def __str__(self):
         return f'{self.job_name}'
+
+class MTOJob(models.Model):
+    job_id = models.ForeignKey(Jobs, on_delete=models.PROTECT,null=True)
+    assigned_to = models.IntegerField(help_text='related to MTO')
+    due_date = models.DateField() 
+    assigned_date = models.DateField(auto_now_add=True)
+    fees = models.FloatField()
+    rating_evaluation = models.IntegerField(null=True)
+    payment_status = models.ForeignKey(PaymentStatus, verbose_name=_("payment status"), on_delete=models.CASCADE,null=True)
+    completed_date = models.DateField(null=True)
+    output_path = models.FileField(upload_to='images/job_documents/job_submissions')
+    evaluation_status = models.ForeignKey(EvaluationStatus, on_delete=models.CASCADE)
+
+    @property
+    def mto(self):
+        mto = MTO.objects.filter(id=self.assigned_to).first()
+        return mto
+
+    def __str__(self):
+        return f"{self.job_id.job_name} :: {self.mto.full_name}"
+
+
+
+class AdminRoles(models.Model):
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description
+
+    # def save(self, *args, **kwargs):
+    #     super(AdminRoles, self).save(using='varal_job_posting_db')
+
+
+class MTOAdminUser(User):
+    varal_role_id = models.ForeignKey(AdminRoles, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.full_name
+
+    class Meta:
+        verbose_name_plural = 'MTO Admin Users'
+
+    # def save(self, *args, **kwargs):
+    #     super(MTOAdminUser, self).save(using='varal_job_posting_db')
+
+# trial session
+
+

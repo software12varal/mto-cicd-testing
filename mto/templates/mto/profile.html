@@ -1,0 +1,79 @@
+{% extends 'mto/base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+
+{% block content %}
+<br><br>
+<main class="container">
+	<div class="mt-5 pb-5">
+
+		<h6 class="mt-5">Profile</h6>
+
+		<div class="row">
+			{% if messages %}
+			{% for message in messages %}
+				<div class="col-md-12 alert alert-success mt-3">
+				  <span data-notify="message">{{ message }}</span>
+				</div>
+			{% endfor %}
+			{% endif %}
+			<div class="col-md-5">
+				<div class="card mb-3">
+					<div class="card-header">
+						<h5 class="card-title mb-0">Profile Details</h5>
+					</div>
+					<div class="card-body text-center align-items-center">
+						<img src="{% static 'images/default_user.png' %}" alt="Christina Mason" class="img-fluid rounded-circle mb-2" width="128" height="128" />
+						<h5 class="card-title mb-0">{{ mto.full_name }}</h5>
+						<div class="text-muted mb-2">{{ mto.email }}</div>
+
+						<div>
+							<form method="post" action="{% url 'mto:logout' %}">
+								{% csrf_token %}
+								<button class="btn btn-danger btn-sm" type="submit">Logout</button>
+							</form>
+						</div>
+					</div>
+					<hr class="my-0" />
+					<div class="card-body">
+						<h5 class="h6 card-title">Interests</h5>
+						{% for category in job_categories %}
+						<a href="#" class="badge badge-primary mr-1 my-1">{{ category.name }}</a>
+						{% endfor %}
+					</div>
+					<hr class="my-0" />
+					<div class="card-body mt-2">
+						<h5 class="h6 card-title">About</h5>
+						<ul class="list-unstyled mb-0">
+							<li class="mb-1"><span data-feather="briefcase" class="feather-sm mr-1"></span> Phone <a href="#">{{ mto.contact_number }}</a></li>
+							<li class="mb-1"><span data-feather="briefcase" class="feather-sm mr-1"></span> PayPal ID <a href="#">{{ mto.paypal_id }}</a></li>
+							<li class="mb-1"><span data-feather="home" class="feather-sm mr-1"></span> Lives in <a href="#">{{ mto.location }}</a></li>
+							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Date Joined <a href="#">{{ mto.timestamp }}</a></li>
+						</ul>
+					</div>
+					<hr class="my-0" />
+				</div>
+			</div>
+
+			<div class="col-md-7">
+				<div class="card">
+					<div class="card-header">
+
+						<h5 class="card-title mb-0">Edit Profile</h5>
+					</div>
+					<div class="card-body h-100">
+						<form method="post">
+							{% csrf_token %}
+							{{ form }}
+
+							<button type="submit" class="btn btn-primary mt-3">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</main>
+
+{% endblock %}

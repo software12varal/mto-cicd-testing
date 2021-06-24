@@ -2,13 +2,14 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
-from jobs.models import MTOJob, Jobs
+from jobs.models import MTOJob, Jobs,MALRequirement
 from .forms import MTOAdminSignUpForm, MALRequirementForm
 from django.contrib import messages
 from jobs.forms import JobsForm
 
 from jobs.models import MTOJob, MicroTask, MTOAdminUser
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 
 def home(request):
@@ -50,7 +51,15 @@ def add_job(request):
 
 
 def alljobs(request):
-    data = Jobs.objects.all().order_by('-id')
+    jobs = Jobs.objects.all().order_by('-id')
+    p = Paginator(jobs, 5)
+    page_num = request.GET.get('page')
+    try:
+        data = p.page(page_num)
+    except PageNotAnInteger:
+        data = p.page(1)
+    except EmptyPage:
+        data = p.page(p.num_pages)
     return render(request, 'jobs/jobs.html', {'data': data})
 
 
@@ -69,7 +78,7 @@ def microtask_page(request):
 
 
 def mal_requirement(request):
-    context = {'jobs': MicroTask.objects.all(), }
+    context = {'jobs': MALRequirement.objects.all(), }
     return render(request, 'jobs/MAL_requirement.html', context)
 
 

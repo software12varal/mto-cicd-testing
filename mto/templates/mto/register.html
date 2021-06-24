@@ -31,6 +31,29 @@
 			<div id="error-paypal-id" class="text-danger"></div>
 		</div>
 
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Phone</label>
+                    {{ form.contact_number }}
+                    <div id="error-contact" class="text-danger"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Location</label>
+                    {{ form.location }}
+                    <div id="error-location" class="text-danger"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+			<label>Preffered working Categories</label>
+			{{ form.job_category }}
+			<div id="error-categories" class="text-danger"></div>
+		</div>
+		
 		<div class="form-group">
 			<label>Password</label>
 			{{ form.password1 }}
