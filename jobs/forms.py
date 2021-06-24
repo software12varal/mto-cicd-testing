@@ -56,6 +56,7 @@ class JobsForm(forms.ModelForm):
         self.fields['target_date'].widget.attrs['type'] = 'datetime'
         self.fields['job_description'].widget.attrs['class'] = 'form-control'
         self.fields['job_sample'].widget.attrs['class'] = 'form-control'
+        self.fields['job_instructions'].widget.attrs['class'] = 'form-control'
         self.fields['job_quantity'].widget.attrs['class'] = 'form-control'
         self.fields['people_required'].widget.attrs['class'] = 'form-control'
         self.fields['skills'].widget.attrs['class'] = 'form-control'
