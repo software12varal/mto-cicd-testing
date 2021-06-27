@@ -16,13 +16,15 @@ import json
 # from django.views.generic.base import View
 #
 # from jobs.models import MALRequirement, MicroTask, MTOJobCategory
-from jobs.models import MTOJob,Jobstatus,PaymentStatus,MALRequirement,Jobs
+from jobs.models import MTOJob, Jobstatus, PaymentStatus, MALRequirement, Jobs
+from users.models import User
 from .forms import SignUpForm
 from .models import MTO
 from mto.forms import MTOUpdateProfileForm
 from datetime import datetime
 from django.db.models import Count
-from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 class SignUpView(CreateView):
     form_class = SignUpForm
@@ -44,27 +46,33 @@ class SignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.save()
-        domain_name = get_current_site(self.request).domain
-        token = str(random.random()).split('.')[1]
-        user.token = token
-        user.save()
-        link = f'http://{domain_name}/verify/{token}'
-        send_mail(
-            'Verify your email',
-            f'Click on this {link} to verify your account.',
-            settings.EMAIL_HOST_USER,
-            [user.email],
-            fail_silently=False
+        context = {}
+        if User.objects.using('varal_job_posting_db').filter(username=user.username).exists():
+            messages.info(self.request, f"{user.username} exists in varal job posting db")
+        elif User.objects.using('vendor_os_db').filter(username=user.username).exists():
+            messages.info(self.request, f"{user.username} exists in vendor os db")
+        else:
+            domain_name = get_current_site(self.request).domain
+            token = str(random.random()).split('.')[1]
+            user.token = token
+            # user.is_mto = True
+            # user.is_active = False
+            user.save()
+            link = f'http://{domain_name}/verify/{token}'
+            send_mail(
+                'Verify your email',
+                f'Click on this {link} to verify your account.',
+                settings.EMAIL_HOST_USER,
+                [user.email],
+                fail_silently=False
 
-
-        )
-        
-        messages.success(self.request, f"Hi {user.full_name}, your account was created successfully.")
-        context = {'redirect': '/mto/login'}
+            )
+            messages.success(self.request, f"Hi {user.full_name}, your account was created successfully.")
+            context['redirect'] = '/mto/login'
         return JsonResponse(context, status=200)
 
-def verify(request,token):
+
+def verify(request, token):
     try:
         user = MTO.objects.get(token=token)
         if user:
@@ -74,8 +82,7 @@ def verify(request,token):
     except:
         print("5")
         msg = "Invalid token"
-        return redirect('error.html',{'msg':msg})
-
+        return redirect('error.html', {'msg': msg})
 
 
 # class SignUpView(View):
@@ -102,6 +109,7 @@ def dummy_home_view(request):
     context = {'mtos': mtos}
     return render(request, 'mto/index.html', context)
 
+
 @login_required
 @mto_required
 def dashboard(request):
@@ -114,11 +122,14 @@ def dashboard(request):
     jobs_submitted = jobs_status.filter(job_status_name='Approved').count()
     jobs_item = jobs.all()
     total = 0
-    #totals = jobs_item.aggregate(Sum('fees'))['fees__sum']
-    #total = '{:0.2f}'.format(totals)
-    context = {'jobs':jobs,'jobs_accepted':jobs_accepted,'jobs_status':jobs_status,'jobs_completed':jobs_completed,'jobs_submitted':jobs_submitted,'jobpayment':jobpayment,'total':total}
-   
-    return render(request,'mto/mto_dashboard.html',context)
+    # totals = jobs_item.aggregate(Sum('fees'))['fees__sum']
+    # total = '{:0.2f}'.format(totals)
+    context = {'jobs': jobs, 'jobs_accepted': jobs_accepted, 'jobs_status': jobs_status,
+               'jobs_completed': jobs_completed, 'jobs_submitted': jobs_submitted, 'jobpayment': jobpayment,
+               'total': total}
+
+    return render(request, 'mto/mto_dashboard.html', context)
+
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(mto_required, name='dispatch')
@@ -152,7 +163,7 @@ class MTOProfileView(View):
 
             # update our fields in the database
             MTO.objects.filter(id=self.request.user.id).update(contact_number=phone, location=location,
-            job_category=job_categories_ids, paypal_id=paypal)
+                                                               job_category=job_categories_ids, paypal_id=paypal)
             messages.success(self.request, 'Changes saved successfully')
         return redirect(reverse('mto:profile'))
 
@@ -236,9 +247,8 @@ class MTOProfileView(View):
 #         return redirect('mto:login')
 
 
-
-def view_jobs(request): # MTO view all
-    if request.user.is_authenticated and request.user.is_mto:# and not request.user.is_admin :
+def view_jobs(request):  # MTO view all
+    if request.user.is_authenticated and request.user.is_mto:  # and not request.user.is_admin :
         job = Jobs.objects.filter(target_date__gte=datetime.now()).all()
         mto = MTOJob.objects.values('job_id').order_by('job_id').annotate(count=Count('job_id'))
         ls = []
@@ -248,7 +258,7 @@ def view_jobs(request): # MTO view all
                     if i.people_required <= mto[j]['count']:
                         ls.append(i.id)
         ujob = Jobs.objects.filter(target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
-    # q1 = Jobs.objects.filter(target_date__gte=datetime.now()).all()
+        # q1 = Jobs.objects.filter(target_date__gte=datetime.now()).all()
         p = Paginator(ujob, 5)
         page_num = request.GET.get('page')
         try:
@@ -259,18 +269,21 @@ def view_jobs(request): # MTO view all
             data = p.page(p.num_pages)
         return render(request, 'mto/mto_viewjob.html', {'data': data})
 
+
 def job_detail(request, slug):
     job_details = Jobs.objects.get(id=slug)
     return render(request, 'mto/apply_job.html', {'job_details': job_details})
+
+
 def apply_job(request, id):
     job_details = Jobs.objects.get(id=id)
     assigned_to = request.user.mto.id
     due_date = job_details.target_date
     assigned_date = datetime.now()
     fees = job_details.job_cost
-    apply = MTOJob(job_id=job_details, assigned_to=assigned_to,evaluation_status_id = 2, due_date=due_date, assigned_date=assigned_date,
+    apply = MTOJob(job_id=job_details, assigned_to=assigned_to, evaluation_status_id=2, due_date=due_date,
+                   assigned_date=assigned_date,
                    fees=fees)
     apply.save()
     messages.success(request, "Applied Successfully !")
     return redirect('mto:view')
-
