@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -250,15 +251,12 @@ class MTOProfileView(View):
 def view_jobs(request):  # MTO view all
     if request.user.is_authenticated and request.user.is_mto:  # and not request.user.is_admin :
         job = Jobs.objects.filter(target_date__gte=datetime.now()).all()
-        mto = MTOJob.objects.values('job_id').order_by('job_id').annotate(count=Count('job_id'))
-        ls = []
-        for i in job:
-            for j in range(len(mto)):
-                if i.id == mto[j]['job_id']:
-                    if i.people_required <= mto[j]['count']:
-                        ls.append(i.id)
+        mt = list(MTOJob.objects.values('job_id').order_by('job_id').annotate(count=Count('job_id')))
+        # ADDED BY SHAKEEL
+        ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).people_required <= y else 0,
+                      list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+
         ujob = Jobs.objects.filter(target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
-        # q1 = Jobs.objects.filter(target_date__gte=datetime.now()).all()
         p = Paginator(ujob, 5)
         page_num = request.GET.get('page')
         try:
@@ -287,3 +285,51 @@ def apply_job(request, id):
     apply.save()
     messages.success(request, "Applied Successfully !")
     return redirect('mto:view')
+
+
+def view_applied_jobs(request):
+    mtos = MTO.objects.get(id=request.user.id)
+    jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id).order_by('-assigned_date')
+    # print("-------------------------------------------------")
+    # print(mtos)
+    # print("---------------------------------------------------")
+    # print("-------------------------------------------------")
+    # print(jobs)
+    # print("---------------------------------------------------")
+    context = {'jobs': jobs}
+    return render(request, 'mto/appliedjobs.html', context)
+
+
+def view_applied_details(request, mto_id, job_id):
+    mtos = MTO.objects.get(id=mto_id)
+    details = MTOJob.objects.filter(job_id_id=job_id).first()
+    mtoss = mtos.full_name
+
+    # print("--------------------------------------")
+    # print(mtoss + "::")
+    # print(details.job_id.job_name)
+    # print("---------------------------------------")
+    context = {'mto': mtos, 'details': details}
+    return render(request, 'mto/applied_jobs_details.html', context)
+
+
+def submit_job(request):
+    mto = MTO.objects.get(id=request.user.mto.id)
+
+    # jobs = MTOJob.objects.get(assigned_to=request.user.mto.id)
+    if request.method == 'POST':
+        job_id = request.POST.get("job_id")
+        completed_date = request.POST['date']
+        output_path = request.FILES['file1']
+        Jobs.objects.filter(id=job_id).first()
+        if MTOJob.objects.filter(job_id_id=job_id, is_submitted=True).exists():
+            messages.info(request, f'You already submitted')
+        else:
+            instance = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto.id).first()
+            instance.output_path = output_path
+            instance.completed_date = completed_date
+            instance.is_submitted = True
+            instance.save()
+            messages.success(request, f'Job successfully submitted')
+
+        return redirect('mto:applied')

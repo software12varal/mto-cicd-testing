@@ -11,8 +11,8 @@ urlpatterns = [
     path('microtask', varal_admin_required(microtask_page), name='microtask'),
     path('requirements', varal_admin_required(mal_requirement), name='requirements'),
     path('admin_profile', varal_admin_required(admin_profile), name='admin_profile'),
-    path('addjobs/', add_job, name='add_job'),
-    path('alljobs/',alljobs,name='alljobs'),
+    path('addjobs/', varal_admin_required(add_job), name='add_job'),
+    path('alljobs/',varal_admin_required(alljobs),name='alljobs'),
     path('add-mal/', varal_admin_required(MALRequirementCreateView.as_view()), name='add_mal'),
     path('', home, name='home'),
 
