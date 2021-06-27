@@ -88,7 +88,7 @@ DATABASES = {
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
+DATABASE_ROUTERS = [ 'routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
                     'routers.db_routers.AccountsDBRouter']
 
 # Password validation
@@ -143,7 +143,7 @@ LOGIN_URL = reverse_lazy("mto:login")
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "mto:dashboard"
 
-#smpt config
+# smpt config
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
