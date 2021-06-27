@@ -8,7 +8,7 @@ from django.contrib import messages
 from jobs.forms import JobsForm
 
 from jobs.models import MTOJob, MicroTask, MTOAdminUser
-from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
+from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm,JobPaymentStatusForm,JobStatusForm
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 
@@ -48,6 +48,36 @@ def add_job(request):
             return render(request, "jobs/jobsform.html", {'form': form})
     context = {'form': JobsForm()}
     return render(request, 'jobs/jobsform.html', context)
+
+def add_paymentstatus(request,id):
+    jobs = Jobs.objects.get(id = id)
+    form = JobPaymentStatusForm(instance=jobs)
+    if request.method == 'POST':
+        form = JobPaymentStatusForm(request.POST,instance=jobs)
+        if form.is_valid():
+       
+            form.save()
+            messages.success(request,"Job payment status created")
+        else:
+            messages.error(request,'Something went wrong')
+            return render(request,'jobs/jobpaymentstatus.html',{'form':form})
+    context = {'form':JobPaymentStatusForm()}
+    return render(request,'jobs/jobpaymentstatus.html',context)
+
+def add_jobstatus(request,id):
+    jobs = Jobs.objects.get(id =id)
+    form = JobStatusForm(instance=jobs)
+    if request.method == 'POST':
+        form = JobStatusForm(request.POST,instance=jobs)
+        if form.is_valid():
+       
+            form.save()
+            messages.success(request,"Job status created")
+        else:
+            messages.error(request,'Something went wrong')
+            return render(request,'jobs/jobstatus.html',{'form':form})
+    context = {'form':JobStatusForm()}
+    return render(request,'jobs/jobstatus.html',context)   
 
 
 def alljobs(request):

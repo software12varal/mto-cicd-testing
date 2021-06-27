@@ -14,6 +14,7 @@
 <body>
 {% block content %}
 
+<div class="container">
     <table class="table table-hover">
       <thead>
         <tr>
@@ -27,6 +28,10 @@
           <th scope="col">People Required</th>
           <th scope="col">Skills</th>
           <th scope="col">Job Quantity</th>
+          <th scope="col">Payment Status</th>
+          <th scope="col">Job Status</th>
+
+          
         </tr>
       </thead>
       <tbody>
@@ -42,11 +47,14 @@
           <td>{{dat.people_required}}</td>
           <td>{{dat.skills}}</td>
           <td>{{dat.job_cost}}</td>
+          <td><a class="btn btn-sm btn-info" href="{% url 'jobs:paymentstatus' dat.id %}">PaymentStatus</a></td>
+          <td><a class="btn btn-sm btn-info" href="{% url 'jobs:jobstatus' dat.id %}">JobStatus</a></td>
+
         </tr>
     {% endfor %}
       </tbody>
     </table>
-    
+</div>   
 <nav aria-label="Pagination">
   <ul class="pagination justify-content-center fixed-bottom py-4">
     {% if data.has_previous %}

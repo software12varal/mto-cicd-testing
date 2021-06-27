@@ -65,26 +65,27 @@
             <td>{{job.job_id.id}}</td>
             <!-- displays job title -->
              <td>{{job.job_id.job_name}}</td>  
-            <!-- displays job category-->               
-            <td>{{job.job_id.cat_id.name}}</td>
+            <!-- displays job category-->             
+                <td>{{job.job_id.cat_id.micro_task_category}}</td>
+            
                  <!--displays date of acceptance -->           
             <td>{{job.assigned_date}}</td>
                 
                 <!--displays  deadline -->            
                             
-            <td>{{job.target_date}}</td>
+            <td>{{job.job_id.target_date}}</td>
                 
                 <!--displays job status-->
-          
-            {% for status in jobs_status %}
-                    <td>{{status.job_status_name}}</td>
-            {% endfor %}
-                  <!--displays fees -->          
-            <td>{{job.fees}}</td>
+            <td>{{job_status}}</td>
+            
+                  <!--displays fees -->  
+                        
+                    <td>{{job.fees}}</td>
+              
                 <!--displays payments status-->
-            {% for status in jobpayment %}
-                <td>{{status.payment_status}}</td>
-            {% endfor %}
+            
+                <td>{{jobspayment}}</td>
+            
                 <!--rating eveluation -->
             <td>{{job.rating_evaluation}}</td>
             

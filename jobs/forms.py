@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from .models import MTOAdminUser, Jobs, MALRequirement
+from .models import MTOAdminUser, Jobs, MALRequirement,PaymentStatus,Jobstatus
 from django import forms
 
 
@@ -69,3 +69,23 @@ class MALRequirementForm(ModelForm):
         fields = ['identification_number', 'assembly_line_id', 'assembly_line_name', 'person_name',
                   'person_email', 'output', 'micro_task', 'micro_task_category', 'target_date', 'total_budget',
                   'job_description', 'job_sample', 'job_instructions', 'job_quantity', 'input_folder']
+
+class JobPaymentStatusForm(forms.ModelForm):
+    class Meta:
+        model = PaymentStatus
+        
+        fields = '__all__'
+    
+    
+
+        
+
+
+
+class JobStatusForm(forms.ModelForm):
+    class Meta:
+        model = Jobstatus
+        fields = '__all__'
+
+  
+    

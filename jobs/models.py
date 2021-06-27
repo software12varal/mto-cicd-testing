@@ -40,27 +40,6 @@ class EvaluationStatus(models.Model):
     def __str__(self):
         return self.description
 
-class Jobstatus(models.Model):
-    STATUS = (
-        ('Assigned','Assigned'),
-        ('Completed','Completed'),
-        ('Approved','Approved'),
-    )
-    job_status_name = models.CharField(max_length=200,choices=STATUS)
-
-    def __str__(self):
-        return self.job_status_name
-
-class PaymentStatus(models.Model):
-    Status = (
-        ('Paid','Paid'),
-        ('Not Paid','Not Paid'),
-    )
-    payment_status = models.CharField(max_length=200,choices=Status)
-
-    def __str__(self):
-        return self.payment_status
-
 class MALRequirement(models.Model):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
     identification_number = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
@@ -101,6 +80,30 @@ class Jobs(models.Model):
 
     def __str__(self):
         return f'{self.job_name}'
+
+class Jobstatus(models.Model):
+    
+    STATUS = (
+        ('Assigned','Assigned'),
+        ('Completed','Completed'),
+        ('Approved','Approved'),
+    )
+    job_status_name = models.CharField(max_length=200,choices=STATUS)
+
+    def __str__(self):
+        return self.job_status_name
+
+class PaymentStatus(models.Model):
+    
+    Status = (
+        ('Paid','Paid'),
+        ('Not Paid','Not Paid'),
+    )
+    payment_status = models.CharField(max_length=200,choices=Status)
+
+    def __str__(self):
+        return self.payment_status
+
 
 class MTOJob(models.Model):
     job_id = models.ForeignKey(Jobs, on_delete=models.PROTECT,null=True)

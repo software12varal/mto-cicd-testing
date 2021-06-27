@@ -16,12 +16,12 @@ import json
 # from django.views.generic.base import View
 #
 # from jobs.models import MALRequirement, MicroTask, MTOJobCategory
-from jobs.models import MTOJob,Jobstatus,PaymentStatus,MALRequirement,Jobs
+from jobs.models import MTOJob,Jobstatus,PaymentStatus,MALRequirement,Jobs,MTOJobCategory
 from .forms import SignUpForm
 from .models import MTO
 from mto.forms import MTOUpdateProfileForm
 from datetime import datetime
-from django.db.models import Count
+from django.db.models import Count,Sum
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
 class SignUpView(CreateView):
@@ -107,16 +107,20 @@ def dummy_home_view(request):
 def dashboard(request):
     mtos = MTO.objects.get(id=request.user.id)
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
+    
     jobs_status = Jobstatus.objects.all()
     jobpayment = PaymentStatus.objects.all()
+    job_status = Jobstatus.objects.latest('job_status_name')
+    jobspayment = PaymentStatus.objects.latest('payment_status')
+    
     jobs_accepted = jobs_status.filter(job_status_name='Assigned').count()
     jobs_completed = jobs_status.filter(job_status_name='Completed').count()
     jobs_submitted = jobs_status.filter(job_status_name='Approved').count()
     jobs_item = jobs.all()
-    total = 0
-    #totals = jobs_item.aggregate(Sum('fees'))['fees__sum']
-    #total = '{:0.2f}'.format(totals)
-    context = {'jobs':jobs,'jobs_accepted':jobs_accepted,'jobs_status':jobs_status,'jobs_completed':jobs_completed,'jobs_submitted':jobs_submitted,'jobpayment':jobpayment,'total':total}
+
+    totals = jobs_item.aggregate(Sum('fees'))['fees__sum'] or 0
+    total = '{:0.2f}'.format(totals)
+    context = {'jobs':jobs,'jobs_accepted':jobs_accepted,'jobspayment':jobspayment,'job_status':job_status,'jobs_status':jobs_status,'jobs_completed':jobs_completed,'jobs_submitted':jobs_submitted,'jobpayment':jobpayment,'total':total}
    
     return render(request,'mto/mto_dashboard.html',context)
 
@@ -262,6 +266,7 @@ def view_jobs(request): # MTO view all
 def job_detail(request, slug):
     job_details = Jobs.objects.get(id=slug)
     return render(request, 'mto/apply_job.html', {'job_details': job_details})
+
 def apply_job(request, id):
     job_details = Jobs.objects.get(id=id)
     assigned_to = request.user.mto.id

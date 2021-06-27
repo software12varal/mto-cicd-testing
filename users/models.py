@@ -5,7 +5,7 @@ from django.db import models
 class User(AbstractUser):
     full_name = models.CharField(max_length=100)
     is_mto = models.BooleanField(default=True)  # by default the user is an MTO.
-    is_admin = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def has_perm(self, perm, obj=None):
