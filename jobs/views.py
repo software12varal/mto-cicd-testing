@@ -10,6 +10,7 @@ from jobs.forms import JobsForm
 from jobs.models import MTOJob, MicroTask, MTOAdminUser
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from mto.models import MTO
 
 
 def home(request):
@@ -69,7 +70,26 @@ def admin_dashboard(request):
 
 
 def mto_bank(request):
-    return render(request, 'jobs/MTOBank.html')
+    mto = MTO.objects.all()
+    context = {'mto': mto}
+
+    return render(request, 'jobs/MTOBank.html', context)
+
+
+def viewMto(request, id):
+    mto = MTO.objects.get(pk=id)
+    mtojob = MTOJob.objects.filter(assigned_to=id).count()
+    completed = MTOJob.objects.filter(
+        completed_date__isnull=True, assigned_to=id).count()
+    total_completed = int(mtojob) - int(completed)
+    context = {'mto': mto, 'mtojob': mtojob, 'completed': total_completed}
+    return render(request, 'jobs/viewmto.html', context)
+def deleteMto(request, id):
+    if request.method == "POST":
+        mto = MTO.objects.get(pk=id)
+        mto.delete()
+        messages.success(request, f"Deleted successfully")
+    return redirect('jobs:mto_bank')
 
 
 def microtask_page(request):

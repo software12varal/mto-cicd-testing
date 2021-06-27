@@ -27,21 +27,21 @@ class SignUpForm(UserCreationForm):
             'location': forms.TextInput(attrs={'placeholder': 'Enter Location', 'class': 'form-control'}),
         }
 
-    def save(self, commit=True):
-        job_categories = self.cleaned_data['job_category']
-        job_categories_ids = json.dumps([job.id for job in job_categories])
-
-        user = super().save(commit=False)
-        if User.objects.using('varal_job_posting_db').filter(username=user.username).exists():
-            messages.info(self.request, f"{user.username} exists in varal job posting db")
-        elif User.objects.using('vendor_os_db').filter(username=user.username).exists():
-            messages.info(self.request, f"{user.username} exists in vendor os db")
-        else:
-            user.is_mto = True
-            user.is_active = False
-            user.job_category = job_categories_ids
-            user.save()
-            return user
+    # def save(self, commit=True):
+    #     job_categories = self.cleaned_data['job_category']
+    #     job_categories_ids = json.dumps([job.id for job in job_categories])
+    #
+    #     user = super().save(commit=False)
+    #     if User.objects.using('varal_job_posting_db').filter(username=user.username).exists():
+    #         messages.info(self.request, f"{user.username} exists in varal job posting db")
+    #     elif User.objects.using('vendor_os_db').filter(username=user.username).exists():
+    #         messages.info(self.request, f"{user.username} exists in vendor os db")
+    #     else:
+    #         user.is_mto = True
+    #         user.is_active = False
+    #         user.job_category = job_categories_ids
+    #         user.save()
+    #         return user
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)

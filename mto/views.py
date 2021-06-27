@@ -56,8 +56,8 @@ class SignUpView(CreateView):
             domain_name = get_current_site(self.request).domain
             token = str(random.random()).split('.')[1]
             user.token = token
-            # user.is_mto = True
-            # user.is_active = False
+            user.is_mto = True
+            user.is_active = False
             user.save()
             link = f'http://{domain_name}/verify/{token}'
             send_mail(
@@ -290,25 +290,16 @@ def apply_job(request, id):
 def view_applied_jobs(request):
     mtos = MTO.objects.get(id=request.user.id)
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id).order_by('-assigned_date')
-    # print("-------------------------------------------------")
-    # print(mtos)
-    # print("---------------------------------------------------")
-    # print("-------------------------------------------------")
-    # print(jobs)
-    # print("---------------------------------------------------")
+
     context = {'jobs': jobs}
     return render(request, 'mto/appliedjobs.html', context)
 
 
 def view_applied_details(request, mto_id, job_id):
     mtos = MTO.objects.get(id=mto_id)
-    details = MTOJob.objects.filter(job_id_id=job_id).first()
+    details = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto_id).first()
     mtoss = mtos.full_name
 
-    # print("--------------------------------------")
-    # print(mtoss + "::")
-    # print(details.job_id.job_name)
-    # print("---------------------------------------")
     context = {'mto': mtos, 'details': details}
     return render(request, 'mto/applied_jobs_details.html', context)
 
@@ -322,7 +313,7 @@ def submit_job(request):
         completed_date = request.POST['date']
         output_path = request.FILES['file1']
         Jobs.objects.filter(id=job_id).first()
-        if MTOJob.objects.filter(job_id_id=job_id, is_submitted=True).exists():
+        if MTOJob.objects.filter(job_id_id=job_id, is_submitted=True, assigned_to=mto.id).exists():
             messages.info(request, f'You already submitted')
         else:
             instance = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto.id).first()
