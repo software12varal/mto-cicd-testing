@@ -7,8 +7,8 @@
         <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
-            <h5 class="card-title">Total jobs accepted</h5>
-            <p class="card-text">{{jobs_accepted}}</p>
+            <h5 class="card-title">Total jobs submitted</h5>
+            <p class="card-text">{{jobs_submitted}}</p>
             
             </div>
         </div>
@@ -25,8 +25,8 @@
         <div class="col-sm-3">
             <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Total jobs submitted</h5>
-                <p class="card-text">{{jobs_submitted}}</p>
+                <h5 class="card-title">Total jobs approved</h5>
+                <p class="card-text">{{jobs_approved}}</p>
             
             </div>
             </div>
@@ -76,16 +76,18 @@
             <td>{{job.job_id.target_date}}</td>
                 
                 <!--displays job status-->
-            <td>{{job_status}}</td>
+                
+                    <td>{{job.job_status.job_status}}</td>
+                
             
                   <!--displays fees -->  
                         
                     <td>{{job.fees}}</td>
               
                 <!--displays payments status-->
-            
-                <td>{{jobspayment}}</td>
-            
+                
+                    <td>{{job.payment_status.payment_status}}</td>
+               
                 <!--rating eveluation -->
             <td>{{job.rating_evaluation}}</td>
             

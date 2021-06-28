@@ -30,8 +30,14 @@
                         {% endif %} {% endcomment %}
                     
                     <div class="form-group">
-                            <label>Job Payment Status</label>
-                            {{ form.job_status_name }}
+                            <label>Job Status</label>
+                            <select class="form-control" name="status_id" id="">
+                                {% for status in form %}
+                                    <option value="{{status.id}}">{{status.job_status}}</option>
+                                {% endfor %}
+                            </select>
+                           
+                            
                       
                     </div>
                     <div class="form-group">

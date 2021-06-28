@@ -7,6 +7,7 @@ from users.models import User
 from mto.models import MTO
 
 
+
 class MTOJobCategory(models.Model):
     name = models.CharField(max_length=100)
 
@@ -43,23 +44,14 @@ class EvaluationStatus(models.Model):
 
 
 class Jobstatus(models.Model):
-    STATUS = (
-        ('Assigned', 'Assigned'),
-        ('Completed', 'Completed'),
-        ('Approved', 'Approved'),
-    )
-    job_status_name = models.CharField(max_length=200, choices=STATUS)
+    job_status = models.CharField(max_length=200)
 
     def __str__(self):
-        return self.job_status_name
+        return self.job_status
 
 
 class PaymentStatus(models.Model):
-    Status = (
-        ('Paid', 'Paid'),
-        ('Not Paid', 'Not Paid'),
-    )
-    payment_status = models.CharField(max_length=200, choices=Status)
+    payment_status = models.CharField(max_length=200)
 
     def __str__(self):
         return self.payment_status
@@ -125,6 +117,8 @@ class MTOJob(models.Model):
     rating_evaluation = models.IntegerField(null=True)
     payment_status = models.ForeignKey(PaymentStatus, verbose_name=_("payment status"), on_delete=models.CASCADE,
                                        null=True)
+    job_status = models.ForeignKey(Jobstatus, verbose_name=_("job status"), on_delete=models.CASCADE,
+                                       null=True)                                   
     completed_date = models.DateField(null=True)
     output_path = models.FileField(upload_to=output_directory_path)
     is_submitted = models.BooleanField(default=False)

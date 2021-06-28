@@ -52,11 +52,14 @@ class SignUpView(CreateView):
         elif User.objects.using('vendor_os_db').filter(username=user.username).exists():
             messages.info(self.request, f"{user.username} exists in vendor os db")
         else:
+            job_categories = form.cleaned_data['job_category']
+            job_categories_ids = json.dumps([job.id for job in job_categories])
             domain_name = get_current_site(self.request).domain
             token = str(random.random()).split('.')[1]
             user.token = token
             user.is_mto = True
             user.is_active = False
+            user.job_category = job_categories_ids
             user.save()
             link = f'http://{domain_name}/verify/{token}'
             send_mail(
@@ -113,22 +116,17 @@ def dummy_home_view(request):
 @login_required
 @mto_required
 def dashboard(request):
-    mtos = MTO.objects.get(id=request.user.id)
+    
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
-    
-    jobs_status = Jobstatus.objects.all()
-    jobpayment = PaymentStatus.objects.all()
-    job_status = Jobstatus.objects.latest('job_status_name')
-    jobspayment = PaymentStatus.objects.latest('payment_status')
-    
-    jobs_accepted = jobs_status.filter(job_status_name='Assigned').count()
-    jobs_completed = jobs_status.filter(job_status_name='Completed').count()
-    jobs_submitted = jobs_status.filter(job_status_name='Approved').count()
-    jobs_item = jobs.all()
+  
+    jobs_submitted = jobs.filter(job_status__job_status = 'Submitted').count()
+    jobs_completed = jobs.filter(job_status__job_status = 'Completed').count()
+    jobs_approved = jobs.filter(job_status__job_status = 'Approved').count()
+  
 
-    totals = jobs_item.aggregate(Sum('fees'))['fees__sum'] or 0
+    totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
     total = '{:0.2f}'.format(totals)
-    context = {'jobs':jobs,'jobs_accepted':jobs_accepted,'jobspayment':jobspayment,'job_status':job_status,'jobs_status':jobs_status,'jobs_completed':jobs_completed,'jobs_submitted':jobs_submitted,'jobpayment':jobpayment,'total':total}
+    context = {'jobs':jobs,'jobs_submitted':jobs_submitted,'jobs_completed':jobs_completed,'jobs_approved':jobs_approved,'total':total}
    
     return render(request,'mto/mto_dashboard.html',context)
 

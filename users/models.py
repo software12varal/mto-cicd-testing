@@ -29,15 +29,10 @@ class User(AbstractBaseUser):
     username = models.CharField(unique=True, max_length=50)
     email = models.EmailField(blank=True, max_length=255)
     full_name = models.CharField(max_length=100)
-<<<<<<< HEAD
-    is_mto = models.BooleanField(default=True)  # by default the user is an MTO.
-    is_admin = models.BooleanField(default=True)
-=======
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_mto = models.BooleanField(default=False)  # by default the user is an MTO.
->>>>>>> 59720f1a78d466f5925250061f34139885b73f55
     timestamp = models.DateTimeField(auto_now_add=True)
 
     USERNAME_FIELD = 'username'
