@@ -1,4 +1,5 @@
 # from django.contrib.auth import get_user_model
+from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -40,23 +41,48 @@ class EvaluationStatus(models.Model):
     def __str__(self):
         return self.description
 
+
+class Jobstatus(models.Model):
+    STATUS = (
+        ('Assigned', 'Assigned'),
+        ('Completed', 'Completed'),
+        ('Approved', 'Approved'),
+    )
+    job_status_name = models.CharField(max_length=200, choices=STATUS)
+
+    def __str__(self):
+        return self.job_status_name
+
+
+class PaymentStatus(models.Model):
+    Status = (
+        ('Paid', 'Paid'),
+        ('Not Paid', 'Not Paid'),
+    )
+    payment_status = models.CharField(max_length=200, choices=Status)
+
+    def __str__(self):
+        return self.payment_status
+
+
 class MALRequirement(models.Model):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
     identification_number = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
     assembly_line_id = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
     assembly_line_name = models.TextField(blank=True)
     person_name = models.TextField(help_text="Name of the person in charge")
-    person_email = models.EmailField(null = True)
+    person_email = models.EmailField(null=True)
     output = models.FilePathField(path='media/documents/job_documents/output', help_text="Link of the output folder")
     micro_task = models.CharField(max_length=300)
-    micro_task_category = models.CharField(max_length=300,null = True)
+    micro_task_category = models.CharField(max_length=300, null=True)
     target_date = models.DateField()
     total_budget = models.IntegerField(help_text="Total budget allocated for the job")
     job_description = models.TextField()
     job_sample = models.FileField(upload_to='job_documents/sample')
     job_instructions = models.FileField(upload_to='job_documents/instruction')
     job_quantity = models.IntegerField()
-    input_folder = models.FilePathField(path='media/documents/job_documents/input', help_text="Link of the Input folder")
+    input_folder = models.FilePathField(path='media/documents/job_documents/input',
+                                        help_text="Link of the Input folder")
 
     class Meta:
         verbose_name = 'Mal Requirement'
@@ -65,13 +91,14 @@ class MALRequirement(models.Model):
     def __str__(self):
         return self.micro_task_category
 
+
 class Jobs(models.Model):
     job_name = models.CharField(max_length=300, help_text='e.g develop website')
     cat_id = models.ForeignKey(MALRequirement, on_delete=models.CASCADE)
     target_date = models.DateTimeField(null=True, help_text='e.g 2021-10-25 14:30:59')
     job_description = models.CharField(_('job description'), max_length=1000, help_text='e.g car website')
     job_sample = models.FileField(upload_to='images/job_documents/job_samples')
-    job_instructions = models.FileField(upload_to='images/job_documents/job_instructions', max_length=100,null=True)
+    job_instructions = models.FileField(upload_to='images/job_documents/job_instructions', max_length=100, null=True)
     job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
     people_required = models.PositiveIntegerField(validators=[MinValueValidator(1)],
                                                   help_text='e.g number of people required e.g 2')
@@ -81,40 +108,26 @@ class Jobs(models.Model):
     def __str__(self):
         return f'{self.job_name}'
 
-class Jobstatus(models.Model):
-    
-    STATUS = (
-        ('Assigned','Assigned'),
-        ('Completed','Completed'),
-        ('Approved','Approved'),
-    )
-    job_status_name = models.CharField(max_length=200,choices=STATUS)
 
-    def __str__(self):
-        return self.job_status_name
-
-class PaymentStatus(models.Model):
-    
-    Status = (
-        ('Paid','Paid'),
-        ('Not Paid','Not Paid'),
-    )
-    payment_status = models.CharField(max_length=200,choices=Status)
-
-    def __str__(self):
-        return self.payment_status
+def output_directory_path(instance, filename):
+    job = instance.job_id.job_name
+    mto = MTO.objects.filter(id=instance.assigned_to).first()
+    mto_username = mto.username
+    return f"images/job_documents/job_submissions/{mto_username}_{job}.{filename.split('.')[-1]}"
 
 
 class MTOJob(models.Model):
-    job_id = models.ForeignKey(Jobs, on_delete=models.PROTECT,null=True)
+    job_id = models.ForeignKey(Jobs, on_delete=models.PROTECT, null=True)
     assigned_to = models.IntegerField(help_text='related to MTO')
-    due_date = models.DateField() 
+    due_date = models.DateField()
     assigned_date = models.DateField(auto_now_add=True)
     fees = models.FloatField()
     rating_evaluation = models.IntegerField(null=True)
-    payment_status = models.ForeignKey(PaymentStatus, verbose_name=_("payment status"), on_delete=models.CASCADE,null=True)
+    payment_status = models.ForeignKey(PaymentStatus, verbose_name=_("payment status"), on_delete=models.CASCADE,
+                                       null=True)
     completed_date = models.DateField(null=True)
-    output_path = models.FileField(upload_to='images/job_documents/job_submissions')
+    output_path = models.FileField(upload_to=output_directory_path)
+    is_submitted = models.BooleanField(default=False)
     evaluation_status = models.ForeignKey(EvaluationStatus, on_delete=models.CASCADE)
 
     @property
@@ -124,7 +137,6 @@ class MTOJob(models.Model):
 
     def __str__(self):
         return f"{self.job_id.job_name} :: {self.mto.full_name}"
-
 
 
 class AdminRoles(models.Model):
@@ -150,5 +162,3 @@ class MTOAdminUser(User):
     #     super(MTOAdminUser, self).save(using='varal_job_posting_db')
 
 # trial session
-
-

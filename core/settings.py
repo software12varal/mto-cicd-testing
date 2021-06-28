@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from django.urls import reverse_lazy
 
@@ -88,7 +89,7 @@ DATABASES = {
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
+DATABASE_ROUTERS = [ 'routers.db_routers.VaralJobPostingDBRouter', 'routers.db_routers.VendorOSRouter',
                     'routers.db_routers.AccountsDBRouter']
 
 # Password validation
@@ -132,6 +133,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media/documents"
+#MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -143,7 +145,7 @@ LOGIN_URL = reverse_lazy("mto:login")
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "mto:dashboard"
 
-#smpt config
+# smpt config
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

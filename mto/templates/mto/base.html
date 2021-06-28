@@ -36,6 +36,9 @@
             <li class="nav-item active">
               <a class="nav-link" href="{% url 'mto:view' %}">View Jobs<span class="sr-only">(current)</span></a>
             </li>
+             <li class="nav-item active">
+              <a class="nav-link" href="{% url 'mto:applied' %}">View applied jobs<span class="sr-only">(current)</span></a>
+            </li>
           </ul>
           {% if request.user.is_authenticated %}
           <form class="form-inline mt-2 mt-md-0" method="post" action="{% url 'mto:logout' %}">
