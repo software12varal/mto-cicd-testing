@@ -1,93 +1,93 @@
-{% extends 'base.html' %}
-{% block title %}MTO Registration {% endblock title %}
-{% load static %}
-{% block content %}
+{% extends 'base.html' %} {% block title %}MTO Registration {% endblock title %}
+{% load static %} {% block content %}
 <div class="card-body">
-	<div id="info" class="text-info"></div>
-	<div id="error" class="text-danger"></div>
-	<h4 class="card-title">Register</h4>
-	<form id="sign-up" method="POST" class="my-login-validation" action="{% url 'mto:sign_up' %}">
-		{% csrf_token %}
-		<div class="form-group">
-			<label>Full Name</label>
-			{{ form.full_name }}
-			<div class="text-danger" id="error-full-name"></div>
-		</div>
+  <div id="info" class="text-info"></div>
+  <div id="error" class="text-danger"></div>
+  <h4 class="card-title">Register</h4>
+  <form
+    id="sign-up"
+    method="POST"
+    class="my-login-validation"
+    action="{% url 'mto:sign_up' %}"
+  >
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Full Name</label>
+      {{ form.full_name }}
+      <div class="text-danger" id="error-full-name"></div>
+    </div>
 
-		<div class="form-group">
-			<label>Username</label>
-			{{ form.username }}
-			<div id="error-username" class="text-danger"></div>
-		</div>
-		<div class="form-group">
-			<label>Email</label>
-			{{ form.email }}
-			<div id="error-email" class="text-danger"></div>
-		</div>
+    <div class="form-group">
+      <label>Username</label>
+      {{ form.username }}
+      <div id="error-username" class="text-danger"></div>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      {{ form.email }}
+      <div id="error-email" class="text-danger"></div>
+    </div>
 
-		<div class="form-group">
-			<label>Paypal ID</label>
-			{{ form.paypal_id }}
-			<div id="error-paypal-id" class="text-danger"></div>
-		</div>
+    <div class="form-group">
+      <label>Paypal ID</label>
+      {{ form.paypal_id }}
+      <div id="error-paypal-id" class="text-danger"></div>
+    </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Phone</label>
-                    {{ form.contact_number }}
-                    <div id="error-contact" class="text-danger"></div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label>Location</label>
-                    {{ form.location }}
-                    <div id="error-location" class="text-danger"></div>
-                </div>
-            </div>
-        </div>
-
+    <div class="row">
+      <div class="col-md-6">
         <div class="form-group">
-			<label>Preffered working Categories</label>
-			{{ form.job_category }}
-			<div id="error-categories" class="text-danger"></div>
-		</div>
-		
-		<div class="form-group">
-			<label>Password</label>
-			{{ form.password1 }}
-			<div id="error-password1" class="text-danger"></div>
-		</div>
+          <label>Phone</label>
+          {{ form.contact_number }}
+          <div id="error-contact" class="text-danger"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Location</label>
+          {{ form.location }}
+          <div id="error-location" class="text-danger"></div>
+        </div>
+      </div>
+    </div>
 
-		<div class="form-group">
-			<label>Confirm Password</label>
-			{{ form.password2 }}
-			<div id="error-password2" class="text-danger"></div>
-		</div>
+    <div class="form-group">
+      <label>Preffered working Categories</label>
+      {{ form.job_category }}
+      <div id="error-categories" class="text-danger"></div>
+    </div>
 
-		<div class="form-group m-0">
-			<button type="submit" class="btn btn-primary btn-block">
-				Register
-			</button>
-		</div>
+    <div class="form-group">
+      <label>Password</label>
+      {{ form.password1 }}
+      <div id="error-password1" class="text-danger"></div>
+    </div>
 
-		{% if form.non_field_errors %}
-		{% for error in form.non_field_errors %}
-			<div class="alert alert-danger mt-3">
-			  <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
-			  <span data-notify="message">{{ error }}</span>
-			</div>
-		{% endfor %}
-		{% endif %}
+    <div class="form-group">
+      <label>Confirm Password</label>
+      {{ form.password2 }}
+      <div id="error-password2" class="text-danger"></div>
+    </div>
 
-		<div class="mt-4 text-center">
-			Already have an account? <a href="{% url 'mto:login' %}">Login</a>
-		</div>
-	</form>
+    <div class="form-group m-0">
+      <button type="submit" class="btn btn-primary btn-block">
+        Register
+      </button>
+    </div>
+
+    {% if form.non_field_errors %} {% for error in form.non_field_errors %}
+    <div class="alert alert-danger mt-3">
+      <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
+      <span data-notify="message">{{ error }}</span>
+    </div>
+    {% endfor %} {% endif %}
+
+    <div class="mt-4 text-center">
+      Already have an account? <a href="{% url 'mto:login' %}">Login</a>
+    </div>
+  </form>
 </div>
-{% endblock content %}
-{% block scripts %}
+{% endblock content %} {% block scripts %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="{% static 'mto/sign-up.js' %}"></script>
 {% endblock scripts %}

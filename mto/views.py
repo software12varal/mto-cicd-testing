@@ -48,9 +48,11 @@ class SignUpView(CreateView):
         user = form.save(commit=False)
         context = {}
         if User.objects.using('varal_job_posting_db').filter(username=user.username).exists():
-            messages.info(self.request, f"{user.username} exists in varal job posting db")
+            # messages.info(self.request, f"{user.username} exists in varal job posting db")
+            context['info'] =  f"{user.username} exists in varal job posting db"
         elif User.objects.using('vendor_os_db').filter(username=user.username).exists():
-            messages.info(self.request, f"{user.username} exists in vendor os db")
+            # messages.info(self.request, f"{user.username} exists in vendor os db")
+            context['info'] = f"{user.username} exists in vendor os db"
         else:
             job_categories = form.cleaned_data['job_category']
             job_categories_ids = json.dumps([job.id for job in job_categories])
