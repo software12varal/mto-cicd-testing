@@ -7,8 +7,8 @@
         <div class="col-sm-3">
         <div class="card">
             <div class="card-body">
-            <h5 class="card-title">Total jobs accepted</h5>
-            <p class="card-text">{{jobs_accepted}}</p>
+            <h5 class="card-title">Total jobs submitted</h5>
+            <p class="card-text">{{jobs_submitted}}</p>
             
             </div>
         </div>
@@ -25,8 +25,8 @@
         <div class="col-sm-3">
             <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Total jobs submitted</h5>
-                <p class="card-text">{{jobs_submitted}}</p>
+                <h5 class="card-title">Total jobs approved</h5>
+                <p class="card-text">{{jobs_approved}}</p>
             
             </div>
             </div>
@@ -65,26 +65,29 @@
             <td>{{job.job_id.id}}</td>
             <!-- displays job title -->
              <td>{{job.job_id.job_name}}</td>  
-            <!-- displays job category-->               
-            <td>{{job.job_id.cat_id.name}}</td>
+            <!-- displays job category-->             
+                <td>{{job.job_id.cat_id.micro_task_category}}</td>
+            
                  <!--displays date of acceptance -->           
             <td>{{job.assigned_date}}</td>
                 
                 <!--displays  deadline -->            
                             
-            <td>{{job.target_date}}</td>
+            <td>{{job.job_id.target_date}}</td>
                 
                 <!--displays job status-->
-          
-            {% for status in jobs_status %}
-                    <td>{{status.job_status_name}}</td>
-            {% endfor %}
-                  <!--displays fees -->          
-            <td>{{job.fees}}</td>
+                
+                    <td>{{job.job_status.job_status}}</td>
+                
+            
+                  <!--displays fees -->  
+                        
+                    <td>{{job.fees}}</td>
+              
                 <!--displays payments status-->
-            {% for status in jobpayment %}
-                <td>{{status.payment_status}}</td>
-            {% endfor %}
+                
+                    <td>{{job.payment_status.payment_status}}</td>
+               
                 <!--rating eveluation -->
             <td>{{job.rating_evaluation}}</td>
             
