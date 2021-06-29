@@ -15,13 +15,13 @@ job_categories = MALRequirement.objects.all()
 
 
 class SignUpForm(UserCreationForm):
-    job_category = forms.ModelMultipleChoiceField(job_categories,
-                                                  widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+    job_category = forms.ModelMultipleChoiceField(
+        job_categories, widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
 
     class Meta(UserCreationForm.Meta):
         model = MTO
-        fields = ['username', 'full_name', 'email', 'paypal_id', 'password1', 'password2', 'contact_number', 'location',
-                  'job_category']
+        fields = ['username', 'full_name', 'email', 'paypal_id', 'password1',
+                  'password2', 'contact_number', 'location', 'job_category']
         widgets = {
             'contact_number': forms.NumberInput(attrs={'placeholder': 'Enter contact number', 'class': 'form-control'}),
             'location': forms.TextInput(attrs={'placeholder': 'Enter Location', 'class': 'form-control'}),

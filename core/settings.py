@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'mto.apps.MtoConfig',
     # third party apps
     'widget_tweaks',
+    'phonenumber_field',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -89,7 +90,7 @@ DATABASES = {
 
 }
 
-DATABASE_ROUTERS = [ 'routers.db_routers.VaralJobPostingDBRouter', 'routers.db_routers.VendorOSRouter',
+DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
                     'routers.db_routers.AccountsDBRouter']
 
 # Password validation
@@ -110,7 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = ['users.backends.VaralOSDBAuthBackend', 'django.contrib.auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = [
+    'users.backends.VaralOSDBAuthBackend', 'django.contrib.auth.backends.ModelBackend']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
