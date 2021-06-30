@@ -1,0 +1,71 @@
+{% extends 'mto/base.html' %}
+{% load static %}
+{% block content %}
+<div class="card mb-3" style="
+    margin-top: 100px;">
+    <div class="col-sm-3"><h6 class="mb-0">JOB DETAILS:</h6></div>
+    <hr>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Your full Name</h6></div>
+            <div class="col-sm-9 text-secondary">{{ mto.full_name }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Applied Job Name</h6></div>
+            <div class="col-sm-9 text-secondary">{{ details.job_id.job_name }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Job Category</h6></div>
+            <div class="col-sm-9 text-secondary">{{ details.job_id.cat_id.micro_task_category }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Job Description</h6></div>
+            <div class="col-sm-9 text-secondary">{{ details.job_id.job_description }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Assigned date</h6></div>
+            <div class="col-sm-9 text-secondary">{{ details.assigned_date }}</div>
+        </div>
+        <hr>
+         <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Target date</h6></div>
+            <div class="col-sm-9 text-secondary">{{ details.job_id.target_date }}</div>
+        </div>
+        <hr>
+         <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Due date</h6></div>
+            <div class="col-sm-9 text-secondary">{{ details.due_date }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Budget in AED</h6></div>
+            <div class="col-sm-9 text-secondary">{{ details.fees }}</div>
+        </div>
+        <hr>
+        <form action="{% url 'mto:submit_job' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="job_id" value="{{ details.job_id.id }}">
+            <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Completed Date</h6></div>
+            <div class="col-sm-9 text-secondary"><input type="date" name="date" id="date"></div>
+            </div>
+            <hr>
+            <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Upload completed job</h6></div>
+            <div class="col-sm-9 text-secondary"><input type="file" name="file1" id="file"></div>
+            </div>
+            <hr>
+            {% if not details.is_submitted %}
+            <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0"><input type="submit" class="btn btn-primary"></h6></div>
+            <hr>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

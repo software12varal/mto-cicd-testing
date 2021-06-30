@@ -1,0 +1,102 @@
+{% extends 'mto/base.html' %}
+{% block content %}
+
+<br><br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">Total jobs submitted</h5>
+            <p class="card-text">{{jobs_submitted}}</p>
+            
+            </div>
+        </div>
+        </div>
+        <div class="col-sm-3">
+        <div class="card">
+            <div class="card-body">
+            <h5 class="card-title">Total jobs completed</h5>
+            <p class="card-text">{{jobs_completed}}</p>
+            
+            </div>
+        </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total jobs approved</h5>
+                <p class="card-text">{{jobs_approved}}</p>
+            
+            </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Total earnings</h5>
+                <p class="card-text">{{total}}</p>
+            
+            </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <hr>
+<br>
+    <table class="table table-bordered">
+    <thead>
+        <tr>
+            <th scope="col">Job Id</th>
+            <th scope="col">Job title</th>
+            <th scope="col">Job Category</th>
+            <th scope="col">Job date of Acceptance</th>
+            <th scope="col">Job Deadline</th>
+            <th scope="col">Job Status</th>
+            <th scope="col">Job Payment Amount</th>
+            <th scope="col">Job Payment Status</th>
+            <th scope="col">Job Rating</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <!--displays job id -->
+            <td>{{job.job_id.id}}</td>
+            <!-- displays job title -->
+             <td>{{job.job_id.job_name}}</td>  
+            <!-- displays job category-->             
+                <td>{{job.job_id.cat_id.micro_task_category}}</td>
+            
+                 <!--displays date of acceptance -->           
+            <td>{{job.assigned_date}}</td>
+                
+                <!--displays  deadline -->            
+                            
+            <td>{{job.job_id.target_date}}</td>
+                
+                <!--displays job status-->
+                
+                    <td>{{job.job_status.job_status}}</td>
+                
+            
+                  <!--displays fees -->  
+                        
+                    <td>{{job.fees}}</td>
+              
+                <!--displays payments status-->
+                
+                    <td>{{job.payment_status.payment_status}}</td>
+               
+                <!--rating eveluation -->
+            <td>{{job.rating_evaluation}}</td>
+            
+        </tr>
+        {% endfor %}                
+    </tbody>
+    </table>
+                    
+
+    
+</div>
+{% endblock %}

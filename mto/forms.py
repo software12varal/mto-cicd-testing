@@ -1,24 +1,47 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 # from django.forms import TextInput, EmailInput, PasswordInput
 # from django import forms
 
 from .models import MTO
+import json
+from django import forms
+from jobs.models import MALRequirement, MTOJob
 
 User = get_user_model()
 
+job_categories = MALRequirement.objects.all()
+
 
 class SignUpForm(UserCreationForm):
+    job_category = forms.ModelMultipleChoiceField(
+        job_categories, widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+
     class Meta(UserCreationForm.Meta):
         model = MTO
-        fields = ['username', 'full_name', 'email', 'paypal_id', 'password1', 'password2']
+        fields = ['username', 'full_name', 'email', 'paypal_id', 'password1',
+                  'password2', 'contact_number', 'location', 'job_category']
+        widgets = {
+            'contact_number': forms.NumberInput(attrs={'placeholder': 'Enter contact number', 'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'placeholder': 'Enter Location', 'class': 'form-control'}),
+        }
 
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        user.is_mto = True
-        user.is_active = False
-        user.save()
-        return user
+    # def save(self, commit=True):
+    #     job_categories = self.cleaned_data['job_category']
+    #     job_categories_ids = json.dumps([job.id for job in job_categories])
+    #
+    #     user = super().save(commit=False)
+    #     if User.objects.using('varal_job_posting_db').filter(username=user.username).exists():
+    #         messages.info(self.request, f"{user.username} exists in varal job posting db")
+    #     elif User.objects.using('vendor_os_db').filter(username=user.username).exists():
+    #         messages.info(self.request, f"{user.username} exists in vendor os db")
+    #     else:
+    #         user.is_mto = True
+    #         user.is_active = False
+    #         user.job_category = job_categories_ids
+    #         user.save()
+    #         return user
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
@@ -35,6 +58,26 @@ class SignUpForm(UserCreationForm):
         self.fields['password1'].widget.attrs['placeholder'] = 'Enter password'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm password'
+        self.fields['contact_number'].widget.attrs['class'] = 'form-control'
+        self.fields['contact_number'].widget.attrs['placeholder'] = 'Contact number'
+        self.fields['location'].widget.attrs['class'] = 'form-control'
+        self.fields['location'].widget.attrs['placeholder'] = 'Location'
+        self.fields['job_category'].widget.attrs['class'] = 'form-control'
+        self.fields['job_category'].widget.attrs['placeholder'] = 'Job category'
+
+
+class MTOUpdateProfileForm(forms.ModelForm):
+    job_category = forms.ModelMultipleChoiceField(job_categories,
+                                                  widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = MTO
+        fields = ['contact_number', 'location', 'paypal_id']
+        widgets = {
+            'contact_number': forms.NumberInput(attrs={'placeholder': 'Enter contact number', 'class': 'form-control'}),
+            'location': forms.TextInput(attrs={'placeholder': 'Enter Location', 'class': 'form-control'}),
+            'paypal_id': forms.TextInput(attrs={'placeholder': 'Enter PayPal ID', 'class': 'form-control'}),
+        }
 
 #
 #

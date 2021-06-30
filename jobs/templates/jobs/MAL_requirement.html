@@ -1,17 +1,8 @@
 {% extends 'jobs/base.html' %} {% block content %}
-<div class="mt-5">
-    <div class="card-body">
-        MAL Requirements{% for job in jobs %}
-        <h5 class="mt-5">{{forloop.counter}}. <b>Job Name : </b> {{job.job_name}}</h5>
-        {% endfor %}
-    </div>
-</div>
+
 <div class="card">
     <div class="card-body">
-        <form method="post" action="#">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-primary">add requirements</button>
-        </form>
+        <a href="{% url 'jobs:add_mal' %}" class="btn btn-primary">Add requirements</a>
     </div>
 </div>
 {% endblock %}

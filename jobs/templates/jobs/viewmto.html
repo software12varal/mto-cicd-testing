@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %} View MTO {% endblock %}
+{% block content %}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Full Name</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.full_name }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">User Name</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.username }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Email</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.email }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Paypal id</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.paypal_id }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Is Active User</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.is_active }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Accepted Jobs</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mtojob }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Completed Jobs</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ completed }}</div>
+        </div>
+        <hr>
+        <td><a class="btn btn-success" href="{% url 'jobs:mto_bank' %}" role="button">Back To MTO Bank</a></td>
+
+        {% endblock %}
