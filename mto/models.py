@@ -6,8 +6,7 @@ User = get_user_model()
 
 class MTO(User):
     paypal_id = models.CharField(max_length=100)
-    token = models.CharField(max_length=100,null = True)
-
+    token = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.full_name

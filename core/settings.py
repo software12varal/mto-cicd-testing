@@ -84,10 +84,13 @@ DATABASES = {
     'accounts_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'accounts.db.sqlite3',
+        'TEST': {
+                'DEPENDENCIES': [],
+            },
     },
 
 }
-
+# DEFAULT_DB_ALIAS = 'varal_job_posting_db'
 DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
                     'routers.db_routers.AccountsDBRouter']
 
