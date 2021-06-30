@@ -1,0 +1,105 @@
+{% extends 'jobs/base.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block csrf %}
+<script>
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+</script>
+{% endblock %}
+{% block content %}
+<div class="mt-5">
+			<div class="card-body">
+				<h4 class="mt-5">Add Mal requirement</h4>
+			</div>
+        <div class="alert alert-success mt-3">
+            <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
+            <span data-notify="message" id="message"></span>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <form action="{% url 'jobs:add_mal' %}" method="post" id="add-mal-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                 <div class="form-group">
+                    <label>identification number</label> {{form.identification_number|add_class:"form-control"}}
+                     <div class="text-danger" id="error-identification-number"></div>
+                </div>
+                 <div class="form-group">
+                    <label>assembly line id</label> {{form.assembly_line_id|add_class:"form-control"}}
+                      <div class="text-danger" id="error-assembly-line-id"></div>
+                </div>
+                <div class="form-group">
+                    <label>assembly line name</label> {{form.assembly_line_name|add_class:"form-control"}}
+                     <div class="text-danger" id="error-assembly-line-name"></div>
+                </div>
+                 <div class="form-group">
+                    <label>person_name</label> {{form.person_name|add_class:"form-control"}}
+                      <div class="text-danger" id="error-person-name"></div>
+                </div>
+                <div class="form-group">
+                    <label>person email</label> {{form.person_email|add_class:"form-control"}}
+                     <div class="text-danger" id="error-person-email"></div>
+                </div>
+                 <div class="form-group">
+                    <label>output folder link</label> {{form.output|add_class:"form-control"}}
+                      <div class="text-danger" id="error-output"></div>
+                </div>
+                <div class="form-group">
+                    <label>Name of micro task</label> {{form.micro_task|add_class:"form-control"}}
+                     <div class="text-danger" id="error-micro-task"></div>
+                </div>
+                 <div class="form-group">
+                    <label>micro task category</label> {{form.micro_task_category|add_class:"form-control"}}
+                      <div class="text-danger" id="error-micro-task-category"></div>
+                </div>
+                <div class="form-group">
+                    <label>target date</label> {{form.target_date|add_class:"form-control"}}
+                     <div class="text-danger" id="error-target-date"></div>
+                </div>
+                 <div class="form-group">
+                    <label>total_budget</label> {{form.total_budget|add_class:"form-control"}}
+                      <div class="text-danger" id="error-total-budget"></div>
+                </div>
+                <div class="form-group">
+                    <label>job description</label> {{form.job_description|add_class:"form-control"}}
+                     <div class="text-danger" id="error-job-description"></div>
+                </div>
+                 <div class="form-group">
+                    <label>job sample</label> {{form.job_sample|add_class:"form-control"}}
+                      <div class="text-danger" id="error-job-sample"></div>
+                </div>
+                 <div class="form-group">
+                    <label>job instructions</label> {{form.job_instructions|add_class:"form-control"}}
+                      <div class="text-danger" id="error-job-instructions"></div>
+                </div>
+                <div class="form-group">
+                    <label>job quantity</label> {{form.job_quantity|add_class:"form-control"}}
+                     <div class="text-danger" id="error-job-quantity"></div>
+                </div>
+                 <div class="form-group">
+                    <label>input folder</label> {{form.input_folder|add_class:"form-control"}}
+                      <div class="text-danger" id="error-input-folder"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">submit</button>
+            </form>
+          </div>
+        </div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'jobs/add-mal.js' %}"></script>
+{% endblock %}
