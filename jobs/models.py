@@ -5,13 +5,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from users.models import User
 from mto.models import MTO
-<<<<<<< HEAD
-=======
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import os
 from django.conf import settings
->>>>>>> 62fa89d8f3ec43be278fb87d4ffca9c13035266f
 
 
 
@@ -107,8 +104,6 @@ class Jobs(models.Model):
     def __str__(self):
         return f'{self.job_name}'
 
-<<<<<<< HEAD
-=======
 @receiver(signal=post_save,sender=Jobs)
 def rename_file(sender,instance,created,**kwargs):
     if created:
@@ -132,7 +127,6 @@ def rename_file(sender,instance,created,**kwargs):
         content_file_name(instance=instance,is_sample=True)
         content_file_name(instance=instance,is_sample=False)
         
->>>>>>> 62fa89d8f3ec43be278fb87d4ffca9c13035266f
 
 def output_directory_path(instance, filename):
     job = instance.job_id.job_name
