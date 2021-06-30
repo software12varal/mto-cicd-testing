@@ -78,14 +78,23 @@ DATABASES = {
     'vendor_os_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'vendor_os.db.sqlite3',
+        'TEST': {
+            'DEPENDENCIES': [],
+        } 
     },
     'varal_job_posting_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'varal_job_posting.db.sqlite3',
+        'TEST': {
+            'DEPENDENCIES': [],
+        } 
     },
     'accounts_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'accounts.db.sqlite3',
+        'TEST': {
+            'DEPENDENCIES': [],
+        } 
     },
 
 }
