@@ -273,17 +273,21 @@ def job_detail(request, slug):
     return render(request, 'mto/apply_job.html', {'job_details': job_details})
 
 def apply_job(request, id):
-    job_details = Jobs.objects.get(id=id)
-    assigned_to = request.user.mto.id
-    due_date = job_details.target_date
-    assigned_date = datetime.now()
-    fees = job_details.job_cost
-    apply = MTOJob(job_id=job_details, assigned_to=assigned_to, evaluation_status_id=2, due_date=due_date,
-                   assigned_date=assigned_date,
-                   fees=fees)
-    apply.save()
-    messages.success(request, "Applied Successfully !")
-    return redirect('mto:view')
+    if MTOJob.objects.filter(job_id_id=id,assigned_to=request.user.mto.id).exists():
+        messages.warning(request, "Already Applied to this Job !")
+        return redirect('mto:view')
+    else:    
+        job_details = Jobs.objects.get(id=id)
+        assigned_to = request.user.mto.id
+        due_date = job_details.target_date
+        assigned_date = datetime.now()
+        fees = job_details.job_cost
+        apply = MTOJob(job_id=job_details, assigned_to=assigned_to, evaluation_status_id=2, due_date=due_date,
+                    assigned_date=assigned_date,
+                    fees=fees)
+        apply.save()
+        messages.success(request, "Applied Successfully !")
+        return redirect('mto:view')
 
 
 def view_applied_jobs(request):
