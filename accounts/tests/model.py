@@ -3,6 +3,7 @@ from model_bakery import baker
 
 
 
+<<<<<<< HEAD
 from django.test import TestCase
 from django.utils.html import DOTS
 from accounts.models import MTOPaymentStatus
@@ -31,3 +32,5 @@ class TestNew(AccountsTestDbMixin, TestCase,):
         print(sample_status)
         MTOPaymentStatus.objects.create(description= sample_status)
         self.assertEqual(str(sample_status), MTOPaymentStatus.objects.last().description)
+=======
+>>>>>>> 62fa89d8f3ec43be278fb87d4ffca9c13035266f

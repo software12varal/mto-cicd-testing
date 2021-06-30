@@ -5,6 +5,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from users.models import User
 from mto.models import MTO
+<<<<<<< HEAD
+=======
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+import os
+from django.conf import settings
+>>>>>>> 62fa89d8f3ec43be278fb87d4ffca9c13035266f
 
 
 
@@ -100,6 +107,32 @@ class Jobs(models.Model):
     def __str__(self):
         return f'{self.job_name}'
 
+<<<<<<< HEAD
+=======
+@receiver(signal=post_save,sender=Jobs)
+def rename_file(sender,instance,created,**kwargs):
+    if created:
+        def content_file_name(instance, is_sample=None):
+            if is_sample:
+                filename=os.path.basename(instance.job_sample.name)
+                ext = filename.split('.')[-1]
+                filena = "Samples_%s.%s" % (instance.id, ext)
+                new_path=os.path.join(settings.MEDIA_ROOT, 'images/job_documents/job_samples/',filena)
+                os.rename(instance.job_sample.path, new_path)
+                instance.job_sample.name = new_path
+                instance.save()
+            else:
+                filename=os.path.basename(instance.job_instructions.name)
+                ext = filename.split('.')[-1]
+                filena = "Instructions_%s.%s" % (instance.id, ext)
+                new_path=os.path.join(settings.MEDIA_ROOT, 'images/job_documents/job_instructions/',filena)
+                os.rename(instance.job_instructions.path, new_path)
+                instance.job_instructions.name = new_path
+                instance.save()
+        content_file_name(instance=instance,is_sample=True)
+        content_file_name(instance=instance,is_sample=False)
+        
+>>>>>>> 62fa89d8f3ec43be278fb87d4ffca9c13035266f
 
 def output_directory_path(instance, filename):
     job = instance.job_id.job_name

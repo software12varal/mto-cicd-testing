@@ -17,3 +17,4 @@ class TestNew(MtoTestDbMixin, TestCase):
         mto.set_password('password')
         mto.save()
         self.assertEqual(str(mto), "My name")
+
