@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'jobs/base.html' %}
 {% block title %} View MTO {% endblock %}
 {% block content %}
 
@@ -43,7 +43,7 @@
             <div class="col-sm-3">
                 <h6 class="mb-0">Accepted Jobs</h6>
             </div>
-            <div class="col-sm-9 text-secondary">{{ mtojob }}</div>
+            <div class="col-sm-9 text-secondary">{{ mto_job }}</div>
         </div>
         <hr>
         <div class="row">
@@ -51,6 +51,41 @@
                 <h6 class="mb-0">Completed Jobs</h6>
             </div>
             <div class="col-sm-9 text-secondary">{{ completed }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Percentage of acceptance</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ percentage_acceptance }}%</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Percentage of completeness</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ percentage_completeness }}%</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Average accept time</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{% if accept_days.status %}{{ accept_days.time }}{% endif %} {{ accept_seconds }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Average complete time</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{% if performance_days.status %}{{ performance_days.time }} {% endif %} {{ performance_seconds }}</div>
+        </div>
+                <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Overall performance</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{% if performance_days.status %}{{ performance_days.time }} {% endif %} {{ performance_seconds }}</div>
         </div>
         <hr>
         <td><a class="btn btn-success" href="{% url 'jobs:mto_bank' %}" role="button">Back To MTO Bank</a></td>

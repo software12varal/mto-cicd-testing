@@ -91,6 +91,7 @@ class MALRequirement(models.Model):
 class Jobs(models.Model):
     job_name = models.CharField(max_length=300, help_text='e.g develop website')
     cat_id = models.ForeignKey(MALRequirement, on_delete=models.CASCADE)
+    posted_date = models.DateTimeField(auto_now_add=True)
     target_date = models.DateTimeField(null=True, help_text='e.g 2021-10-25 14:30:59')
     job_description = models.CharField(_('job description'), max_length=1000, help_text='e.g car website')
     job_sample = models.FileField(upload_to='images/job_documents/job_samples')
@@ -138,15 +139,15 @@ def output_directory_path(instance, filename):
 class MTOJob(models.Model):
     job_id = models.ForeignKey(Jobs, on_delete=models.PROTECT, null=True)
     assigned_to = models.IntegerField(help_text='related to MTO')
-    due_date = models.DateField()
-    assigned_date = models.DateField(auto_now_add=True)
+    due_date = models.DateTimeField()
+    assigned_date = models.DateTimeField(auto_now_add=True)
     fees = models.FloatField()
     rating_evaluation = models.IntegerField(null=True)
     payment_status = models.ForeignKey(PaymentStatus, verbose_name=_("payment status"), on_delete=models.CASCADE,
                                        null=True)
     job_status = models.ForeignKey(Jobstatus, verbose_name=_("job status"), on_delete=models.CASCADE,
                                        null=True)                                   
-    completed_date = models.DateField(null=True)
+    completed_date = models.DateTimeField(null=True)
     output_path = models.FileField(upload_to=output_directory_path)
     is_submitted = models.BooleanField(default=False)
     evaluation_status = models.ForeignKey(EvaluationStatus, on_delete=models.CASCADE)
@@ -155,6 +156,32 @@ class MTOJob(models.Model):
     def mto(self):
         mto = MTO.objects.filter(id=self.assigned_to).first()
         return mto
+
+    @property
+    def average_time(self):
+        if self.completed_date is None:
+            time = 0
+        else:
+
+            time = self.completed_date - self.assigned_date
+            # try:
+            #     if time.days >= 1:
+            #         days = time
+            #     else:
+            #         days = 1
+            # except:
+            #     if self.completed_date == self.assigned_date:
+            #         days = 1
+            #     else:
+            #         days = 0
+        return time
+
+    @property
+    def average_accept_time(self):
+
+        time = self.assigned_date - self.job_id.posted_date
+        # context = dict({'days':time.days,'seconds':time.seconds})
+        return time
 
     def __str__(self):
         return f"{self.job_id.job_name} :: {self.mto.full_name}"
