@@ -25,4 +25,7 @@ class VaralOSDBAuthBackend(BaseBackend):
         try:
             return User.objects.using('vendor_os_db').get(pk=user_id)
         except User.DoesNotExist:
-            return None
+            try:
+                return User.objects.using('varal_job_posting_db').get(pk=user_id)
+            except User.DoesNotExist:
+                return None

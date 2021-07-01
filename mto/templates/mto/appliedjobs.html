@@ -1,0 +1,37 @@
+{% extends 'mto/base.html' %}
+{% block content %}
+<div mt-4  style="
+    margin-top: 100px;
+">
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Sr NO</th>
+      <th scope="col">Job Title</th>
+      <th scope="col">View Job Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for job in jobs %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ job.job_id.job_name }}</td>
+      <td><a class="btn btn-success" href="{% url 'mto:view_applied_details' mto_id=job.assigned_to job_id=job.job_id.id  %}" role="button">Submit</a></td>
+    </tr>
+    {% endfor %}
+<!--    <tr>-->
+<!--      <th scope="row">2</th>-->
+<!--      <td>Jacob</td>-->
+<!--      <td>Thornton</td>-->
+<!--      <td>@fat</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--      <th scope="row">3</th>-->
+<!--      <td>Larry</td>-->
+<!--      <td>the Bird</td>-->
+<!--      <td>@twitter</td>-->
+<!--    </tr>-->
+  </tbody>
+</table>
+</div>
+{% endblock %}

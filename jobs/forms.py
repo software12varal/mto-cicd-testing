@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from .models import MTOAdminUser, Jobs, MALRequirement
+from .models import MTOAdminUser, Jobs, MALRequirement,PaymentStatus,Jobstatus
 from django import forms
 
 
@@ -56,6 +56,7 @@ class JobsForm(forms.ModelForm):
         self.fields['target_date'].widget.attrs['type'] = 'datetime'
         self.fields['job_description'].widget.attrs['class'] = 'form-control'
         self.fields['job_sample'].widget.attrs['class'] = 'form-control'
+        self.fields['job_instructions'].widget.attrs['class'] = 'form-control'
         self.fields['job_quantity'].widget.attrs['class'] = 'form-control'
         self.fields['people_required'].widget.attrs['class'] = 'form-control'
         self.fields['skills'].widget.attrs['class'] = 'form-control'
@@ -68,3 +69,8 @@ class MALRequirementForm(ModelForm):
         fields = ['identification_number', 'assembly_line_id', 'assembly_line_name', 'person_name',
                   'person_email', 'output', 'micro_task', 'micro_task_category', 'target_date', 'total_budget',
                   'job_description', 'job_sample', 'job_instructions', 'job_quantity', 'input_folder']
+
+
+
+  
+    
