@@ -1,13 +1,10 @@
-from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-# from django.forms import TextInput, EmailInput, PasswordInput
-# from django import forms
+from django import forms
+from django_countries.widgets import CountrySelectWidget
 
 from .models import MTO
-import json
-from django import forms
-from jobs.models import MALRequirement, MTOJob
+from jobs.models import MALRequirement
 
 User = get_user_model()
 
@@ -24,7 +21,7 @@ class SignUpForm(UserCreationForm):
                   'password2', 'contact_number', 'location', 'job_category']
         widgets = {
             'contact_number': forms.NumberInput(attrs={'placeholder': 'Enter contact number', 'class': 'form-control'}),
-            'location': forms.TextInput(attrs={'placeholder': 'Enter Location', 'class': 'form-control'}),
+            'location': CountrySelectWidget(attrs={'class': 'form-control'}, layout='{widget}'),
         }
 
     # def save(self, commit=True):
@@ -75,7 +72,8 @@ class MTOUpdateProfileForm(forms.ModelForm):
         fields = ['contact_number', 'location', 'paypal_id']
         widgets = {
             'contact_number': forms.NumberInput(attrs={'placeholder': 'Enter contact number', 'class': 'form-control'}),
-            'location': forms.TextInput(attrs={'placeholder': 'Enter Location', 'class': 'form-control'}),
+            'location': CountrySelectWidget(attrs={'class': 'form-control'}, layout='{widget}'
+),
             'paypal_id': forms.TextInput(attrs={'placeholder': 'Enter PayPal ID', 'class': 'form-control'}),
         }
 

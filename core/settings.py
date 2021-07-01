@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     # third party apps
     'widget_tweaks',
     'phonenumber_field',
+    'django_countries',
 ]
 
 AUTH_USER_MODEL = 'users.User'

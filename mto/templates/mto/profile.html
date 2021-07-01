@@ -38,7 +38,7 @@
 					<div class="card-body">
 						<h5 class="h6 card-title">Interests</h5>
 						{% for category in job_categories %}
-						<a href="#" class="badge badge-primary mr-1 my-1">{{ category.name }}</a>
+						<a href="#" class="badge badge-primary mr-1 my-1">{{ category }}</a>
 						{% endfor %}
 					</div>
 					<hr class="my-0" />
@@ -47,7 +47,7 @@
 						<ul class="list-unstyled mb-0">
 							<li class="mb-1"><span data-feather="briefcase" class="feather-sm mr-1"></span> Phone <a href="#">{{ mto.contact_number }}</a></li>
 							<li class="mb-1"><span data-feather="briefcase" class="feather-sm mr-1"></span> PayPal ID <a href="#">{{ mto.paypal_id }}</a></li>
-							<li class="mb-1"><span data-feather="home" class="feather-sm mr-1"></span> Lives in <a href="#">{{ mto.location }}</a></li>
+							<li class="mb-1"><span data-feather="home" class="feather-sm mr-1"></span> Location <a href="#">{{ mto.location.name }}</a></li>
 							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Date Joined <a href="#">{{ mto.timestamp }}</a></li>
 						</ul>
 					</div>
