@@ -78,6 +78,12 @@ class PaymentStatus(models.Model):
 
 
 class Jobs(models.Model):
+    Jobstatus = [('cr','Created'),
+    ('co','Completed'),
+    ('ur','Under review'),
+    ('as','Assigned')
+    
+    ]
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
     identification_number = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
     assembly_line_id = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
@@ -96,7 +102,8 @@ class Jobs(models.Model):
     job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
     input_folder = models.FilePathField(path='media/documents/job_documents/input',
                                         help_text="Link of the Input folder")
-
+    job_status = models.CharField(max_length = 100,choices=Jobstatus,default = "as")
+    
     
 
     def __str__(self):
