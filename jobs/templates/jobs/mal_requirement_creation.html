@@ -50,20 +50,16 @@ const csrftoken = getCookie('csrftoken');
                     <label>person_name</label> {{form.person_name|add_class:"form-control"}}
                       <div class="text-danger" id="error-person-name"></div>
                 </div>
-                <div class="form-group">
-                    <label>person email</label> {{form.person_email|add_class:"form-control"}}
-                     <div class="text-danger" id="error-person-email"></div>
-                </div>
                  <div class="form-group">
                     <label>output folder link</label> {{form.output|add_class:"form-control"}}
                       <div class="text-danger" id="error-output"></div>
                 </div>
                 <div class="form-group">
-                    <label>Name of micro task</label> {{form.micro_task|add_class:"form-control"}}
+                    <label>Name of micro task</label> {{form.job_name|add_class:"form-control"}}
                      <div class="text-danger" id="error-micro-task"></div>
                 </div>
                  <div class="form-group">
-                    <label>micro task category</label> {{form.micro_task_category|add_class:"form-control"}}
+                    <label>micro task category</label> {{form.cat_id|add_class:"form-control"}}
                       <div class="text-danger" id="error-micro-task-category"></div>
                 </div>
                 <div class="form-group">

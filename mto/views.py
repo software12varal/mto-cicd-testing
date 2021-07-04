@@ -17,7 +17,7 @@ import json
 # from django.views.generic.base import View
 #
 # from jobs.models import MALRequirement, MicroTask, MTOJobCategory
-from jobs.models import MTOJob, Jobstatus, PaymentStatus, MALRequirement, Jobs
+from jobs.models import MTOJob, Jobstatus, PaymentStatus, Jobs, MicroTask
 from users.models import User
 from .forms import SignUpForm
 from .models import MTO
@@ -146,7 +146,7 @@ class MTOProfileView(View):
         # we get the items from string type to list type and get the users job categories
         jsonDec = json.decoder.JSONDecoder()
         mto_preferred_categories = jsonDec.decode(mto.job_category)
-        job_categories = [MALRequirement.objects.get(id=job_id) for job_id in mto_preferred_categories]
+        job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
 
         context = {self.context_object_name: mto, 'form': self.form, 'job_categories': job_categories}
         return render(self.request, self.template_name, context)

@@ -79,27 +79,24 @@
                               </div>
                             {% endif %} {% endcomment %}
                         <div class="form-group">
-		                    	<label>Job Name</label>
-		                    	{{ form.job_name }}
+		                    	<label>microtask_name </label>
+		                    	{{ form.microtask_name }}
                           <span class="h6 text-danger m-0"> {{form.job_name.errors|striptags}} </span>
 		                    </div>
 
 		                    <div class="form-group">
-		                    	<label>Category ID</label>
-		                    	{{ form.cat_id }}
-                          <span class="h6 text-danger m-0"> {{form.cat_id.errors|striptags}} </span>
+		                    	<label>microtask_category</label>
+		                    	{{ form.microtask_category }}
+                          <span class="h6 text-danger m-0"> {{form.microtask_category.errors|striptags}} </span>
 		                    </div>
 		                    <div class="form-group">
-		                    	<label>Target Date</label>
-		                    	<input type="datetime-local" name="target_date" class="form-control" required="" id="id_target_date">
-                          <span class="h6 text-danger m-0"> {{form.target_date.errors|striptags}} </span>
+		                    	<label>time_required </label>
+                          {{ form.time_required }}
+		                    	{% comment %} <input type="datetime-local" name="target_date" class="form-control" required="" id="id_target_date"> {% endcomment %}
+                          <span class="h6 text-danger m-0"> {{form.time_required.errors|striptags}} </span>
 		                    </div>
 
-		                    <div class="form-group">
-		                    	<label>Job Description</label>
-		                    	{{ form.job_description }}
-                          <span class="h6 text-danger m-0"> {{form.job_description.errors|striptags}} </span>
-		                    </div>
+		    
 
 		                    <div class="form-group">
 		                    	<label>Job Sample</label>
@@ -114,14 +111,14 @@
 		                    </div>
 
 		                    <div class="form-group">
-		                    	<label>Job Quantity</label>
-		                    	{{ form.job_quantity }}
+		                    	<label>tc_type</label>
+		                    	{{ form.tc_type }}
                           <span class="h6 text-danger m-0"> {{form.job_quantity.errors|striptags}} </span>
 		                    </div>
 
                         <div class="form-group">
 		                    	<label>People Required</label>
-		                    	{{ form.people_required }}
+		                    	{{ form.people_required_for_valid_tc }}
                           <span class="h6 text-danger m-0"> {{form.people_required.errors|striptags}} </span>
 		                    </div>
 

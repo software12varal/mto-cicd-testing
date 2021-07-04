@@ -2,8 +2,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
-from jobs.models import MTOJob, Jobs,MALRequirement
-from .forms import MTOAdminSignUpForm, MALRequirementForm
+from jobs.models import MTOJob, Jobs
+from .forms import MTOAdminSignUpForm, JobForm
 from django.contrib import messages
 from jobs.forms import JobsForm
 
@@ -245,7 +245,7 @@ def microtask_page(request):
 
 
 def mal_requirement(request):
-    context = {'jobs': MALRequirement.objects.all(), }
+    context = {'jobs': Jobs.objects.all(), }
     return render(request, 'jobs/MAL_requirement.html', context)
 
 
@@ -266,7 +266,7 @@ def admin_profile(request):
 
 
 class MALRequirementCreateView(CreateView):
-    form_class = MALRequirementForm
+    form_class = JobForm
     template_name = 'jobs/mal_requirement_creation.html'
 
     def get_form_kwargs(self):
@@ -286,5 +286,5 @@ class MALRequirementCreateView(CreateView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.save()
-        context = {'message': f" {instance.micro_task}, has been created successfully."}
+        context = {'message': f" {instance.job_name}, has been created successfully."}
         return JsonResponse(context, status=200)
