@@ -18,7 +18,7 @@
         <hr>
         <div class="row">
             <div class="col-sm-3"><h6 class="mb-0">Job Category</h6></div>
-            <div class="col-sm-9 text-secondary">{{ details.job_id.cat_id.micro_task_category }}</div>
+            <div class="col-sm-9 text-secondary">{{ details.job_id.cat_id.microtask_name }}</div>
         </div>
         <hr>
         <div class="row">
@@ -49,10 +49,6 @@
         <form action="{% url 'mto:submit_job' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="job_id" value="{{ details.job_id.id }}">
-            <div class="row">
-            <div class="col-sm-3"><h6 class="mb-0">Completed Date</h6></div>
-            <div class="col-sm-9 text-secondary"><input type="date" name="date" id="date"></div>
-            </div>
             <hr>
             <div class="row">
             <div class="col-sm-3"><h6 class="mb-0">Upload completed job</h6></div>
