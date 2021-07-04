@@ -66,3 +66,5 @@ class JobForm(ModelForm):  # change_from = MALRequirementForm
     class Meta:
         model = Jobs
         fields = '__all__'
+
+

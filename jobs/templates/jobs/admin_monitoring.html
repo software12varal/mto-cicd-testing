@@ -1,0 +1,107 @@
+{% extends 'jobs/base.html' %}
+{% block title %}Admin Monitoring {% endblock %}
+{% block content %}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Total Jobs Submitted
+                </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{submitted_jobs}}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Total Jobs Completed</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ completed_jobs }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Jobs Rejected After TC
+                </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ rejected_jobs }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job payment(total amount spent )
+                </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ Job_payment }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Number of MTOs working on a Job
+                </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.No_of_mtos_working_onjobs }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Number of Ongoing Jobs
+                </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.Number_of_Ongoing_Jobs }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">JOB ID</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.JOBID }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job TITLE</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{% for i in mto %}{{i.job_id}}{% endfor %}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job category
+                </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ Job_category  }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Date of posting 
+                </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ date_of_posting }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">date of acceptance</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mto.assigned_date }} </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job deadline</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"> {{ mto.due_date }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Approved amount per job </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{Approved_amount_per_job}}</div>
+        </div>
+        <hr>
+        <td><a class="btn btn-success" href="{% url 'jobs:admin_monitoring' %}" role="button">Back To Admin Monitoring</a></td>
+
+        {% endblock %}

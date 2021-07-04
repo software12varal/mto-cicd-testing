@@ -288,3 +288,21 @@ class MALRequirementCreateView(CreateView):
         instance.save()
         context = {'message': f" {instance.job_name}, has been created successfully."}
         return JsonResponse(context, status=200)
+
+
+def admin_monitoring(request):
+    jobs = Jobs.objects.all()
+    submitted_jobs = MTOJob.objects.all().count()
+    completed_jobs = MTOJob.objects.all().count()
+    rejected_jobs = MTOJob.objects.all().count()
+    Job_payment = MTOJob.objects.all().count()
+    No_of_mtos_working_onjobs = MTOJob.objects.all().count()
+    Number_of_Ongoing_Jobs = MTOJob.objects.all().count() 
+    Approved_amount_per_job = MTOJob.objects.all().count()
+    Job_TITLE = MTOJob.objects.all()
+    Job_category = MTOJob.objects.all()
+    date_of_posting = MTOJob.objects.all()
+
+    context = {'jobs': jobs,'submitted_jobs':submitted_jobs,'completed_jobs':completed_jobs,'rejected_jobs': rejected_jobs,'Job_payment':Job_payment,'No_of_mtos_working_onjobs':No_of_mtos_working_onjobs,'Number_of_Ongoing_Jobs':Number_of_Ongoing_Jobs,'Approved_amount_per_job':Approved_amount_per_job,'Job_TITLE':Job_TITLE,'Job_category':Job_category,'date_of_posting':date_of_posting}
+    
+    return render(request, 'jobs/admin_monitoring.html', context)

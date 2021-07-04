@@ -51,6 +51,9 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'jobs:admin_profile' %}">View Profile</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}">Admin Monitoring</a>
+            </li>
           </ul>
           {% if request.user.is_authenticated %}
           <form class="form-inline mt-2 mt-md-0" method="post" action="{% url 'mto:logout' %}">
