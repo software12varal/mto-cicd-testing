@@ -4,11 +4,11 @@ from django import forms
 from django_countries.widgets import CountrySelectWidget
 
 from .models import MTO
-from jobs.models import MALRequirement
+from jobs.models import Jobs
 
 User = get_user_model()
 
-job_categories = MALRequirement.objects.all()
+job_categories = Jobs.objects.all()
 
 
 class SignUpForm(UserCreationForm):
@@ -73,7 +73,7 @@ class MTOUpdateProfileForm(forms.ModelForm):
         widgets = {
             'contact_number': forms.NumberInput(attrs={'placeholder': 'Enter contact number', 'class': 'form-control'}),
             'location': CountrySelectWidget(attrs={'class': 'form-control'}, layout='{widget}'
-),
+                                            ),
             'paypal_id': forms.TextInput(attrs={'placeholder': 'Enter PayPal ID', 'class': 'form-control'}),
         }
 
