@@ -7,12 +7,16 @@ from .forms import MTOAdminSignUpForm, JobForm
 from django.contrib import messages
 from jobs.forms import JobsForm
 
-from jobs.models import MTOJob, MicroTask, MTOAdminUser,PaymentStatus
+from jobs.models import MTOJob, MicroTask, MTOAdminUser, PaymentStatus
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
-from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from mto.models import MTO
 from .models import Jobstatus
 from functools import reduce
+
+from django.core.mail import EmailMessage
+from django.conf import settings
+
 
 def home(request):
     context = {'jobs': MTOJob.objects.all(), }
@@ -39,39 +43,56 @@ def mto_admin_signup(request):
     return render(request, 'jobs/admin-register.html', context)
 
 
+def email_notification(request):
+    email = EmailMessage(
+        'subject',
+        'body',
+        settings.EMAIL_HOST_USER,
+        [request.user.profile.email]
+        # ['software8@varaluae.com'],
+    )
+
+    email.fail_silently = False
+    return email.send()
+
+
 def add_job(request):
     if request.method == 'POST':
         form = JobsForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "Job is Successfully Created !")
+            email_notification(request)
         else:
             messages.error(request, "Something went wrong!")
             return render(request, "jobs/jobsform.html", {'form': form})
     context = {'form': JobsForm()}
     return render(request, 'jobs/jobsform.html', context)
 
-def add_paymentstatus(request,job_id):
-    instance = MTOJob.objects.filter(id = job_id).first()
-    
+
+def add_paymentstatus(request, job_id):
+    instance = MTOJob.objects.filter(id=job_id).first()
+
     if request.method == 'POST':
         payment_id = request.POST.get('payment_id')
         instance.payment_status_id = payment_id
         instance.save()
-        messages.success(request,"Payment Status updated")
-    context = {'form':PaymentStatus.objects.all()}
-    return render(request,'jobs/jobpaymentstatus.html',context)
+        messages.success(request, "Payment Status updated")
+    context = {'form': PaymentStatus.objects.all()}
+    return render(request, 'jobs/jobpaymentstatus.html', context)
 
-def add_jobstatus(request,job_id):
-    instance = MTOJob.objects.filter(id = job_id).first()
+
+def add_jobstatus(request, job_id):
+    instance = MTOJob.objects.filter(id=job_id).first()
     if request.method == 'POST':
         status_id = request.POST.get('status_id')
         instance.job_status_id = status_id
         instance.save()
-        messages.success(request,"Job Status updated")
-    
-    context = {'form':Jobstatus.objects.all()}
-    return render(request,'jobs/jobstatus.html',context)   
+        messages.success(request, "Job Status updated")
+
+    context = {'form': Jobstatus.objects.all()}
+    return render(request, 'jobs/jobstatus.html', context)
+
 
 def appliedjobs(request):
     job = MTOJob.objects.all().order_by('-id')
@@ -84,7 +105,6 @@ def appliedjobs(request):
     except EmptyPage:
         data = p.page(p.num_pages)
     return render(request, 'jobs/appliedjobs.html', {'data': data})
-
 
 
 def alljobs(request):
@@ -297,12 +317,16 @@ def admin_monitoring(request):
     rejected_jobs = MTOJob.objects.all().count()
     Job_payment = MTOJob.objects.all().count()
     No_of_mtos_working_onjobs = MTOJob.objects.all().count()
-    Number_of_Ongoing_Jobs = MTOJob.objects.all().count() 
+    Number_of_Ongoing_Jobs = MTOJob.objects.all().count()
     Approved_amount_per_job = MTOJob.objects.all().count()
     Job_TITLE = MTOJob.objects.all()
     Job_category = MTOJob.objects.all()
     date_of_posting = MTOJob.objects.all()
 
-    context = {'jobs': jobs,'submitted_jobs':submitted_jobs,'completed_jobs':completed_jobs,'rejected_jobs': rejected_jobs,'Job_payment':Job_payment,'No_of_mtos_working_onjobs':No_of_mtos_working_onjobs,'Number_of_Ongoing_Jobs':Number_of_Ongoing_Jobs,'Approved_amount_per_job':Approved_amount_per_job,'Job_TITLE':Job_TITLE,'Job_category':Job_category,'date_of_posting':date_of_posting}
-    
+    context = {'jobs': jobs, 'submitted_jobs': submitted_jobs, 'completed_jobs': completed_jobs,
+               'rejected_jobs': rejected_jobs, 'Job_payment': Job_payment,
+               'No_of_mtos_working_onjobs': No_of_mtos_working_onjobs, 'Number_of_Ongoing_Jobs': Number_of_Ongoing_Jobs,
+               'Approved_amount_per_job': Approved_amount_per_job, 'Job_TITLE': Job_TITLE, 'Job_category': Job_category,
+               'date_of_posting': date_of_posting}
+
     return render(request, 'jobs/admin_monitoring.html', context)

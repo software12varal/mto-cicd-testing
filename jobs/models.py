@@ -11,50 +11,51 @@ import os
 from django.conf import settings
 
 
-
 class MicroTask(models.Model):
-
-    type_of_tc = [('M','Manual'),
-    ('A','Automatic')
-    ]
+    type_of_tc = [('M', 'Manual'),
+                  ('A', 'Automatic')
+                  ]
 
     microtask_name = models.CharField(max_length=300, help_text='e.g develop website')
     microtask_category = models.CharField(max_length=300)
     job_cost = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0)], help_text="currency AED")
-    time_required = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)],help_text="In Hours" )
+    time_required = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)], help_text="In Hours")
     skills = models.CharField(_('skills'), max_length=500, help_text='e.g coding, data entry')
     people_required_for_valid_tc = models.PositiveIntegerField(validators=[MinValueValidator(1)],
-                                                  help_text='number of people required e.g 2')
+                                                               help_text='number of people required e.g 2')
     job_sample = models.FileField(upload_to='job_documents/job_samples/', )
     job_instructions = models.FileField(upload_to='job_documents/job_instructions/', )
-    tc_type = models.CharField(_('type of tc to be done'), max_length=1,choices=type_of_tc,default='Manual',
+    tc_type = models.CharField(_('type of tc to be done'), max_length=1, choices=type_of_tc, default='Manual',
                                help_text='e.g Senior developer, tester & client')
 
     def __str__(self):
         return f'{self.microtask_category}'
 
-@receiver(signal=post_save,sender=MicroTask)
-def rename_file(sender,instance,created,**kwargs):
+
+@receiver(signal=post_save, sender=MicroTask)
+def rename_file(sender, instance, created, **kwargs):
     if created:
         def content_file_name(instance, is_sample=None):
             if is_sample:
-                filename=os.path.basename(instance.job_sample.name)
+                filename = os.path.basename(instance.job_sample.name)
                 ext = filename.split('.')[-1]
                 filena = "Samples_%s.%s" % (instance.id, ext)
-                new_path=os.path.join(settings.MEDIA_ROOT, 'images/job_documents/job_samples/',filena)
+                new_path = os.path.join(settings.MEDIA_ROOT, 'images/job_documents/job_samples/', filena)
                 os.rename(instance.job_sample.path, new_path)
                 instance.job_sample.name = new_path
                 instance.save()
             else:
-                filename=os.path.basename(instance.job_instructions.name)
+                filename = os.path.basename(instance.job_instructions.name)
                 ext = filename.split('.')[-1]
                 filena = "Instructions_%s.%s" % (instance.id, ext)
-                new_path=os.path.join(settings.MEDIA_ROOT, 'images/job_documents/job_instructions/',filena)
+                new_path = os.path.join(settings.MEDIA_ROOT, 'images/job_documents/job_instructions/', filena)
                 os.rename(instance.job_instructions.path, new_path)
                 instance.job_instructions.name = new_path
                 instance.save()
-        content_file_name(instance=instance,is_sample=True)
-        content_file_name(instance=instance,is_sample=False)
+
+        content_file_name(instance=instance, is_sample=True)
+        content_file_name(instance=instance, is_sample=False)
+
 
 class EvaluationStatus(models.Model):
     description = models.CharField(max_length=50)
@@ -78,12 +79,12 @@ class PaymentStatus(models.Model):
 
 
 class Jobs(models.Model):
-    Jobstatus = [('cr','Created'),
-    ('co','Completed'),
-    ('ur','Under review'),
-    ('as','Assigned')
-    
-    ]
+    Jobstatus = [('cr', 'Created'),
+                 ('co', 'Completed'),
+                 ('ur', 'Under review'),
+                 ('as', 'Assigned')
+
+                 ]
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
     identification_number = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
     assembly_line_id = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
@@ -92,7 +93,8 @@ class Jobs(models.Model):
     # as per predecesor 2 there is no need of person_email
     # person_email = models.EmailField(null=True)
     output = models.FilePathField(path='media/documents/job_documents/output', help_text="Link of the output folder")
-    job_name = models.CharField(max_length=300, help_text='e.g develop website') #models.ForeignKey(MicroTask, on_delete=models.CASCADE)
+    job_name = models.CharField(max_length=300,
+                                help_text='e.g develop website')  # models.ForeignKey(MicroTask, on_delete=models.CASCADE)
     cat_id = models.ForeignKey(MicroTask, on_delete=models.CASCADE)
     target_date = models.DateTimeField(null=True, help_text='e.g 2021-10-25 14:30:59')
     total_budget = models.PositiveIntegerField(help_text="e.g currency AED")
@@ -102,13 +104,11 @@ class Jobs(models.Model):
     job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
     input_folder = models.FilePathField(path='media/documents/job_documents/input',
                                         help_text="Link of the Input folder")
-    job_status = models.CharField(max_length = 100,choices=Jobstatus,default = "as")
-    
-    
+    job_status = models.CharField(max_length=100, choices=Jobstatus, default="as")
 
     def __str__(self):
         return self.job_name
-      
+
 
 def output_directory_path(instance, filename):
     job = instance.job_id.job_name
@@ -127,7 +127,7 @@ class MTOJob(models.Model):
     payment_status = models.ForeignKey(PaymentStatus, verbose_name=_("payment status"), on_delete=models.CASCADE,
                                        null=True)
     job_status = models.ForeignKey(Jobstatus, verbose_name=_("job status"), on_delete=models.CASCADE,
-                                       null=True)                                   
+                                   null=True)
     completed_date = models.DateTimeField(null=True)
     output_path = models.FileField(upload_to=output_directory_path)
     is_submitted = models.BooleanField(default=False)
