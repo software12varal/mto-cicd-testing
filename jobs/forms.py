@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 
-from .models import MTOAdminUser, Jobs, PaymentStatus, Jobstatus, MicroTask
+from .models import MTOAdminUser, Jobs, Jobstatus, MicroTask
 from django import forms
 
 
