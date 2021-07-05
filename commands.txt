@@ -1,0 +1,2 @@
+docker build --tag mto-main .
+docker run --publish 8000:8000 mto-main

@@ -17,7 +17,7 @@ import json
 # from django.views.generic.base import View
 #
 # from jobs.models import MALRequirement, MicroTask, MTOJobCategory
-from jobs.models import MTOJob, Jobstatus, PaymentStatus, MALRequirement, Jobs
+from jobs.models import MTOJob, Jobstatus, PaymentStatus, Jobs, MicroTask
 from users.models import User
 from .forms import SignUpForm
 from .models import MTO
@@ -146,7 +146,7 @@ class MTOProfileView(View):
         # we get the items from string type to list type and get the users job categories
         jsonDec = json.decoder.JSONDecoder()
         mto_preferred_categories = jsonDec.decode(mto.job_category)
-        job_categories = [MALRequirement.objects.get(id=job_id) for job_id in mto_preferred_categories]
+        job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
 
         context = {self.context_object_name: mto, 'form': self.form, 'job_categories': job_categories}
         return render(self.request, self.template_name, context)
@@ -250,14 +250,14 @@ class MTOProfileView(View):
 
 def view_jobs(request):  # MTO view all
     if request.user.is_authenticated and request.user.is_mto:  # and not request.user.is_admin :
-        job = Jobs.objects.filter(target_date__gte=datetime.now()).all()
+        job = Jobs.objects.all()
         mt = list(MTOJob.objects.values('job_id').order_by('job_id').annotate(count=Count('job_id')))
         # ADDED BY SHAKEEL
-        ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).people_required <= y else 0,
+        ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).cat_id.people_required_for_valid_tc <= y else 0,
                       list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         ujob = Jobs.objects.filter(target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
-        p = Paginator(ujob, 5)
+        p = Paginator(job, 5)
         page_num = request.GET.get('page')
         try:
             data = p.page(page_num)
@@ -281,7 +281,7 @@ def apply_job(request, id):
         assigned_to = request.user.mto.id
         due_date = job_details.target_date
         assigned_date = datetime.now()
-        fees = job_details.job_cost
+        fees = job_details.total_budget
         apply = MTOJob(job_id=job_details, assigned_to=assigned_to, evaluation_status_id=2, due_date=due_date,
                     assigned_date=assigned_date,
                     fees=fees)
@@ -313,7 +313,6 @@ def submit_job(request):
     # jobs = MTOJob.objects.get(assigned_to=request.user.mto.id)
     if request.method == 'POST':
         job_id = request.POST.get("job_id")
-        completed_date = request.POST['date']
         output_path = request.FILES['file1']
         Jobs.objects.filter(id=job_id).first()
         if MTOJob.objects.filter(job_id_id=job_id, is_submitted=True, assigned_to=mto.id).exists():
@@ -321,7 +320,6 @@ def submit_job(request):
         else:
             instance = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto.id).first()
             instance.output_path = output_path
-            instance.completed_date = completed_date
             instance.is_submitted = True
             instance.save()
             messages.success(request, f'Job successfully submitted')

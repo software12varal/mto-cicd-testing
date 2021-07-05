@@ -2,8 +2,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
-from jobs.models import MTOJob, Jobs,MALRequirement
-from .forms import MTOAdminSignUpForm, MALRequirementForm
+from jobs.models import MTOJob, Jobs
+from .forms import MTOAdminSignUpForm, JobForm
 from django.contrib import messages
 from jobs.forms import JobsForm
 
@@ -12,7 +12,7 @@ from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from mto.models import MTO
 from .models import Jobstatus
-
+from functools import reduce
 
 def home(request):
     context = {'jobs': MTOJob.objects.all(), }
@@ -112,14 +112,125 @@ def mto_bank(request):
     return render(request, 'jobs/MTOBank.html', context)
 
 
-def viewMto(request, id):
+def convert_seconds(performance):
+    if performance >= 60:
+        minutes = performance / 60
+        if minutes == 1:
+            time = f"{round(minutes)} minute"
+        else:
+            time = f"{round(minutes)} minutes"
+        if minutes >= 60:
+            hours = minutes / 60
+            if hours >= 60:
+                time = f"{round(hours)} hour"
+            else:
+                time = f"{round(hours)} hours"
+    else:
+        time = performance
+    return time
+
+
+def convert_days(performance_days):
+    if performance_days > 1:
+        performance_days = f"{round(performance_days)} days"
+        control = True
+    else:
+        if performance_days == 1:
+            performance_days = f"{round(performance_days)} day"
+            control = True
+        else:
+            performance_days = f"{round(performance_days)} day"
+            control = False
+    context = {'time': performance_days, 'status': control}
+    return context
+
+
+def percentage(mto_job, total_job, total_completed):
+    if total_completed is None:
+        percentage_accept = (int(mto_job) / int(total_job) * 100)
+        percentage_accept = round(percentage_accept)
+    else:
+        percentage_accept = (int(total_completed) / int(mto_job) * 100)
+        percentage_accept = round(percentage_accept)
+    return percentage_accept
+
+
+def view_mto(request, id):
     mto = MTO.objects.get(pk=id)
-    mtojob = MTOJob.objects.filter(assigned_to=id).count()
-    completed = MTOJob.objects.filter(
-        completed_date__isnull=True, assigned_to=id).count()
-    total_completed = int(mtojob) - int(completed)
-    context = {'mto': mto, 'mtojob': mtojob, 'completed': total_completed}
-    return render(request, 'jobs/viewmto.html', context)
+    mto_job = MTOJob.objects.filter(assigned_to=id)
+
+    days_list = [0]
+    seconds_list = [0]
+    for i in mto_job:
+        if i.average_time is not 0:
+            days_list.append(i.average_time.days)
+            seconds_list.append(i.average_time.seconds)
+    length = len(days_list) - 1
+    # performance in days
+    performance = reduce(lambda x, y: x + y, days_list)
+
+    try:
+        performance_days = round(performance / length)
+    except ZeroDivisionError:
+        performance_days = 0
+    performance_days = convert_days(performance_days)
+
+    # performance in seconds
+    performance = reduce(lambda x, y: x + y, seconds_list)
+    try:
+        performance = performance / length
+    except ZeroDivisionError:
+        performance = 0
+    performance_seconds = convert_seconds(performance)
+
+    #  acceptance time calculating
+    days = [0]
+    seconds = [0]
+    for i in mto_job:
+        seconds.append(i.average_accept_time.seconds)
+        days.append(i.average_accept_time.days)
+    mto_job = MTOJob.objects.filter(assigned_to=id).count()
+    accept_days = reduce(lambda x, y: x + y, days)
+    try:
+        accept_day = round(accept_days / mto_job)
+        accept_days = convert_days(accept_day)
+    except ZeroDivisionError:
+        accept_days = 0
+    final_date = reduce(lambda x, y: x + y, seconds)
+    try:
+        accept_date = final_date / mto_job
+        accept_seconds = convert_seconds(accept_date)
+    except ZeroDivisionError:
+        accept_seconds = 0
+    mto_job = MTOJob.objects.filter(assigned_to=id).count()
+    total_completed = MTOJob.objects.filter(
+        completed_date__isnull=False, assigned_to=id).count()
+    total_job = Jobs.objects.all().count()
+
+    # cat_list = []
+    # list(
+    #     map(lambda i: i if i == '[' or i == ',' or i == ']' or i == " " else cat_list.append(int(i)), mto.job_category))
+    # print(cat_list)
+    # jobs = list(map(lambda i: i if i == '[' or i == ',' or i == ']' or i == " " else {
+    #     'name': Jobs.objects.filter(cat_id=i).first()}, cat_list))
+    # print(jobs.count('name'))
+
+    try:
+        percentage_acceptance = percentage(mto_job=mto_job, total_job=total_job, total_completed=None)
+    except ZeroDivisionError:
+        percentage_acceptance = 0
+    try:
+        percentage_completeness = percentage(mto_job=mto_job, total_job=None, total_completed=total_completed)
+    except ZeroDivisionError:
+        percentage_completeness = 0
+    context = {'mto': mto, 'mto_job': mto_job, 'completed': total_completed,
+               'percentage_completeness': percentage_completeness,
+               'percentage_acceptance': percentage_acceptance,
+               'accept_days': accept_days, 'accept_seconds': accept_seconds,
+               'performance_days': performance_days, 'performance_seconds': performance_seconds}
+    return render(request, 'jobs/view_mto.html', context)
+
+
 def deleteMto(request, id):
     if request.method == "POST":
         mto = MTO.objects.get(pk=id)
@@ -134,7 +245,7 @@ def microtask_page(request):
 
 
 def mal_requirement(request):
-    context = {'jobs': MALRequirement.objects.all(), }
+    context = {'jobs': Jobs.objects.all(), }
     return render(request, 'jobs/MAL_requirement.html', context)
 
 
@@ -155,7 +266,7 @@ def admin_profile(request):
 
 
 class MALRequirementCreateView(CreateView):
-    form_class = MALRequirementForm
+    form_class = JobForm
     template_name = 'jobs/mal_requirement_creation.html'
 
     def get_form_kwargs(self):
@@ -175,5 +286,23 @@ class MALRequirementCreateView(CreateView):
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.save()
-        context = {'message': f" {instance.micro_task}, has been created successfully."}
+        context = {'message': f" {instance.job_name}, has been created successfully."}
         return JsonResponse(context, status=200)
+
+
+def admin_monitoring(request):
+    jobs = Jobs.objects.all()
+    submitted_jobs = MTOJob.objects.all().count()
+    completed_jobs = MTOJob.objects.all().count()
+    rejected_jobs = MTOJob.objects.all().count()
+    Job_payment = MTOJob.objects.all().count()
+    No_of_mtos_working_onjobs = MTOJob.objects.all().count()
+    Number_of_Ongoing_Jobs = MTOJob.objects.all().count() 
+    Approved_amount_per_job = MTOJob.objects.all().count()
+    Job_TITLE = MTOJob.objects.all()
+    Job_category = MTOJob.objects.all()
+    date_of_posting = MTOJob.objects.all()
+
+    context = {'jobs': jobs,'submitted_jobs':submitted_jobs,'completed_jobs':completed_jobs,'rejected_jobs': rejected_jobs,'Job_payment':Job_payment,'No_of_mtos_working_onjobs':No_of_mtos_working_onjobs,'Number_of_Ongoing_Jobs':Number_of_Ongoing_Jobs,'Approved_amount_per_job':Approved_amount_per_job,'Job_TITLE':Job_TITLE,'Job_category':Job_category,'date_of_posting':date_of_posting}
+    
+    return render(request, 'jobs/admin_monitoring.html', context)
