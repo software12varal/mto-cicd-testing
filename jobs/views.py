@@ -51,27 +51,27 @@ def add_job(request):
     context = {'form': JobsForm()}
     return render(request, 'jobs/jobsform.html', context)
 
-# def add_paymentstatus(request,job_id):
-#     instance = MTOJob.objects.filter(id = job_id).first()
-#
-#     if request.method == 'POST':
-#         payment_id = request.POST.get('payment_id')
-#         instance.payment_status_id = payment_id
-#         instance.save()
-#         messages.success(request,"Payment Status updated")
-#     context = {'form':PaymentStatus.objects.all()}
-#     return render(request,'jobs/jobpaymentstatus.html',context)
+def add_paymentstatus(request,job_id):
+    instance = MTOJob.objects.filter(id = job_id).first()
 
-# def add_jobstatus(request,job_id):
-#     instance = MTOJob.objects.filter(id = job_id).first()
-#     if request.method == 'POST':
-#         status_id = request.POST.get('status_id')
-#         instance.job_status_id = status_id
-#         instance.save()
-#         messages.success(request,"Job Status updated")
-#
-#     context = {'form':Jobstatus.objects.all()}
-#     return render(request,'jobs/jobstatus.html',context)
+    if request.method == 'POST':
+        payment_id = request.POST['payment_status']
+        instance.payment_status = payment_id
+        instance.save()
+        messages.success(request,"Payment Status updated")
+    
+    return redirect('jobs:appliedjobs')
+
+def add_jobstatus(request,job_id):
+    instance = MTOJob.objects.filter(id = job_id).first()
+    if request.method == 'POST':
+        status_id = request.POST['job_status']
+        instance.job_status = status_id
+        instance.save()
+        messages.success(request,"Job Status updated")
+
+    
+    return redirect('jobs:appliedjobs')
 
 def appliedjobs(request):
     job = MTOJob.objects.all().order_by('-id')

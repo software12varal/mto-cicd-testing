@@ -47,9 +47,27 @@
           <td>{{dat.job_id.people_required}}</td>
           <td>{{dat.job_id.skills}}</td>
           <td>{{dat.job_id.job_cost}}</td>
-          <td><a class="btn btn-sm btn-info" href="{% url 'jobs:paymentstatus' job_id=dat.id %}">PaymentStatus</a></td>
-          <td><a class="btn btn-sm btn-info" href="{% url 'jobs:jobstatus' job_id=dat.id %}">JobStatus</a></td>
-
+          <td>
+            <form action="{% url 'jobs:paymentstatus' job_id=dat.id %}" method="POST">
+            {% csrf_token %}
+            <select onchange="this.form.submit()" name="payment_status">
+              {% for ch in dat.PAYMENT_CHOICES %}
+              <option {% if dat.payment_status == ch.0 %} selected {% endif %} value='{{ch.0}}'>{{ch.1}}</option>
+              {%endfor%}
+            </select>
+          </form>
+        </td>
+        <td>
+          <form action="{% url 'jobs:jobstatus' job_id=dat.id %}" method="POST">
+          {% csrf_token %}
+          <select onchange="this.form.submit()" name="job_status">
+            {% for ch in dat.JOB_STATUS %}
+            <option {% if dat.job_status == ch.0 %} selected {% endif %}  value='{{ch.0}}'>{{ch.1}}</option>
+            {%endfor%}
+          </select>
+        </form>
+      </td>
+          
         </tr>
     {% endfor %}
       </tbody>

@@ -1,6 +1,6 @@
 from django.urls import path
 from users.decorators import varal_admin_required
-from .views import home, mto_admin_signup, admin_dashboard, admin_profile,mto_bank, microtask_page, mal_requirement, \
+from .views import home, mto_admin_signup, admin_dashboard,add_paymentstatus,add_jobstatus, admin_profile,mto_bank, microtask_page, mal_requirement, \
     add_job, alljobs, MALRequirementCreateView,view_mto,deleteMto,appliedjobs,admin_monitoring
 
 
@@ -19,7 +19,8 @@ urlpatterns = [
     path('alljobs/',varal_admin_required(alljobs),name='alljobs'),
     path('appliedjobs/',varal_admin_required(appliedjobs),name='appliedjobs'),
     path('add-mal/', varal_admin_required(MALRequirementCreateView.as_view()), name='add_mal'),
-    # path('paymentstatus/<int:job_id>/',add_paymentstatus,name='paymentstatus'),
+    path('paymentstatus/<int:job_id>/',add_paymentstatus,name='paymentstatus'),
+    path('jobstatus/<int:job_id>/',add_jobstatus,name='jobstatus'),
     path('admin_monitoring/', varal_admin_required(admin_monitoring), name='admin_monitoring'),
     path('', home, name='home'),
 
