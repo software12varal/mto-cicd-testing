@@ -17,7 +17,7 @@ import json
 # from django.views.generic.base import View
 #
 # from jobs.models import MALRequirement, MicroTask, MTOJobCategory
-from jobs.models import MTOJob, Jobstatus, PaymentStatus, Jobs, MicroTask
+from jobs.models import MTOJob, Jobstatus, Jobs, MicroTask
 from users.models import User
 from .forms import SignUpForm
 from .models import MTO
@@ -118,17 +118,29 @@ def dummy_home_view(request):
 @login_required
 @mto_required
 def dashboard(request):
+    JOB_STATUS = [('in', 'in progress'),
+                  ('sub', 'submitted'),
+                  ('co', 'Completed'),
+
+                  ]
     
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
-  
-    jobs_submitted = jobs.filter(job_status__job_status = 'Submitted').count()
-    jobs_completed = jobs.filter(job_status__job_status = 'Completed').count()
-    jobs_approved = jobs.filter(job_status__job_status = 'Approved').count()
+    job_progress = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='in progress').count()
+    jobs_submitted = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='submitted').count()
+    jobs_completed = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='Completed').count()
+    # jobs_submitted = jobs.filter(job_status = 'Created').count()
+    # jobs_completed = jobs.filter(job_status = 'Completed').count()
+    # jobs_approved = jobs.filter(job_status = 'Assigned').count()
+    # jobs_under_review = jobs.filter(job_status = 'Under review').count()
+    print(f'job submitted {jobs_submitted}')
+    print(f'job Completed {jobs_completed}')
+    print(f'job approved {job_progress}')
+
   
 
     totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
     total = '{:0.2f}'.format(totals)
-    context = {'jobs':jobs,'jobs_submitted':jobs_submitted,'jobs_completed':jobs_completed,'jobs_approved':jobs_approved,'total':total}
+    context = {'jobs':jobs,'jobs_submitted':jobs_submitted,'jobs_completed':jobs_completed,'total':total}
    
     return render(request,'mto/mto_dashboard.html',context)
 
