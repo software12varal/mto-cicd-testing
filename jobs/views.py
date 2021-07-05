@@ -7,7 +7,7 @@ from .forms import MTOAdminSignUpForm, JobForm
 from django.contrib import messages
 from jobs.forms import JobsForm
 
-from jobs.models import MTOJob, MicroTask, MTOAdminUser,PaymentStatus
+from jobs.models import MTOJob, MicroTask, MTOAdminUser
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 from mto.models import MTO
@@ -51,27 +51,27 @@ def add_job(request):
     context = {'form': JobsForm()}
     return render(request, 'jobs/jobsform.html', context)
 
-def add_paymentstatus(request,job_id):
-    instance = MTOJob.objects.filter(id = job_id).first()
-    
-    if request.method == 'POST':
-        payment_id = request.POST.get('payment_id')
-        instance.payment_status_id = payment_id
-        instance.save()
-        messages.success(request,"Payment Status updated")
-    context = {'form':PaymentStatus.objects.all()}
-    return render(request,'jobs/jobpaymentstatus.html',context)
+# def add_paymentstatus(request,job_id):
+#     instance = MTOJob.objects.filter(id = job_id).first()
+#
+#     if request.method == 'POST':
+#         payment_id = request.POST.get('payment_id')
+#         instance.payment_status_id = payment_id
+#         instance.save()
+#         messages.success(request,"Payment Status updated")
+#     context = {'form':PaymentStatus.objects.all()}
+#     return render(request,'jobs/jobpaymentstatus.html',context)
 
-def add_jobstatus(request,job_id):
-    instance = MTOJob.objects.filter(id = job_id).first()
-    if request.method == 'POST':
-        status_id = request.POST.get('status_id')
-        instance.job_status_id = status_id
-        instance.save()
-        messages.success(request,"Job Status updated")
-    
-    context = {'form':Jobstatus.objects.all()}
-    return render(request,'jobs/jobstatus.html',context)   
+# def add_jobstatus(request,job_id):
+#     instance = MTOJob.objects.filter(id = job_id).first()
+#     if request.method == 'POST':
+#         status_id = request.POST.get('status_id')
+#         instance.job_status_id = status_id
+#         instance.save()
+#         messages.success(request,"Job Status updated")
+#
+#     context = {'form':Jobstatus.objects.all()}
+#     return render(request,'jobs/jobstatus.html',context)
 
 def appliedjobs(request):
     job = MTOJob.objects.all().order_by('-id')
