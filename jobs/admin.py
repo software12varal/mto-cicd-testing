@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from jobs.models import MTOAdminUser, AdminRoles,  MicroTask, MTOJob, EvaluationStatus, Jobs, PaymentStatus, Jobstatus
+from jobs.models import MTOAdminUser, AdminRoles,  MicroTask, MTOJob, EvaluationStatus, Jobs, Jobstatus
 
 
 class MTOJobCategoryAdmin(admin.ModelAdmin):
@@ -65,5 +65,4 @@ admin.site.register(AdminRoles, MTORolesAdmin)
 admin.site.register(MicroTask)
 # admin.site.register(MALRequirement),
 admin.site.register(Jobs),
-admin.site.register(PaymentStatus),
 admin.site.register(Jobstatus)

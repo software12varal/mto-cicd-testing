@@ -30,6 +30,7 @@ class MicroTask(models.Model):
     tc_type = models.CharField(_('type of tc to be done'), max_length=1,choices=type_of_tc,default='Manual',
                                help_text='e.g Senior developer, tester & client')
 
+
     def __str__(self):
         return f'{self.microtask_category}'
 
@@ -70,20 +71,13 @@ class Jobstatus(models.Model):
         return self.job_status
 
 
-class PaymentStatus(models.Model):
-    payment_status = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.payment_status
-
 
 class Jobs(models.Model):
-    Jobstatus = [('cr','Created'),
-    ('co','Completed'),
-    ('ur','Under review'),
-    ('as','Assigned')
-    
-    ]
+    JOB_STATUS = [('cr','Created'),
+                 ('as', 'Assigned'),
+                 ('ur', 'Under review'),
+                 ('co','Completed'),
+                ]
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
     identification_number = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
     assembly_line_id = models.CharField(max_length=50, blank=True, validators=[alphanumeric])
@@ -102,7 +96,7 @@ class Jobs(models.Model):
     job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
     input_folder = models.FilePathField(path='media/documents/job_documents/input',
                                         help_text="Link of the Input folder")
-    job_status = models.CharField(max_length = 100,choices=Jobstatus,default = "as")
+    job_status = models.CharField(max_length = 100,choices=JOB_STATUS,default = "cr")
     
     
 
@@ -118,16 +112,26 @@ def output_directory_path(instance, filename):
 
 
 class MTOJob(models.Model):
+    JOB_STATUS = [('in', 'in progress'),
+                  ('sub', 'submitted'),
+                  ('co', 'Completed'),
+
+                 ]
+    PAYMENT_CHOICES = [('uninitiated', 'uninitiated'),
+                       ('pending', 'pending'),
+                       ('paid', 'paid'),
+                       ]
+
     job_id = models.ForeignKey(Jobs, on_delete=models.PROTECT, null=True)
     assigned_to = models.IntegerField(help_text='related to MTO')
     due_date = models.DateTimeField()
     assigned_date = models.DateTimeField(auto_now_add=True)
     fees = models.FloatField()
+    updated_date = models.DateTimeField(auto_now=True)
     rating_evaluation = models.IntegerField(null=True)
-    payment_status = models.ForeignKey(PaymentStatus, verbose_name=_("payment status"), on_delete=models.CASCADE,
-                                       null=True)
-    job_status = models.ForeignKey(Jobstatus, verbose_name=_("job status"), on_delete=models.CASCADE,
-                                       null=True)                                   
+    payment_status = models.CharField(max_length=100, choices=PAYMENT_CHOICES, default="uninitiated")
+    job_status = models.CharField(max_length = 100,choices=JOB_STATUS,default = "in")
+
     completed_date = models.DateTimeField(null=True)
     output_path = models.FileField(upload_to=output_directory_path)
     is_submitted = models.BooleanField(default=False)
