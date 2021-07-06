@@ -12,8 +12,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-dun&%6s8phvfpb5o)-dz7l#!p*vy9&ligftj5kgq(m!*+qpet)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# If the value is set to 1, then debug mode will be enabled, otherwise it will not.
+DEBUG = bool(int(os.environ.get('DEBUG', 1)))
 
+# GAE comes with built in header attack prevention, so it’s safe to use the asterisk character to set a wildcard for allowing all hosts
 ALLOWED_HOSTS = ['*']
 
 # Application definition

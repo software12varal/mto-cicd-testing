@@ -105,3 +105,20 @@ def varal_admin_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME,
     if function:
         return actual_decorator(function)
     return actual_decorator
+
+
+# def varal_admin_redirect_when_autheticated(function=None, redirect_field_name='adminDashboard',
+#                                            login_url='admin_login'):
+#     """
+#     Decorator for views that checks that the logged in user is an MTO,
+#     redirects to the MTO's log-in page if necessary.
+#     """
+#     print(lambda u: u.is_active and u.is_admin and u.is_authenticated,)
+#     actual_decorator = user_passes_test(
+#         lambda u: u.is_active and u.is_admin and u.is_authenticated,
+#         login_url=login_url,
+#         redirect_field_name=redirect_field_name
+#     )
+#     if function:
+#         return actual_decorator(function)
+#     return actual_decorator

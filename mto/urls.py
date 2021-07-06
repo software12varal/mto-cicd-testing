@@ -11,7 +11,7 @@ urlpatterns = [
 
     # authentication patterns
     path('register/', SignUpView.as_view(), name='sign_up'),
-    path('login/', LoginView.as_view(template_name='mto/login.html'), name='login'),
+    path('login/', LoginView.as_view(template_name='mto/login.html', redirect_authenticated_user=True), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('viewjob/', mto_required(view_jobs), name='view'),
     path('apply/<int:id>', mto_required(apply_job), name='apply'),
