@@ -27,9 +27,28 @@ class MicroTask(models.Model):
                   ('A', 'Automatic')
                   ]
 
+    job_category = [
+        ('cw', 'Content Writing'),
+        ('da', 'Document Analysis'),
+        ('de', 'Data Entry'),
+        ('cr', 'Combining Rules from Semi-Legal documents'),
+        ('df', 'Data Entry(Fields)'),
+        ('cd', 'Collecting copies of documents'),
+        ('cp', 'Content Copy & Paste'),
+        ('cf', 'Combining Data Entry Fields'),
+        ('fn', 'Find Non-Copyrighted Images and Uploading'),
+        ('ac', 'Apply Compliance to Fields'),
+        ('ng', 'Naming'),
+        ('ce', 'Compliance Extraction'),
+        ('id', 'Identifying One Line Decision'),
+        ('ab', 'A+B TC For Document Extraction'),
+        ('tc', 'TC For One Line Decision'),
+    ]
+
     microtask_name = models.CharField(
         max_length=300, help_text='e.g develop website')
-    microtask_category = models.CharField(max_length=300)
+    microtask_category = models.CharField(
+        _('microtask category dropdown'), max_length=2, choices=job_category, default='Content Writing')
     job_cost = models.PositiveIntegerField(
         default=0, validators=[MinValueValidator(0)], help_text="currency AED")
     time_required = models.PositiveIntegerField(
