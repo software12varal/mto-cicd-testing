@@ -62,9 +62,6 @@ const csrftoken = getCookie('csrftoken');
                     <label>micro task category</label> {{form.cat_id|add_class:"form-control"}}
                       <div class="text-danger" id="error-micro-task-category"></div>
                 </div>
-
-                <div id="jobs-category"></div> 
-
                 <div class="form-group">
                     <label>target date</label> {{form.target_date|add_class:"form-control"}}
                      <div class="text-danger" id="error-target-date"></div>
@@ -76,6 +73,14 @@ const csrftoken = getCookie('csrftoken');
                 <div class="form-group">
                     <label>job description</label> {{form.job_description|add_class:"form-control"}}
                      <div class="text-danger" id="error-job-description"></div>
+                </div>
+                 <div class="form-group">
+                    <label>job sample</label> {{form.job_sample|add_class:"form-control"}}
+                      <div class="text-danger" id="error-job-sample"></div>
+                </div>
+                 <div class="form-group">
+                    <label>job instructions</label> {{form.job_instructions|add_class:"form-control"}}
+                      <div class="text-danger" id="error-job-instructions"></div>
                 </div>
                 <div class="form-group">
                     <label>job quantity</label> {{form.job_quantity|add_class:"form-control"}}

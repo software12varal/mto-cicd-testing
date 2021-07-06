@@ -24,7 +24,6 @@
           <th scope="col">Target Date</th>
           <th scope="col">Job Description</th>
           <th scope="col">Job Sample</th>
-          <th scope="col">Job Instructions</th>
           <th scope="col">Job Quantity</th>
           <th scope="col">People Required</th>
           <th scope="col">Skills</th>
@@ -42,12 +41,11 @@
           <td>{{dat.cat_id}}</td>
           <td>{{dat.target_date}}</td>
           <td>{{dat.job_description}}</td>
-          <td>{{dat.cat_id.sample}}</td>
-          <td>{{dat.cat_id.instructions}}</td>
+          <td>{{dat.job_sample}}</td>
           <td>{{dat.job_quantity}}</td>
-          <td>{{dat.cat_id.people_required_for_valid_tc}}</td>
-          <td>{{dat.cat_id.skills}}</td>
-          <td>{{dat.cat_id.job_cost}}</td>
+          <td>{{dat.people_required}}</td>
+          <td>{{dat.skills}}</td>
+          <td>{{dat.job_cost}}</td>
          
         </tr>
     {% endfor %}

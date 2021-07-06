@@ -57,12 +57,12 @@ class MTORolesAdmin(admin.ModelAdmin):
         return super().formfield_for_manytomany(db_field, request, using=self.using, **kwargs)
 
 
-admin.site.register(EvaluationStatus),
-admin.site.register(MTOAdminUser),
-admin.site.register(MTOJob),
+admin.site.register(EvaluationStatus)
+admin.site.register(MTOAdminUser)
+admin.site.register(MTOJob)
 # admin.site.register(MTOJobCategory, MTOJobCategoryAdmin)
-admin.site.register(AdminRoles, MTORolesAdmin),
-admin.site.register(MicroTask),
+admin.site.register(AdminRoles, MTORolesAdmin)
+admin.site.register(MicroTask)
 # admin.site.register(MALRequirement),
 admin.site.register(Jobs),
-admin.site.register(Jobstatus),
+admin.site.register(Jobstatus)
