@@ -18,12 +18,21 @@ const job_description = document.getElementById("id_job_description");
 const job_instructions = document.getElementById("id_job_instructions");
 const job_quantity = document.getElementById("id_job_quantity");
 const input_folder = document.getElementById("id_input_folder");
+$(document).ready(function(){
+  $("#id_cat_id").click(function(){
+    $("p").prepend("<b>Prepended text</b>. ");
+  });
+});
+
 
 uploadForm.addEventListener("submit", e => {
   e.preventDefault();
-  const job_sample_data = input.files[0];
-  const job_instructions_data = job_instructions.files[0];
+
   const fd = new FormData();
+  
+  const sample_data = $('#id_sample').files
+  const instructions_data = $('#id_instructions').files
+
   fd.append("csrfmiddlewaretoken", csrf[0].value);
   fd.append("identification_number", identification_number.value);
   fd.append("assembly_line_id", assembly_line_id.value);
@@ -35,10 +44,12 @@ uploadForm.addEventListener("submit", e => {
   fd.append("target_date", target_date.value);
   fd.append("total_budget", total_budget.value);
   fd.append("job_description", job_description.value);
-  fd.append("job_sample", job_sample_data);
-  fd.append("job_instructions", job_instructions_data);
   fd.append("job_quantity", job_quantity.value);
   fd.append("input_folder", input_folder.value);
+  fd.append('sample',sample_data )
+  fd.append('instructions',instructions_data )
+  
+
   $.ajax({
     type: "POST",
     url: uploadForm.action,
@@ -55,8 +66,8 @@ uploadForm.addEventListener("submit", e => {
       $("#error-target-date").html("");
       $("#error-total-budget").html("");
       $("#error-job-description").html("");
-      $("#error-job-sample").html("");
-      $("#error-job-instructions").html("");
+      // $("#error-job-sample").html("");
+      // $("#error-job-instructions").html("");
       $("#error-job-quantity").html("");
       $("#error-input-folder").html("");
     },
@@ -98,12 +109,12 @@ uploadForm.addEventListener("submit", e => {
       if (response["job_description"]) {
         $("#error-job-description").html(response["job_description"]);
       }
-      if (response["job_sample"]) {
-        $("#error-job-sample").html(response["job_sample"]);
-      }
-      if (response["job_instructions"]) {
-        $("#error-job-instructions").html(response["job_instructions"]);
-      }
+      // if (response["job_sample"]) {
+      //   $("#error-job-sample").html(response["job_sample"]);
+      // }
+      // if (response["job_instructions"]) {
+      //   $("#error-job-instructions").html(response["job_instructions"]);
+      // }
       if (response["job_quantity"]) {
         $("#error-job-quantity").html(response["job_quantity"]);
       }
@@ -113,15 +124,11 @@ uploadForm.addEventListener("submit", e => {
     },
     error: function(error) {
       console.log(error);
-      alertBox.innerHTML = `<div class="alert alert-danger" role="alert">
-                <strong>
-                ${error.message}
-                </strong>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true"><i class="zmdi zmdi-close"></i></span>
-                </button>
-            </div>`;
-      $(window).scrollTop(0);
+      iziToast.error({
+        title: error.status,
+        message: error.statusText,
+        position: 'topRight'
+      });
     },
     cache: false,
     contentType: false,
@@ -129,106 +136,3 @@ uploadForm.addEventListener("submit", e => {
   });
 });
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//console.log("Adding Mal")
-//$(document).ready(function() {
-//        $("#add-mal-form").submit(function(event) {
-//           event.preventDefault();
-//           $.ajax({ data:$(this).serialize(),
-//                    type: $(this).attr('method'),
-//                    url: $(this).attr('action'),
-//                    enctype: "multipart/form-data",
-////                    headers: {'X-CSRFToken': csrftoken},
-////                    cache: false,
-////                    contentType: false,
-////                    processData: false,
-//                    beforeSend: function() {
-//                        $("#error-identification-number").html('');
-//                        $("#error-assembly-line-id").html('');
-//                        $("#error-assembly-line-name").html('');
-//                        $("#error-person-name").html('');
-//                        $("#error-person-email").html('');
-//                        $("#error-output").html('');
-//                        $("#error-micro-task").html('');
-//                        $("#error-micro-task-category").html('');
-//                        $("#error-target-date").html('');
-//                        $("#error-total-budget").html('');
-//                        $("#error-job-description").html('');
-//                        $("#error-job-sample").html('');
-//                        $("#error-job-instructions").html('');
-//                        $("#error-job-quantity").html('');
-//                        $("#error-input-folder").html('');
-//                    },
-//                    success: function(response) {
-//                        console.log(response);
-//                        if(response['message']) {
-//                         $("#message").html(response['message']);
-//                        }
-//                        if(response['identification_number']) {
-//                           $("#error-identification-number").html(response['identification_number']);
-//                        }
-//                        if(response['assembly_line_id']) {
-//                           $("#error-assembly-line-id").html(response['assembly_line_id']);
-//                        }
-//                        if(response['assembly_line_name']) {
-//                           $("#error-assembly-line-name").html(response['assembly_line_name']);
-//                        }
-//                        if(response['person_name']) {
-//                           $("#error-person-name").html(response['person_name']);
-//                        }
-//                        if(response['person_email']) {
-//                           $("#error-person-email").html(response['person_email']);
-//                        }
-//                        if(response['output']) {
-//                           $("#error-output").html(response['output']);
-//                        }if(response['job_name']) {
-//                           $("#error-micro-task").html(response['job_name']);
-//                        }
-//                        if(response['cat_id']) {
-//                           $("#error-micro-task-category").html(response['cat_id']);
-//                        }
-//                        if(response['target_date']) {
-//                           $("#error-target-date").html(response['target_date']);
-//                        }
-//                        if(response['total_budget']) {
-//                           $("#error-total-budget").html(response['total_budget']);
-//                        }
-//                        if(response['job_description']) {
-//                           $("#error-job-description").html(response['job_description']);
-//                        }
-//                        if(response['job_sample']) {
-//                           $("#error-job-sample").html(response['job_sample']);
-//                        }if(response['job_instructions']) {
-//                           $("#error-job-instructions").html(response['job_instructions']);
-//                        }
-//                        if(response['job_quantity']) {
-//                           $("#error-job-quantity").html(response['job_quantity']);
-//                        }
-//                        if(response['input_folder']) {
-//                           $("#error-input-folder").html(response['input_folder']);
-//                        }
-//                    },
-//                    error: function (request, status, error) {
-//                         console.log(request.responseText);
-//                         $("#error").html(error);
-//                    }
-//           });
-//       });
-//    })
