@@ -24,6 +24,7 @@
           <th scope="col">Target Date</th>
           <th scope="col">Job Description</th>
           <th scope="col">Job Sample</th>
+          <th scope="col">Job Instructions</th>
           <th scope="col">Job Quantity</th>
           <th scope="col">People Required</th>
           <th scope="col">Skills</th>
@@ -42,11 +43,12 @@
           <td>{{dat.job_id.cat_id}}</td>
           <td>{{dat.job_id.target_date}}</td>
           <td>{{dat.job_id.job_description}}</td>
-          <td>{{dat.job_id.job_sample}}</td>
+          <td>{{dat.job_id.cat_id.sample}}</td>
+          <td>{{dat.job_id.cat_id.instructions}}</td>
           <td>{{dat.job_id.job_quantity}}</td>
-          <td>{{dat.job_id.people_required}}</td>
-          <td>{{dat.job_id.skills}}</td>
-          <td>{{dat.job_id.job_cost}}</td>
+          <td>{{dat.job_id.cat_id.people_required_for_valid_tc}}</td>
+          <td>{{dat.job_id.cat_id.skills}}</td>
+          <td>{{dat.job_id.cat_id.job_cost}}</td>
           <td>
             <form action="{% url 'jobs:paymentstatus' job_id=dat.id %}" method="POST">
             {% csrf_token %}
