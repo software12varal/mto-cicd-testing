@@ -66,7 +66,8 @@ const csrftoken = getCookie('csrftoken');
                 <div id="jobs-category"></div> 
 
                 <div class="form-group">
-                    <label>target date</label> {{form.target_date|add_class:"form-control"}}
+                    <label>target date</label>
+                    {% render_field form.target_date type='datetime-local' class+="form-control" %}
                      <div class="text-danger" id="error-target-date"></div>
                 </div>
                  <div class="form-group">
@@ -91,6 +92,10 @@ const csrftoken = getCookie('csrftoken');
         </div>
 {% endblock %}
 {% block scripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{% static 'jobs/add-mal.js' %}"></script>
+    <script src="{% static 'jobs/displaying-category.js' %}"></script>
+    <script>
+        let get_cat_url = "{% url 'jobs:displaying_categories' %}"
+    </script>
 {% endblock %}
