@@ -7,7 +7,6 @@ from .forms import MTOAdminSignUpForm, JobForm
 from django.contrib import messages
 from jobs.forms import JobsForm
 
-from jobs.models import MTOJob, MicroTask, MTOAdminUser, PaymentStatus
 from jobs.models import MTOJob, MicroTask, MTOAdminUser
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -18,10 +17,23 @@ from functools import reduce
 from django.core.mail import EmailMessage
 from django.conf import settings
 
+from django.urls import reverse
+
 
 def home(request):
     context = {'jobs': MTOJob.objects.all(), }
+
+    # solves Bug: can see a home page without logout options(when url is put directly), solved by redirecting to
+    # adminDashboard
+    if request.user.is_authenticated and request.user.is_admin and not request.user.is_mto:
+        return redirect(reverse('jobs:adminDashboard'))
     return render(request, 'jobs/index.html', context)
+
+
+
+# def mto_admin_home(request):
+#     print(request.user)
+#     return render(request, 'jobs/admin_dashboard.html')
 
 
 def mto_admin_signup(request):
@@ -44,13 +56,13 @@ def mto_admin_signup(request):
     return render(request, 'jobs/admin-register.html', context)
 
 
-def email_notification(request):
+def email_notification_job_created(request):
     email = EmailMessage(
-        'subject',
-        'body',
+        'New Job created!',
+        'Mto has created a new job',
         settings.EMAIL_HOST_USER,
-        [request.user.profile.email]
-        # ['software8@varaluae.com'],
+        # [request.user.profile.email]
+        ['software8@varaluae.com'],
     )
 
     email.fail_silently = False
@@ -63,36 +75,13 @@ def add_job(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Job is Successfully Created !")
-            email_notification(request)
+            email_notification_job_created(request)
         else:
             messages.error(request, "Something went wrong!")
             return render(request, "jobs/jobsform.html", {'form': form})
     context = {'form': JobsForm()}
     return render(request, 'jobs/jobsform.html', context)
 
-
-def add_paymentstatus(request, job_id):
-    instance = MTOJob.objects.filter(id=job_id).first()
-
-    if request.method == 'POST':
-        payment_id = request.POST.get('payment_id')
-        instance.payment_status_id = payment_id
-        instance.save()
-        messages.success(request, "Payment Status updated")
-    context = {'form': PaymentStatus.objects.all()}
-    return render(request, 'jobs/jobpaymentstatus.html', context)
-
-
-def add_jobstatus(request, job_id):
-    instance = MTOJob.objects.filter(id=job_id).first()
-    if request.method == 'POST':
-        status_id = request.POST.get('status_id')
-        instance.job_status_id = status_id
-        instance.save()
-        messages.success(request, "Job Status updated")
-
-    context = {'form': Jobstatus.objects.all()}
-    return render(request, 'jobs/jobstatus.html', context)
 
 # def add_paymentstatus(request,job_id):
 #     instance = MTOJob.objects.filter(id = job_id).first()
