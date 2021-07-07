@@ -19,3 +19,6 @@ class TestViews(JobsTestDbMixin, TestCase):
         print(response)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'jobs/index.html')
+
+
+    

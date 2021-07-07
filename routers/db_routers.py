@@ -25,7 +25,7 @@ class VendorOSRouter:
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if app_label in self.route_app_labels:
-            return db == 'vendor_os_db'
+            return True
         return None
 
 
@@ -56,7 +56,7 @@ class VaralJobPostingDBRouter:
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if app_label in self.route_app_labels:
-            return db == 'varal_job_posting_db'
+            return True
         return None
 
 
