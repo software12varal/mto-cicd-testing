@@ -138,6 +138,10 @@ class Jobs(models.Model):
     job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
     input_folder = models.FilePathField(path='media/documents/job_documents/input',
                                         help_text="Link of the Input folder")
+    sample = models.FileField(
+        upload_to=sample_directory_path, default='Onkar_py.txt')
+    instructions = models.FileField(
+        upload_to=instructions_directory_path, default='Onkar_py.txt')
     job_status = models.CharField(
         max_length=100, choices=JOB_STATUS, default="cr")
 
