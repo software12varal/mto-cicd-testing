@@ -43,20 +43,39 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'jobs:appliedjobs' %}">Applied Jobs</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:add_job' %}">Create Microtask</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:add_mal' %}">Post requirements</a>
-            </li>
+            {% if request.user.is_admin and not request.user.is_super_admin %}
             <li class="nav-item">
               <a class="nav-link" href="{% url 'jobs:admin_profile' %}">View Profile</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:add_job' %}">Create Microtask</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'super_admin:create_admin' %}">Create Varal Admin</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:add_job' %}">Create Microtask</a>
+            </li>
+            <li class="nav-item">
+<<<<<<< HEAD
+              <a class="nav-link" href="{% url 'super_admin:super_admin_profile' %}">View Profile</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:add_mal' %}">Post requirements</a>
+            </li>
+<!--            {% if request.user.is_super_admin %}-->
+
+<!--             {% endif %}-->
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}">Admin Monitoring</a>
+=======
               <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}">Admin Monitoring</Table></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'jobs:admin_table' %}">Admin Table</Table></a>
+>>>>>>> deabf0f67f3de175e65c89f9744de1b40f3383bc
             </li>
           </ul>
           {% if request.user.is_authenticated %}
