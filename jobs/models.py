@@ -22,7 +22,6 @@ def instructions_directory_path(instance, filename):
 
 
 class MicroTask(models.Model):
-
     type_of_tc = [('M', 'Manual'),
                   ('A', 'Automatic')
                   ]
@@ -63,6 +62,7 @@ class MicroTask(models.Model):
         upload_to=instructions_directory_path, default='Onkar_py.txt')
     tc_type = models.CharField(_('type of tc to be done'), max_length=1, choices=type_of_tc, default='Manual',
                                help_text='e.g Senior developer, tester & client')
+    updated_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.microtask_category}'
@@ -90,6 +90,7 @@ def rename_file(sender, instance, created, **kwargs):
                 os.rename(instance.instructions.path, new_path)
                 instance.instructions.name = new_path
                 instance.save()
+
         content_file_name(instance=instance, is_sample=True)
         content_file_name(instance=instance, is_sample=False)
 
@@ -101,11 +102,11 @@ class EvaluationStatus(models.Model):
         return self.description
 
 
-class Jobstatus(models.Model):
-    job_status = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.job_status
+# class Jobstatus(models.Model):
+#     job_status = models.CharField(max_length=200)
+#
+#     def __str__(self):
+#         return self.job_status
 class AdminRoles(models.Model):
     description = models.CharField(max_length=50)
 
@@ -128,6 +129,7 @@ class MTOAdminUser(User):
     # def save(self, *args, **kwargs):
     #     super(MTOAdminUser, self).save(using='varal_job_posting_db')
 
+
 # trial session
 
 
@@ -144,7 +146,7 @@ class Jobs(models.Model):
     assembly_line_id = models.CharField(
         max_length=50, blank=True, validators=[alphanumeric])
     assembly_line_name = models.TextField(blank=True)
-    person_name = models.ForeignKey(MTOAdminUser,on_delete=models.CASCADE)
+    person_name = models.ForeignKey(MTOAdminUser, on_delete=models.CASCADE)
     # as per predecesor 2 there is no need of person_email
     # person_email = models.EmailField(null=True)
     output = models.FilePathField(
@@ -167,6 +169,8 @@ class Jobs(models.Model):
         upload_to=instructions_directory_path, default='Onkar_py.txt')
     job_status = models.CharField(
         max_length=100, choices=JOB_STATUS, default="cr")
+    updated_date = models.DateTimeField(auto_now=True)
+    posted_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.job_name
@@ -195,7 +199,7 @@ class MTOJob(models.Model):
     due_date = models.DateTimeField()
     assigned_date = models.DateTimeField(auto_now_add=True)
     fees = models.FloatField()
-    updated_date = models.DateTimeField(auto_now=True)
+    updated_date = models.DateTimeField(auto_now=True)  # Submitted
     rating_evaluation = models.IntegerField(null=True)
     payment_status = models.CharField(
         max_length=100, choices=PAYMENT_CHOICES, default="uninitiated")
@@ -204,9 +208,8 @@ class MTOJob(models.Model):
 
     completed_date = models.DateTimeField(null=True)
     output_path = models.FileField(upload_to=output_directory_path)
-    is_submitted = models.BooleanField(default=False)
-    evaluation_status = models.ForeignKey(
-        EvaluationStatus, on_delete=models.CASCADE)
+    submitted_date = models.DateTimeField(null=True)
+    evaluation_status = models.ForeignKey(EvaluationStatus, on_delete=models.CASCADE)
 
     @property
     def mto(self):
@@ -241,5 +244,3 @@ class MTOJob(models.Model):
 
     def __str__(self):
         return f"{self.job_id.job_name} :: {self.mto.full_name}"
-
-

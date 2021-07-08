@@ -11,7 +11,6 @@ from jobs.models import MTOJob, MicroTask, MTOAdminUser
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from mto.models import MTO
-from .models import Jobstatus
 from functools import reduce
 import json
 
@@ -165,7 +164,7 @@ def view_mto(request, id):
     days_list = [0]
     seconds_list = [0]
     for i in mto_job:
-        if i.average_time is not 0:
+        if i.average_time != 0:
             days_list.append(i.average_time.days)
             seconds_list.append(i.average_time.seconds)
     length = len(days_list) - 1
