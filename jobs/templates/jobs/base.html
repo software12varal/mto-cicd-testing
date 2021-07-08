@@ -53,7 +53,10 @@
               <a class="nav-link" href="{% url 'jobs:admin_profile' %}">View Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}">Admin Monitoring</a>
+              <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}">Admin Monitoring</Table></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:admin_table' %}">Admin Table</Table></a>
             </li>
           </ul>
           {% if request.user.is_authenticated %}
