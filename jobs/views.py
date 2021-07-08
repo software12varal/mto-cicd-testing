@@ -11,7 +11,6 @@ from jobs.models import MTOJob, MicroTask, MTOAdminUser
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from mto.models import MTO
-from .models import Jobstatus
 from functools import reduce
 import json
 
@@ -165,7 +164,7 @@ def view_mto(request, id):
     days_list = [0]
     seconds_list = [0]
     for i in mto_job:
-        if i.average_time is not 0:
+        if i.average_time != 0:
             days_list.append(i.average_time.days)
             seconds_list.append(i.average_time.seconds)
     length = len(days_list) - 1
@@ -392,3 +391,47 @@ def displaying_categories(request):
     except ValueError:
         print("Select something please")
     return JsonResponse(context)
+
+def admin_monitoring(request):
+    admin= MTOAdminUser.objects.all()
+
+    context = {'admin': admin}
+
+    return render(request, 'jobs/admin_monitoring.html',context)
+
+def view_admin(request,id):
+    # admin = MTOAdminUser.objects.get(id = id)
+    # mto = MTOJob.objects.filter(assigned_to=id).count
+    # context = {'admin':admin,'mto':mto}
+    # context['admin'] = admin
+    context = {}
+   
+    context['Total_Jobs_Posted'] = Jobs.objects.filter().count
+    context['No_of_Jobs_Allocated'] = MTOJob.objects.filter(assigned_to=id).count()
+    #context['Total_Jobs_Submitted'] = Jobs.objects.filter().count
+    context['Total_Jobs_Completed'] = MTOJob.objects.filter(job_status='Completed').count()
+    context['Job_payment'] = MTOJob.objects.all().count
+    context['Number_of_MTOs_working_on_a_Job'] = Jobs.objects.all().count
+    context['Number_of_Ongoing_Jobs'] = Jobs.objects.all().count
+    print(context)
+
+    # mto_job = MTOJob.objects.filter(assigned_to=id).count()
+    # total_completed = MTOJob.objects.filter(completed_date__isnull=False, assigned_to=id).count()
+    # total_job = Jobs.objects.all().count()
+    # context = {'mto_job':mto_job,'total_completed':total_completed,'total_job':total_job}
+
+
+    return render(request,'jobs/view_admin.html',context)
+
+
+def admin_table(request):
+    job = MTOJob.objects.all().order_by('-id')
+    p = Paginator(job, 5)
+    page_num = request.GET.get('page')
+    try:
+        data = p.page(page_num)
+    except PageNotAnInteger:
+        data = p.page(1)
+    except EmptyPage:
+        data = p.page(p.num_pages)
+    return render(request, 'jobs/admin_table.html', {'data': data})
