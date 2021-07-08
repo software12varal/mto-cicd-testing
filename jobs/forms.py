@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
 from django.core.validators import RegexValidator
-from .models import MTOAdminUser, Jobs, Jobstatus, MicroTask
+from .models import MTOAdminUser, Jobs, MicroTask
 from django import forms
 job_categories = MicroTask.objects.all()
 
