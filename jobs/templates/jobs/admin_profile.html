@@ -17,52 +17,12 @@
                  {{form.errors.full_name}}
              </div>
         </div>
-        {% if request.user.is_admin and not request.user.is_super_admin %}
          <div class="form-group">
             <label>Varal Role</label> {{form.varal_role_id|add_class:"form-control"}}
               <div class="text-danger">
                 {{form.errors.varal_role_id}}
              </div>
-               <div class="form-group">
-            <label>Contact Number</label> {{form.contact_number|add_class:"form-control"}}
-              <div class="text-danger">
-                {{form.errors.contact_number}}
-             </div>
-            <label>Email</label> {{form.email|add_class:"form-control"}}
-              <div class="text-danger">
-                {{form.errors.email}}
-             </div>
-            <label>Designation</label> {{form.designation|add_class:"form-control"}}
-              <div class="text-danger">
-                {{form.errors.varal_role_id}}
-             </div>
-            <label>Department</label> {{form.department|add_class:"form-control"}}
-              <div class="text-danger">
-                {{form.errors.department}}
-             </div>
         </div>
-        </div>
-
-        {% else %}
-        <div class="form-group">
-            <label>Administrator Contact Number</label> {{form.contact_number|add_class:"form-control"}}
-              <div class="text-danger">
-                {{form.errors.contact_number}}
-             </div>
-            <label>Administrator Email</label> {{form.email|add_class:"form-control"}}
-              <div class="text-danger">
-                {{form.errors.email}}
-             </div>
-            <label> Designation</label> {{form.designation|add_class:"form-control"}}
-              <div class="text-danger">
-                {{form.errors.varal_role_id}}
-             </div>
-            <label>Department</label> {{form.department|add_class:"form-control"}}
-              <div class="text-danger">
-                {{form.errors.department}}
-             </div>
-        </div>
-        {% endif %}
         <button type="submit" class="btn btn-primary">submit</button>
     </form>
             <!--<h6>{{ forloop.counter }} - Name: <br/>{{ job.mto.full_name }} {{ job.mto.user.username }}</h6>-->
