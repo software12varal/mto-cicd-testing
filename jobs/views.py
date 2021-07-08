@@ -30,7 +30,7 @@ def mto_admin_signup(request):
             instance.is_mto = False
             instance.save()
             f.save()
-            return redirect('/admin-login')  # Redirect to Dashboard Page
+            return redirect('admin_login')  # Redirect to Dashboard Page
         else:
             return render(request, 'jobs/admin-register.html', {'form': f})
     context = {

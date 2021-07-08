@@ -8,6 +8,7 @@ from users.forms import MTOAdminAuthenticationForm
 class MTOAdminLoginView(LoginView):
     template_name = 'admin_login.html'
     authentication_form = MTOAdminAuthenticationForm
+
     def form_valid(self, form):
         print(form.get_user())
         """Security check complete. Log the user in."""

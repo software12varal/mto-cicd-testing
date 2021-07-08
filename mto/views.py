@@ -23,8 +23,9 @@ from .forms import SignUpForm
 from .models import MTO
 from mto.forms import MTOUpdateProfileForm
 from datetime import datetime
-from django.db.models import Count,Sum
-from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.db.models import Count, Sum
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 class SignUpView(CreateView):
     form_class = SignUpForm
@@ -49,7 +50,7 @@ class SignUpView(CreateView):
         context = {}
         if User.objects.using('varal_job_posting_db').filter(username=user.username).exists():
             # messages.info(self.request, f"{user.username} exists in varal job posting db")
-            context['info'] =  f"{user.username} exists in varal job posting db"
+            context['info'] = f"{user.username} exists in varal job posting db"
         elif User.objects.using('vendor_os_db').filter(username=user.username).exists():
             # messages.info(self.request, f"{user.username} exists in vendor os db")
             context['info'] = f"{user.username} exists in vendor os db"
@@ -123,7 +124,7 @@ def dashboard(request):
                   ('co', 'Completed'),
 
                   ]
-    
+
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
     job_progress = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='in progress').count()
     jobs_submitted = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='submitted').count()
@@ -136,13 +137,12 @@ def dashboard(request):
     print(f'job Completed {jobs_completed}')
     print(f'job approved {job_progress}')
 
-  
-
     totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
     total = '{:0.2f}'.format(totals)
-    context = {'jobs':jobs,'jobs_submitted':jobs_submitted,'jobs_completed':jobs_completed,'total':total}
-   
-    return render(request,'mto/mto_dashboard.html',context)
+    context = {'jobs': jobs, 'jobs_submitted': jobs_submitted, 'jobs_completed': jobs_completed, 'total': total}
+
+    return render(request, 'mto/mto_dashboard.html', context)
+
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(mto_required, name='dispatch')
@@ -284,19 +284,20 @@ def job_detail(request, slug):
     job_details = Jobs.objects.get(id=slug)
     return render(request, 'mto/apply_job.html', {'job_details': job_details})
 
+
 def apply_job(request, id):
-    if MTOJob.objects.filter(job_id_id=id,assigned_to=request.user.mto.id).exists():
+    if MTOJob.objects.filter(job_id_id=id, assigned_to=request.user.mto.id).exists():
         messages.warning(request, "Already Applied to this Job !")
         return redirect('mto:view')
-    else:    
+    else:
         job_details = Jobs.objects.get(id=id)
         assigned_to = request.user.mto.id
         due_date = job_details.target_date
         assigned_date = datetime.now()
         fees = job_details.total_budget
         apply = MTOJob(job_id=job_details, assigned_to=assigned_to, evaluation_status_id=2, due_date=due_date,
-                    assigned_date=assigned_date,
-                    fees=fees)
+                       assigned_date=assigned_date,
+                       fees=fees)
         apply.save()
         messages.success(request, "Applied Successfully !")
         return redirect('mto:view')

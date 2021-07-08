@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'jobs.apps.JobsConfig',
     'users.apps.UsersConfig',
     'mto.apps.MtoConfig',
+    'super_admin.apps.SuperAdminConfig',
     # third party apps
     'widget_tweaks',
     'phonenumber_field',

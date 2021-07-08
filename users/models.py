@@ -31,6 +31,7 @@ class User(AbstractBaseUser):
     full_name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_super_admin = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_mto = models.BooleanField(default=False)  # by default the user is an MTO.
     timestamp = models.DateTimeField(auto_now_add=True)
