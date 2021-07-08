@@ -58,6 +58,7 @@
               <a class="nav-link" href="{% url 'jobs:add_job' %}">Create Microtask</a>
             </li>
             <li class="nav-item">
+<<<<<<< HEAD
               <a class="nav-link" href="{% url 'super_admin:super_admin_profile' %}">View Profile</a>
             </li>
             {% endif %}
@@ -69,6 +70,12 @@
 <!--             {% endif %}-->
             <li class="nav-item">
               <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}">Admin Monitoring</a>
+=======
+              <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}">Admin Monitoring</Table></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:admin_table' %}">Admin Table</Table></a>
+>>>>>>> f9683bfcc27fb1719dd5efb7eeff9c2f29ecbcaa
             </li>
           </ul>
           {% if request.user.is_authenticated %}

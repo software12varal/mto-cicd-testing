@@ -17,7 +17,7 @@ import json
 # from django.views.generic.base import View
 #
 # from jobs.models import MALRequirement, MicroTask, MTOJobCategory
-from jobs.models import MTOJob, Jobstatus, Jobs, MicroTask
+from jobs.models import MTOJob, Jobs, MicroTask
 from users.models import User
 from .forms import SignUpForm
 from .models import MTO
