@@ -106,6 +106,29 @@ class Jobstatus(models.Model):
 
     def __str__(self):
         return self.job_status
+class AdminRoles(models.Model):
+    description = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.description
+
+    # def save(self, *args, **kwargs):
+    #     super(AdminRoles, self).save(using='varal_job_posting_db')
+
+
+class MTOAdminUser(User):
+    varal_role_id = models.ForeignKey(AdminRoles, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.full_name
+
+    class Meta:
+        verbose_name_plural = 'MTO Admin Users'
+
+    # def save(self, *args, **kwargs):
+    #     super(MTOAdminUser, self).save(using='varal_job_posting_db')
+
+# trial session
 
 
 class Jobs(models.Model):
@@ -121,7 +144,7 @@ class Jobs(models.Model):
     assembly_line_id = models.CharField(
         max_length=50, blank=True, validators=[alphanumeric])
     assembly_line_name = models.TextField(blank=True)
-    person_name = models.TextField(help_text="Name of the person in charge")
+    person_name = models.ForeignKey(MTOAdminUser,on_delete=models.CASCADE)
     # as per predecesor 2 there is no need of person_email
     # person_email = models.EmailField(null=True)
     output = models.FilePathField(
@@ -220,26 +243,3 @@ class MTOJob(models.Model):
         return f"{self.job_id.job_name} :: {self.mto.full_name}"
 
 
-class AdminRoles(models.Model):
-    description = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.description
-
-    # def save(self, *args, **kwargs):
-    #     super(AdminRoles, self).save(using='varal_job_posting_db')
-
-
-class MTOAdminUser(User):
-    varal_role_id = models.ForeignKey(AdminRoles, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return self.full_name
-
-    class Meta:
-        verbose_name_plural = 'MTO Admin Users'
-
-    # def save(self, *args, **kwargs):
-    #     super(MTOAdminUser, self).save(using='varal_job_posting_db')
-
-# trial session
