@@ -3,6 +3,8 @@ from django.core.files.storage import FileSystemStorage
 from django.core.validators import MinValueValidator, RegexValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
+
 from users.models import User
 from mto.models import MTO
 from django.db.models.signals import post_save
@@ -232,6 +234,9 @@ class AdminRoles(models.Model):
 
 class MTOAdminUser(User):
     varal_role_id = models.ForeignKey(AdminRoles, on_delete=models.PROTECT)
+    contact_number = PhoneNumberField(blank=True)
+    designation = models.CharField(max_length=500, blank=True)
+    department = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return self.full_name
