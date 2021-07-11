@@ -1,7 +1,7 @@
 from django.urls import path
 from users.decorators import varal_admin_required
 from .views import create_jobs, home, displaying_categories, mto_admin_signup, admin_dashboard, add_paymentstatus, add_jobstatus, admin_profile, mto_bank, microtask_page, mal_requirement, \
-    add_job, alljobs, view_mto, deleteMto, appliedjobs,admin_monitoring,view_admin,admin_table
+    add_job, alljobs, view_mto, deleteMto, appliedjobs,admin_monitoring,view_admin
 
 urlpatterns = [
 
@@ -28,7 +28,5 @@ urlpatterns = [
     path('', home, name='home'),
     path('admin_monitoring/', varal_admin_required(admin_monitoring), name='admin_monitoring'),
     path('view_admin/<int:id>', varal_admin_required(view_admin), name='viewAdmin'),
-    path('admin_table/', varal_admin_required(admin_table), name='admin_table'),
-
-
+  
 ]

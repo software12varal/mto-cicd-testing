@@ -13,7 +13,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from mto.models import MTO
 from functools import reduce
 import json
-
+from django.db.models import Count,Sum
 
 def home(request):
     context = {'jobs': MTOJob.objects.all(), }
@@ -400,38 +400,25 @@ def admin_monitoring(request):
     return render(request, 'jobs/admin_monitoring.html',context)
 
 def view_admin(request,id):
-    # admin = MTOAdminUser.objects.get(id = id)
-    # mto = MTOJob.objects.filter(assigned_to=id).count
-    # context = {'admin':admin,'mto':mto}
-    # context['admin'] = admin
-    context = {}
+    job_admin = MTOAdminUser.objects.get(id = id)
+    Total_Jobs_Posted = Jobs.objects.filter(person_name=job_admin.id).count()
+    No_of_Jobs_Allocated = Jobs.objects.filter(person_name=job_admin.id,job_status='as').count()
+    Total_Jobs_Completed = Jobs.objects.filter(person_name=job_admin.id,job_status='co').count()
+    
+    jobs = Jobs.objects.filter(person_name=job_admin.id)
+    total_Jobs_Posted_by_admin = Jobs.objects.filter(person_name=job_admin.id)
+    Number_of_MTOs_working_on_a_Job = MTOJob.objects.filter(job_id__in=[job.id for job in jobs]).count()
+    Number_of_Ongoing_Jobs = MTOJob.objects.filter(job_id__in=[job.id for job in jobs],job_status='in').count()
+    
+    #these line for total amount spent
+    totals = jobs.aggregate(Sum('total_budget'))['total_budget__sum'] or 0
+    total = '{:0.2f}'.format(totals)
+
+    # to show acceptance date
+    total_jobs = MTOJob.objects.filter(job_id__in=[job.id for job in jobs])
    
-    context['Total_Jobs_Posted'] = Jobs.objects.filter().count
-    context['No_of_Jobs_Allocated'] = MTOJob.objects.filter(assigned_to=id).count()
-    #context['Total_Jobs_Submitted'] = Jobs.objects.filter().count
-    context['Total_Jobs_Completed'] = MTOJob.objects.filter(job_status='Completed').count()
-    context['Job_payment'] = MTOJob.objects.all().count
-    context['Number_of_MTOs_working_on_a_Job'] = Jobs.objects.all().count
-    context['Number_of_Ongoing_Jobs'] = Jobs.objects.all().count
-    print(context)
-
-    # mto_job = MTOJob.objects.filter(assigned_to=id).count()
-    # total_completed = MTOJob.objects.filter(completed_date__isnull=False, assigned_to=id).count()
-    # total_job = Jobs.objects.all().count()
-    # context = {'mto_job':mto_job,'total_completed':total_completed,'total_job':total_job}
-
-
+    
+    context={'Total_Jobs_Posted':Total_Jobs_Posted,'No_of_Jobs_Allocated':No_of_Jobs_Allocated,'Total_Jobs_Completed':Total_Jobs_Completed,'Number_of_MTOs_working_on_a_Job':Number_of_MTOs_working_on_a_Job,'Number_of_Ongoing_Jobs':Number_of_Ongoing_Jobs,'total':total_Jobs_Posted_by_admin,'totals':total,'total_jobs':total_jobs}
+   
     return render(request,'jobs/view_admin.html',context)
 
-
-def admin_table(request):
-    job = MTOJob.objects.all().order_by('-id')
-    p = Paginator(job, 5)
-    page_num = request.GET.get('page')
-    try:
-        data = p.page(page_num)
-    except PageNotAnInteger:
-        data = p.page(1)
-    except EmptyPage:
-        data = p.page(p.num_pages)
-    return render(request, 'jobs/admin_table.html', {'data': data})
