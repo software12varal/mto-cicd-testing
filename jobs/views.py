@@ -102,6 +102,18 @@ def alljobs(request):
     return render(request, 'jobs/jobs.html', {'data': data})
 
 
+def microtask_job_details(request, id):
+    job = Jobs.objects.get(id=id)
+    print(job)
+    mtojob = MTOJob.objects.filter(job_id = id)
+    print(mtojob)
+    count_mto = MTOJob.objects.filter(job_id = id).count()
+    print(count_mto)
+
+    context = {'job': job, 'mtojob': mtojob,'count_mto':count_mto}
+    return render(request, 'jobs/microtask_job_details.html', context)
+
+
 def admin_dashboard(request):
     print(request.user)
     return render(request, 'jobs/admin_dashboard.html')
