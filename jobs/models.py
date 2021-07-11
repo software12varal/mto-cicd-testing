@@ -9,7 +9,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 import os
 from django.conf import settings
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 def sample_directory_path(instance, filename):
     job = instance.id
@@ -119,6 +119,9 @@ class AdminRoles(models.Model):
 
 class MTOAdminUser(User):
     varal_role_id = models.ForeignKey(AdminRoles, on_delete=models.PROTECT)
+    contact_number = PhoneNumberField(blank=True)
+    designation = models.CharField(max_length=500, blank=True)
+    department = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return self.full_name
