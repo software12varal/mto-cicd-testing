@@ -154,7 +154,7 @@ class Jobs(models.Model):
     # models.ForeignKey(MicroTask, on_delete=models.CASCADE)
     job_name = models.CharField(
         max_length=300, help_text='e.g develop website')
-    cat_id = models.ForeignKey(MicroTask, on_delete=models.CASCADE)
+    cat_id = models.CharField(max_length=50) #models.ForeignKey(MicroTask, on_delete=models.CASCADE)
     target_date = models.DateTimeField(
         null=True, help_text='e.g 2021-10-25 14:30:59')
     total_budget = models.PositiveIntegerField(help_text="e.g currency AED")
@@ -163,9 +163,9 @@ class Jobs(models.Model):
     job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
     input_folder = models.CharField(_("input folder"), max_length=300)
     sample = models.FileField(
-        upload_to=sample_directory_path, default='Onkar_py.txt')
+        upload_to=sample_directory_path, default='Varal.txt')
     instructions = models.FileField(
-        upload_to=instructions_directory_path, default='Onkar_py.txt')
+        upload_to=instructions_directory_path, default='Varal.txt')
     job_status = models.CharField(
         max_length=100, choices=JOB_STATUS, default="cr")
     updated_date = models.DateTimeField(auto_now=True)

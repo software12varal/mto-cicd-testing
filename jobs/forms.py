@@ -63,41 +63,9 @@ class JobsForm(forms.ModelForm):
         # self.fields['tc_type'].widget.attrs['type'] = 'select'
 
 
-class JobForm(ModelForm):  # change_from = MALRequirementForm
+class JobForm(ModelForm): 
     class Meta:
         model = Jobs
-        fields = '__all__'
-
-# class JobForm(forms.Form):
-#     #data = [(i.id, i.full_name) for i in MTOAdminUser.objects.all()]
-#     Jobstatus = [('cr', 'Created'),
-#                  ('co', 'Completed'),
-#                  ('ur', 'Under review'),
-#                  ('as', 'Assigned')
-#                  ]
-#     alphanumeric = RegexValidator(
-#         r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
-#     sample = forms.FileField()
-#     instructions = forms.FileField()
-#     identification_number = forms.CharField(
-#         max_length=50, validators=[alphanumeric])
-#     assembly_line_id = forms.CharField(
-#         max_length=50, validators=[alphanumeric])
-#     assembly_line_name = forms.CharField()
-#     person_name =forms.ChoiceField(choices=data)
-#     target_date = forms.DateTimeField(help_text='e.g 2021-10-25 14:30:59')
-#     # as per predecesor 2 there is no need of person_email
-#     # person_email = models.EmailField(null=True)
-#     output = forms.FilePathField(
-#         path='media/documents/job_documents/output', help_text="Link of the output folder")
-#     # models.ForeignKey(MicroTask, on_delete=models.CASCADE)
-#     job_name = forms.CharField(
-#         max_length=300, help_text='e.g develop website')
-#     cat_id = forms.ModelChoiceField(job_categories)
-#     total_budget = forms.IntegerField(help_text="e.g currency AED")
-#     job_description = forms.CharField(
-#         max_length=1000, help_text='e.g car website')
-#     job_quantity = forms.IntegerField(help_text="e.g Quantity of Job")
-#     input_folder = forms.FilePathField(path='media/documents/job_documents/input',
-#                                        help_text="Link of the Input folder")
-#     # job_status = forms.ChoiceField(choices=Jobstatus, required=False)
+        fields = ['identification_number','assembly_line_id','assembly_line_name',
+                'person_name','output','job_name','cat_id','target_date','total_budget',
+                'job_description','job_quantity','input_folder','sample','instructions']
