@@ -24,8 +24,9 @@ from .forms import SignUpForm
 from .models import MTO
 from mto.forms import MTOUpdateProfileForm
 from datetime import datetime, timedelta
-from django.db.models import Count,Sum
-from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.db.models import Count, Sum
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
 
 class SignUpView(CreateView):
     form_class = SignUpForm
@@ -50,7 +51,7 @@ class SignUpView(CreateView):
         context = {}
         if User.objects.using('varal_job_posting_db').filter(username=user.username).exists():
             # messages.info(self.request, f"{user.username} exists in varal job posting db")
-            context['info'] =  f"{user.username} exists in varal job posting db"
+            context['info'] = f"{user.username} exists in varal job posting db"
         elif User.objects.using('vendor_os_db').filter(username=user.username).exists():
             # messages.info(self.request, f"{user.username} exists in vendor os db")
             context['info'] = f"{user.username} exists in vendor os db"
@@ -73,7 +74,8 @@ class SignUpView(CreateView):
                 fail_silently=False
 
             )
-            messages.success(self.request, f"Hi {user.full_name}, your account was created successfully.")
+            messages.success(
+                self.request, f"Hi {user.full_name}, your account was created successfully.")
             context['redirect'] = '/mto/login'
         return JsonResponse(context, status=200)
 
@@ -124,11 +126,14 @@ def dashboard(request):
                   ('co', 'Completed'),
 
                   ]
-    
+
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
-    job_progress = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='in progress').count()
-    jobs_submitted = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='submitted').count()
-    jobs_completed = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='Completed').count()
+    job_progress = MTOJob.objects.filter(
+        assigned_to=request.user.mto.id, job_status='in progress').count()
+    jobs_submitted = MTOJob.objects.filter(
+        assigned_to=request.user.mto.id, job_status='submitted').count()
+    jobs_completed = MTOJob.objects.filter(
+        assigned_to=request.user.mto.id, job_status='Completed').count()
     # jobs_submitted = jobs.filter(job_status = 'Created').count()
     # jobs_completed = jobs.filter(job_status = 'Completed').count()
     # jobs_approved = jobs.filter(job_status = 'Assigned').count()
@@ -137,13 +142,13 @@ def dashboard(request):
     print(f'job Completed {jobs_completed}')
     print(f'job approved {job_progress}')
 
-  
-
     totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
     total = '{:0.2f}'.format(totals)
-    context = {'jobs':jobs,'jobs_submitted':jobs_submitted,'jobs_completed':jobs_completed,'total':total}
-   
-    return render(request,'mto/mto_dashboard.html',context)
+    context = {'jobs': jobs, 'jobs_submitted': jobs_submitted,
+               'jobs_completed': jobs_completed, 'total': total}
+
+    return render(request, 'mto/mto_dashboard.html', context)
+
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(mto_required, name='dispatch')
@@ -159,9 +164,11 @@ class MTOProfileView(View):
         # we get the items from string type to list type and get the users job categories
         jsonDec = json.decoder.JSONDecoder()
         mto_preferred_categories = jsonDec.decode(mto.job_category)
-        job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
+        job_categories = [Jobs.objects.get(id=job_id)
+                          for job_id in mto_preferred_categories]
 
-        context = {self.context_object_name: mto, 'form': self.form, 'job_categories': job_categories}
+        context = {self.context_object_name: mto,
+                   'form': self.form, 'job_categories': job_categories}
         return render(self.request, self.template_name, context)
 
     def post(self, *args, **kwargs):
@@ -262,14 +269,17 @@ class MTOProfileView(View):
 
 
 def view_jobs(request):  # MTO view all
-    if request.user.is_authenticated and request.user.is_mto:  # and not request.user.is_admin :
+    # and not request.user.is_admin :
+    if request.user.is_authenticated and request.user.is_mto:
         job = Jobs.objects.all()
-        mt = list(MTOJob.objects.values('job_id').order_by('job_id').annotate(count=Count('job_id')))
+        mt = list(MTOJob.objects.values('job_id').order_by(
+            'job_id').annotate(count=Count('job_id')))
         # ADDED BY SHAKEEL
         ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).cat_id.people_required_for_valid_tc <= y else 0,
                       list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
-        ujob = Jobs.objects.filter(target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
+        ujob = Jobs.objects.filter(
+            target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
         p = Paginator(job, 5)
         page_num = request.GET.get('page')
         try:
@@ -285,19 +295,20 @@ def job_detail(request, slug):
     job_details = Jobs.objects.get(id=slug)
     return render(request, 'mto/apply_job.html', {'job_details': job_details})
 
+
 def apply_job(request, id):
-    if MTOJob.objects.filter(job_id_id=id,assigned_to=request.user.mto.id).exists():
+    if MTOJob.objects.filter(job_id_id=id, assigned_to=request.user.mto.id).exists():
         messages.warning(request, "Already Applied to this Job !")
         return redirect('mto:view')
-    else:    
+    else:
         job_details = Jobs.objects.get(id=id)
         assigned_to = request.user.mto.id
         due_date = job_details.target_date
         assigned_date = datetime.now()
         fees = job_details.total_budget
         apply = MTOJob(job_id=job_details, assigned_to=assigned_to, evaluation_status_id=2, due_date=due_date,
-                    assigned_date=assigned_date,
-                    fees=fees)
+                       assigned_date=assigned_date,
+                       fees=fees)
         apply.save()
         messages.success(request, "Applied Successfully !")
         return redirect('mto:view')
@@ -305,7 +316,8 @@ def apply_job(request, id):
 
 def view_applied_jobs(request):
     mtos = MTO.objects.get(id=request.user.id)
-    jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id).order_by('-assigned_date')
+    jobs = MTOJob.objects.filter(
+        assigned_to=request.user.mto.id).order_by('-assigned_date')
 
     context = {'jobs': jobs}
     return render(request, 'mto/appliedjobs.html', context)
@@ -313,7 +325,8 @@ def view_applied_jobs(request):
 
 def view_applied_details(request, mto_id, job_id):
     mtos = MTO.objects.get(id=mto_id)
-    details = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto_id).first()
+    details = MTOJob.objects.filter(
+        job_id_id=job_id, assigned_to=mto_id).first()
     mtoss = mtos.full_name
 
     context = {'mto': mtos, 'details': details}
@@ -333,10 +346,11 @@ def submit_job(request):
         elif MTOJob.objects.filter(job_id_id=job_id, job_status='co', assigned_to=mto.id).exists():
             messages.info(request, f'You already submitted')
         else:
-            instance = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto.id).first()
+            instance = MTOJob.objects.filter(
+                job_id_id=job_id, assigned_to=mto.id).first()
             instance.output_path = output_path
             instance.job_status = 'sub'
-            instance.completed_date = datetime.now()
+            instance.submitted_date = datetime.now()
             instance.save()
             messages.success(request, f'Job successfully submitted')
 
@@ -371,6 +385,7 @@ def view_payment_status(request):
 
 def view_job_deadline(request):
     due_date = timezone.now() + timedelta(hours=4)
-    due_jobs = MTOJob.objects.filter(assigned_to=request.user.id, due_date__gte=timezone.now(), due_date__lte=due_date, job_status='in').order_by('-due_date')
+    due_jobs = MTOJob.objects.filter(assigned_to=request.user.id, due_date__gte=timezone.now(
+    ), due_date__lte=due_date, job_status='in').order_by('-due_date')
     context = {'jobs': due_jobs}
     return render(request, 'mto/job_deadline.html', context)
