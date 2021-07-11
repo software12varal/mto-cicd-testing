@@ -1,7 +1,8 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from users.decorators import mto_required
-from mto.views import SignUpView, dummy_home_view,view_jobs,apply_job,job_detail,MTOProfileView,dashboard,view_applied_jobs, view_applied_details, submit_job
+from mto.views import SignUpView, dummy_home_view,view_jobs,apply_job,job_detail,MTOProfileView,dashboard,view_applied_jobs,\
+    view_applied_details, submit_job, notification, recommended_jobs, view_payment_status, view_job_deadline
 
 urlpatterns = [
     path('', mto_required(dummy_home_view), name='home'),    
@@ -19,4 +20,8 @@ urlpatterns = [
     path('view-applied-jobs/', mto_required(view_applied_jobs), name='applied'),
     path('view-applied-details/<int:mto_id>/<int:job_id>', mto_required(view_applied_details), name='view_applied_details'),
     path('submit-job/', mto_required(submit_job), name='submit_job'),
+    path('notificatons/', mto_required(notification), name='notification'),
+    path('recommended-jobs/', mto_required(recommended_jobs), name='recommended_jobs'),
+    path('payment-status/', mto_required(view_payment_status), name='view_payment_status'),
+    path('view-job-deadline/', mto_required(view_job_deadline), name='job_deadline'),
 ]
