@@ -1,0 +1,161 @@
+{% extends 'jobs/base.html' %}
+{% block title %} View MTO {% endblock %}
+{% block content %}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job Name</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.job_name }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Category of the MTO job</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.cat_id }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job Description</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.job_description }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Posted Date</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.posted_date }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Assembly Line Number </h6>
+            </div>
+            <div class="col-sm-9 text-secondary"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Name of the Assembly Line </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.assembly_line_name }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0"> MTO Job Intiation Number</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0"> Micro Task Number</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Total No of MTO's worked in the job </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ count_mto }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Total cost of the MTO job</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.total_budget }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job Status</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.get_job_status_display }}</div>
+        </div>
+        <hr><div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Type of TC to be done </h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.cat_id.get_tc_type_display }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">TC job ID </h6>
+            </div>
+            <div class="col-sm-9 text-secondary"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Name of the folder to which the Output is moved</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job instruction </h6>
+            </div>
+            <div class="col-sm-9 text-secondary"><a href="{{ job.cat_id.instructions.url }}">{{job.cat_id.instructions}}</a></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Job sample</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"><a href="{{ job.cat_id.sample.url }}">{{job.cat_id.sample}}</a></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Who was given Permission</h6>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ job.person_name }}</div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">When Was the Permission removed</h6>
+            </div>
+            <div class="col-sm-9 text-secondary"></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6 class="mb-0">Payment status </h6>
+                <div class="container-fluid" style="min-width: max-content;">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">MTO Name</th>
+                          <th scope="col">Payment Status</th>
+                          <th scope="col">Submitted Date</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                      {% for dat in mtojob %}
+                        <tr>
+                          <th scope="row">{{ dat.mto.full_name }}</th>
+                          <td>{{dat.payment_status}}</td>
+                          <td>{{dat.assigned_date}}</td>
+                        </tr>
+                    {% endfor %}
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-9 text-secondary">{{ mtojob.payment_status }}</div>
+        </div>
+        <hr>
+        <td><a class="btn btn-success" href="{% url 'jobs:alljobs' %}" role="button">Back To Jobs</a></td>
+
+        {% endblock %}
