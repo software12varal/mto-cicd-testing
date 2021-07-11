@@ -161,8 +161,7 @@ class Jobs(models.Model):
     job_description = models.CharField(
         _('job description'), max_length=1000, help_text='e.g car website')
     job_quantity = models.IntegerField(help_text="e.g Quantity of Job")
-    input_folder = models.FilePathField(path='media/documents/job_documents/input',
-                                        help_text="Link of the Input folder")
+    input_folder = models.CharField(_("input folder"), max_length=300)
     sample = models.FileField(
         upload_to=sample_directory_path, default='Onkar_py.txt')
     instructions = models.FileField(
@@ -209,7 +208,8 @@ class MTOJob(models.Model):
     completed_date = models.DateTimeField(null=True)
     output_path = models.FileField(upload_to=output_directory_path)
     submitted_date = models.DateTimeField(null=True)
-    evaluation_status = models.ForeignKey(EvaluationStatus, on_delete=models.CASCADE)
+    evaluation_status = models.ForeignKey(
+        EvaluationStatus, on_delete=models.CASCADE)
 
     @property
     def mto(self):
