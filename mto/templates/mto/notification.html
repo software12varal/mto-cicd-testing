@@ -1,0 +1,22 @@
+{% extends 'mto/base.html' %}
+{% block content %}
+<div class="bg-light p-5 rounded" style="
+    margin-top: 100px;
+">
+    <h5>Recommended jobs</h5>
+    <p class="lead">As per your preferences system recommended some jobs please check it</p>
+    <a class="btn btn-lg btn-primary btn-sm" href="{% url 'mto:recommended_jobs' %}" role="button">View Recommended jobs »</a>
+  </div>
+<hr>
+<div class="bg-light p-5 rounded" >
+    <h5>Job Deadlines</h5>
+    <p class="lead">You can see your job's deadline here</p>
+    <a class="btn btn-lg btn-primary btn-sm" href="{% url 'mto:job_deadline' %}" role="button">View Job Deadlines »</a>
+  </div>
+<hr>
+<div class="bg-light p-5 rounded" >
+    <h5>Payment Status</h5>
+    <p class="lead">Check your Payment Status</p>
+    <a class="btn btn-lg btn-primary btn-sm" href="{% url 'mto:view_payment_status' %}" role="button">View Payment Status »</a>
+  </div>
+{% endblock %}

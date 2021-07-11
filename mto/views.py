@@ -12,6 +12,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from users.decorators import mto_required
+from django.utils import timezone
 from django.template.context import RequestContext
 import json
 # from django.views.generic.base import View
@@ -22,7 +23,7 @@ from users.models import User
 from .forms import SignUpForm
 from .models import MTO
 from mto.forms import MTOUpdateProfileForm
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db.models import Count,Sum
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
 
@@ -327,13 +328,49 @@ def submit_job(request):
         job_id = request.POST.get("job_id")
         output_path = request.FILES['file1']
         Jobs.objects.filter(id=job_id).first()
-        if MTOJob.objects.filter(job_id_id=job_id, is_submitted=True, assigned_to=mto.id).exists():
+        if MTOJob.objects.filter(job_id_id=job_id, job_status='sub', assigned_to=mto.id).exists():
+            messages.info(request, f'You already submitted')
+        elif MTOJob.objects.filter(job_id_id=job_id, job_status='co', assigned_to=mto.id).exists():
             messages.info(request, f'You already submitted')
         else:
             instance = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto.id).first()
             instance.output_path = output_path
-            instance.is_submitted = True
+            instance.job_status = 'sub'
+            instance.completed_date = datetime.now()
             instance.save()
             messages.success(request, f'Job successfully submitted')
 
         return redirect('mto:applied')
+
+
+def notification(request):
+    return render(request, 'mto/notification.html')
+
+
+def recommended_jobs(request):
+    mto = MTO.objects.get(id=request.user.id)
+    print(mto.id)
+    jsonDec = json.decoder.JSONDecoder()
+    mto_preferred_categories = jsonDec.decode(mto.job_category)
+    print(mto_preferred_categories)
+    print(type(mto_preferred_categories))
+    # job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
+    # print(job_categories)
+    all_job = Jobs.objects.filter(cat_id__in=[job_id for job_id in mto_preferred_categories],
+                                  target_date__gte=datetime.now())
+    print(all_job)
+    context = {'jobs': all_job}
+    return render(request, 'mto/recommended_jobs.html', context)
+
+
+def view_payment_status(request):
+    job_payment_status = MTOJob.objects.filter(assigned_to=request.user.id)
+    context = {'jobs': job_payment_status}
+    return render(request, 'mto/view_payment_status.html', context)
+
+
+def view_job_deadline(request):
+    due_date = timezone.now() + timedelta(hours=4)
+    due_jobs = MTOJob.objects.filter(assigned_to=request.user.id, due_date__gte=timezone.now(), due_date__lte=due_date, job_status='in').order_by('-due_date')
+    context = {'jobs': due_jobs}
+    return render(request, 'mto/job_deadline.html', context)
