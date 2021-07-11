@@ -221,14 +221,6 @@ def view_mto(request, id):
         completed_date__isnull=False, assigned_to=id).count()
     total_job = Jobs.objects.all().count()
 
-    # cat_list = []
-    # list(
-    #     map(lambda i: i if i == '[' or i == ',' or i == ']' or i == " " else cat_list.append(int(i)), mto.job_category))
-    # print(cat_list)
-    # jobs = list(map(lambda i: i if i == '[' or i == ',' or i == ']' or i == " " else {
-    #     'name': Jobs.objects.filter(cat_id=i).first()}, cat_list))
-    # print(jobs.count('name'))
-
     try:
         percentage_acceptance = percentage(
             mto_job=mto_job, total_job=total_job, total_completed=None)
@@ -274,102 +266,39 @@ def admin_profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Your Profile has been updated!")
-            # return redirect(request, 'jobs/admin_profile.html')
         else:
             messages.info(request, "sorry profile is not updated!")
-            # return redirect(request, 'jobs/admin_profile.html')
     data['form'] = form
     return render(request, 'jobs/admin_profile.html', data)
 
 
 def create_jobs(request):
     context = {}
-    context['form'] = JobForm
+    abc = MicroTask.objects.values('microtask_category').all()
+    xyz = {i['microtask_category'] for i in abc}
+    context["jobs"] = list(xyz)
+    form = JobForm()
     if request.method == 'POST':
-
-        form = JobForm(request.POST)
-        print(request.POST.get('identification_number'))
-        sample = request.FILES.get('sample')
-        instructions = request.FILES.get('instructions')
-
-        if instructions and sample is not None:
-            identification_number = request.POST.get('identification_number')
-            assembly_line_id = request.POST.get('assembly_line_id')
-            assembly_line_name = request.POST.get('assembly_line_name')
-            person_name = request.POST.get('person_name')
-            output = request.POST.get('output')
-            job_name = request.POST.get('job_name')
-            cat_id = request.POST.get('cat_id')
-            target_date = request.POST.get('target_date')
-            total_budget = request.POST.get('total_budget')
-            job_description = request.POST.get('job_description')
-            job_quantity = request.POST.get('job_quantity')
-            input_folder = request.POST.get('input_folder')
-
-            instance = Jobs.objects.create(identification_number=identification_number, assembly_line_id=assembly_line_id,
-                                           assembly_line_name=assembly_line_name, person_name=person_name,
-                                           job_name=job_name, cat_id_id=cat_id, target_date=target_date, total_budget=total_budget,
-                                           job_description=job_description, job_quantity=job_quantity)
-            instance.output = output
-            instance.input_folder = input_folder
-            instance.save()
+        form = JobForm(request.POST,request.FILES)
+        print(form)
+        print(request.FILES.get('sample'))
+        print(request.FILES.get('instructions'))
+        if form.is_valid():
+            # if
+            if request.FILES.get('sample') is None or request.FILES.get('instructions') is None:
+                mic_ojbs = MicroTask.objects.filter(id = request.POST.get('job_name')).first()
+                instance = form.save(commit=False)
+                if request.FILES.get('sample') is None:
+                    instance.sample = mic_ojbs.sample
+                if request.FILES.get('instructions') is None:
+                    instance.instructions = mic_ojbs.instructions
+                instance.save()
+            else:
+                form.save()
             messages.success(request, 'Form Has Been Submited Successfully !')
-            print(request.POST.get('identification_number'))
-            instance = MicroTask.objects.get(id=cat_id)
-            instance.sample = sample
-            instance.instructions = instructions
-            print(sample)
-            instance.save()
-        else:
-            identification_number = request.POST.get('identification_number')
-            assembly_line_id = request.POST.get('assembly_line_id')
-            assembly_line_name = request.POST.get('assembly_line_name')
-            person_name = request.POST.get('person_name')
-            output = request.POST.get('output')
-            job_name = request.POST.get('job_name')
-            cat_id = request.POST.get('cat_id')
-            target_date = request.POST.get('target_date')
-            total_budget = request.POST.get('total_budget')
-            job_description = request.POST.get('job_description')
-            job_quantity = request.POST.get('job_quantity')
-            input_folder = request.POST.get('input_folder')
-
-            instance = Jobs.objects.create(identification_number=identification_number, assembly_line_id=assembly_line_id,
-                                           assembly_line_name=assembly_line_name, person_name=person_name,
-                                           job_name=job_name, cat_id_id=cat_id, target_date=target_date, total_budget=total_budget,
-                                           job_description=job_description, job_quantity=job_quantity)
-            instance.output = output
-            instance.input_folder = input_folder
-            instance.save()
-            messages.success(request, 'Form Has Been Submited Successfully !')
-            print(request.POST.get('identification_number'))
+            return redirect('jobs:alljobs')
+    context["form"] = form    
     return render(request, 'jobs/mal_requirement_creation.html', context)
-
-
-# class MALRequirementCreateView(CreateView):
-#     form_class = JobForm
-#     template_name = 'jobs/mal_requirement_creation.html'
-
-#     def get_form_kwargs(self):
-#         kwargs = super(MALRequirementCreateView, self).get_form_kwargs()
-#         return kwargs
-
-#     def post(self, request, *args, **kwargs):
-#         form = self.get_form()
-#         if form.is_valid():
-#             return self.form_valid(form)
-#         else:
-#             return self.form_invalid(form)
-
-#     def form_invalid(self, form):
-#         return JsonResponse(form.errors, status=200)
-
-#     def form_valid(self, form):
-#         instance = form.save(commit=False)
-#         instance.save()
-#         context = {'message': f" {instance.job_name}, has been created successfully."}
-#         return JsonResponse(context, status=200)
-
 
 def admin_monitoring(request):
     jobs = Jobs.objects.all()
@@ -433,4 +362,14 @@ def view_admin(request,id):
     context={'Total_Jobs_Posted':Total_Jobs_Posted,'No_of_Jobs_Allocated':No_of_Jobs_Allocated,'Total_Jobs_Completed':Total_Jobs_Completed,'Number_of_MTOs_working_on_a_Job':Number_of_MTOs_working_on_a_Job,'Number_of_Ongoing_Jobs':Number_of_Ongoing_Jobs,'total':total_Jobs_Posted_by_admin,'totals':total,'total_jobs':total_jobs}
    
     return render(request,'jobs/view_admin.html',context)
+
+def displaying_microtask(request):
+    cat_idw = request.GET.get('cat_ide')
+    mctsk = MicroTask.objects.filter(microtask_category__icontains=cat_idw).all()
+    return render(request, 'jobs/cat_name.html', {'mctsk':mctsk})
+
+def displaying_files(request):
+    jb_namw = request.GET.get('jb_name')
+    namee = MicroTask.objects.filter(id=jb_namw).first()
+    return render(request, 'jobs/cat_name.html', {'namee':namee})
 
