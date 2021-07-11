@@ -4,14 +4,13 @@ from django.contrib import admin
 from django.urls import path, include
 from mto.views import verify
 
-urlpatterns = [
-    path('verify/<str:token>', verify, name='verify'),
-    path('super-admin/', include(('super_admin.urls', 'super_admin'), namespace="super_admin")),
 
+urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', include('users.urls')),
+    path('', include('users.urls')),
     path('mto/', include(('mto.urls', 'mto'), namespace="mto")),
     path('', include(('jobs.urls', 'jobs'), namespace="jobs")),
+    path('verify/<str:token>',verify,name='verify')
 
 ]
 if settings.DEBUG:

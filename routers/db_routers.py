@@ -36,7 +36,7 @@ class VaralJobPostingDBRouter:
     jobs and payments applications. This is related to VaralJobPostingDB.
     """
     route_app_labels = {'users', 'auth',
-                        'contenttypes', 'sessions', 'admin', 'jobs','super_admin'}
+                        'contenttypes', 'sessions', 'admin', 'jobs'}
 
     def db_for_read(self, model, **hints):
         if model._meta.app_label in self.route_app_labels:
