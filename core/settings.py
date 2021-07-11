@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'jobs.apps.JobsConfig',
     'users.apps.UsersConfig',
     'mto.apps.MtoConfig',
+    'super_admin.apps.SuperAdminConfig',
     # third party apps
     'widget_tweaks',
     'phonenumber_field',
@@ -81,26 +82,26 @@ DATABASES = {
         'NAME': BASE_DIR / 'vendor_os.db.sqlite3',
         'TEST': {
             'DEPENDENCIES': [],
-        } 
+        }
     },
     'varal_job_posting_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'varal_job_posting.db.sqlite3',
         'TEST': {
             'DEPENDENCIES': [],
-        } 
+        }
     },
     'accounts_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'accounts.db.sqlite3',
         'TEST': {
             'DEPENDENCIES': [],
-        } 
+        }
     },
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VaralJobPostingDBRouter', 'routers.db_routers.VendorOSRouter',
+DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
                     'routers.db_routers.AccountsDBRouter']
 
 # Password validation
@@ -145,7 +146,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media/documents"
-#MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

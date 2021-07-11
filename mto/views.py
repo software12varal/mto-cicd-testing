@@ -7,7 +7,7 @@ from django.views.generic import CreateView
 from django.views import View
 from django.conf import settings
 import random
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
@@ -275,8 +275,12 @@ def view_jobs(request):  # MTO view all
         mt = list(MTOJob.objects.values('job_id').order_by(
             'job_id').annotate(count=Count('job_id')))
         # ADDED BY SHAKEEL
-        ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).cat_id.people_required_for_valid_tc <= y else 0,
+
+        ls = list(map(lambda x, y: x if 10 <= y else 0,
                       list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+
+        # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).cat_id.people_required_for_valid_tc <= y else 0,
+        #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         ujob = Jobs.objects.filter(
             target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
@@ -296,6 +300,37 @@ def job_detail(request, slug):
     return render(request, 'mto/apply_job.html', {'job_details': job_details})
 
 
+# This code can be refactored further using an if statement
+# Email notifications to MTO_admin
+def email_notification_job_applied(request):
+    # link = f'http://{domain_name}/verify/{token}'
+    email = EmailMessage(
+        'Job applied',
+        'User has applied for job',
+        settings.EMAIL_HOST_USER,
+        # [request.user.profile.email]
+        ['software8@varaluae.com'],
+    )
+
+    email.fail_silently = False
+    return email.send()
+
+
+# Email notifications to MTO_admin; add it to apply job function
+
+def email_notification_job_submit(request):
+    email = EmailMessage(
+        'Job ',
+        'User has submitted the job',
+        settings.EMAIL_HOST_USER,
+        # [request.user.profile.email]
+        ['software8@varaluae.com'],
+    )
+
+    email.fail_silently = False
+    return email.send()
+
+
 def apply_job(request, id):
     if MTOJob.objects.filter(job_id_id=id, assigned_to=request.user.mto.id).exists():
         messages.warning(request, "Already Applied to this Job !")
@@ -311,6 +346,7 @@ def apply_job(request, id):
                        fees=fees)
         apply.save()
         messages.success(request, "Applied Successfully !")
+        email_notification_job_applied(request)
         return redirect('mto:view')
 
 
@@ -353,6 +389,7 @@ def submit_job(request):
             instance.submitted_date = datetime.now()
             instance.save()
             messages.success(request, f'Job successfully submitted')
+            email_notification_job_submit(request)
 
         return redirect('mto:applied')
 

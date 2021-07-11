@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import CreateView
 
 from jobs.models import MTOJob, Jobs
@@ -13,10 +14,15 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from mto.models import MTO
 from functools import reduce
 import json
-from django.db.models import Count,Sum
+from django.db.models import Count, Sum
+
 
 def home(request):
     context = {'jobs': MTOJob.objects.all(), }
+    # solves Bug: can see a home page without logout options(when url is put directly), solved by redirecting to
+    # adminDashboard
+    if request.user.is_authenticated and request.user.is_admin and not request.user.is_mto:
+        return redirect(reverse('jobs:adminDashboard'))
     return render(request, 'jobs/index.html', context)
 
 
@@ -105,12 +111,12 @@ def alljobs(request):
 def microtask_job_details(request, id):
     job = Jobs.objects.get(id=id)
     print(job)
-    mtojob = MTOJob.objects.filter(job_id = id)
+    mtojob = MTOJob.objects.filter(job_id=id)
     print(mtojob)
-    count_mto = MTOJob.objects.filter(job_id = id).count()
+    count_mto = MTOJob.objects.filter(job_id=id).count()
     print(count_mto)
 
-    context = {'job': job, 'mtojob': mtojob,'count_mto':count_mto}
+    context = {'job': job, 'mtojob': mtojob, 'count_mto': count_mto}
     return render(request, 'jobs/microtask_job_details.html', context)
 
 
@@ -279,14 +285,14 @@ def create_jobs(request):
     context["jobs"] = list(xyz)
     form = JobForm()
     if request.method == 'POST':
-        form = JobForm(request.POST,request.FILES)
+        form = JobForm(request.POST, request.FILES)
         print(form)
         print(request.FILES.get('sample'))
         print(request.FILES.get('instructions'))
         if form.is_valid():
             # if
             if request.FILES.get('sample') is None or request.FILES.get('instructions') is None:
-                mic_ojbs = MicroTask.objects.filter(id = request.POST.get('job_name')).first()
+                mic_ojbs = MicroTask.objects.filter(id=request.POST.get('job_name')).first()
                 instance = form.save(commit=False)
                 if request.FILES.get('sample') is None:
                     instance.sample = mic_ojbs.sample
@@ -297,8 +303,9 @@ def create_jobs(request):
                 form.save()
             messages.success(request, 'Form Has Been Submited Successfully !')
             return redirect('jobs:alljobs')
-    context["form"] = form    
+    context["form"] = form
     return render(request, 'jobs/mal_requirement_creation.html', context)
+
 
 def admin_monitoring(request):
     jobs = Jobs.objects.all()
@@ -313,8 +320,11 @@ def admin_monitoring(request):
     Job_category = MTOJob.objects.all()
     date_of_posting = MTOJob.objects.all()
 
-    context = {'jobs': jobs, 'submitted_jobs': submitted_jobs, 'completed_jobs': completed_jobs, 'rejected_jobs': rejected_jobs, 'Job_payment': Job_payment, 'No_of_mtos_working_onjobs': No_of_mtos_working_onjobs,
-               'Number_of_Ongoing_Jobs': Number_of_Ongoing_Jobs, 'Approved_amount_per_job': Approved_amount_per_job, 'Job_TITLE': Job_TITLE, 'Job_category': Job_category, 'date_of_posting': date_of_posting}
+    context = {'jobs': jobs, 'submitted_jobs': submitted_jobs, 'completed_jobs': completed_jobs,
+               'rejected_jobs': rejected_jobs, 'Job_payment': Job_payment,
+               'No_of_mtos_working_onjobs': No_of_mtos_working_onjobs,
+               'Number_of_Ongoing_Jobs': Number_of_Ongoing_Jobs, 'Approved_amount_per_job': Approved_amount_per_job,
+               'Job_TITLE': Job_TITLE, 'Job_category': Job_category, 'date_of_posting': date_of_posting}
 
     return render(request, 'jobs/admin_monitoring.html', context)
 
@@ -333,43 +343,49 @@ def displaying_categories(request):
         print("Select something please")
     return JsonResponse(context)
 
+
 def admin_monitoring(request):
-    admin= MTOAdminUser.objects.all()
+    admin = MTOAdminUser.objects.all()
 
     context = {'admin': admin}
 
-    return render(request, 'jobs/admin_monitoring.html',context)
+    return render(request, 'jobs/admin_monitoring.html', context)
 
-def view_admin(request,id):
-    job_admin = MTOAdminUser.objects.get(id = id)
+
+def view_admin(request, id):
+    job_admin = MTOAdminUser.objects.get(id=id)
     Total_Jobs_Posted = Jobs.objects.filter(person_name=job_admin.id).count()
-    No_of_Jobs_Allocated = Jobs.objects.filter(person_name=job_admin.id,job_status='as').count()
-    Total_Jobs_Completed = Jobs.objects.filter(person_name=job_admin.id,job_status='co').count()
-    
+    No_of_Jobs_Allocated = Jobs.objects.filter(person_name=job_admin.id, job_status='as').count()
+    Total_Jobs_Completed = Jobs.objects.filter(person_name=job_admin.id, job_status='co').count()
+
     jobs = Jobs.objects.filter(person_name=job_admin.id)
     total_Jobs_Posted_by_admin = Jobs.objects.filter(person_name=job_admin.id)
     Number_of_MTOs_working_on_a_Job = MTOJob.objects.filter(job_id__in=[job.id for job in jobs]).count()
-    Number_of_Ongoing_Jobs = MTOJob.objects.filter(job_id__in=[job.id for job in jobs],job_status='in').count()
-    
-    #these line for total amount spent
+    Number_of_Ongoing_Jobs = MTOJob.objects.filter(job_id__in=[job.id for job in jobs], job_status='in').count()
+
+    # these line for total amount spent
     totals = jobs.aggregate(Sum('total_budget'))['total_budget__sum'] or 0
     total = '{:0.2f}'.format(totals)
 
     # to show acceptance date
     total_jobs = MTOJob.objects.filter(job_id__in=[job.id for job in jobs])
-   
-    
-    context={'Total_Jobs_Posted':Total_Jobs_Posted,'No_of_Jobs_Allocated':No_of_Jobs_Allocated,'Total_Jobs_Completed':Total_Jobs_Completed,'Number_of_MTOs_working_on_a_Job':Number_of_MTOs_working_on_a_Job,'Number_of_Ongoing_Jobs':Number_of_Ongoing_Jobs,'total':total_Jobs_Posted_by_admin,'totals':total,'total_jobs':total_jobs}
-   
-    return render(request,'jobs/view_admin.html',context)
+
+    context = {'Total_Jobs_Posted': Total_Jobs_Posted, 'No_of_Jobs_Allocated': No_of_Jobs_Allocated,
+               'Total_Jobs_Completed': Total_Jobs_Completed,
+               'Number_of_MTOs_working_on_a_Job': Number_of_MTOs_working_on_a_Job,
+               'Number_of_Ongoing_Jobs': Number_of_Ongoing_Jobs, 'total': total_Jobs_Posted_by_admin, 'totals': total,
+               'total_jobs': total_jobs}
+
+    return render(request, 'jobs/view_admin.html', context)
+
 
 def displaying_microtask(request):
     cat_idw = request.GET.get('cat_ide')
     mctsk = MicroTask.objects.filter(microtask_category__icontains=cat_idw).all()
-    return render(request, 'jobs/cat_name.html', {'mctsk':mctsk})
+    return render(request, 'jobs/cat_name.html', {'mctsk': mctsk})
+
 
 def displaying_files(request):
     jb_namw = request.GET.get('jb_name')
     namee = MicroTask.objects.filter(id=jb_namw).first()
-    return render(request, 'jobs/cat_name.html', {'namee':namee})
-
+    return render(request, 'jobs/cat_name.html', {'namee': namee})
