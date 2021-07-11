@@ -43,7 +43,8 @@ I have managed to add 3 databases to the project. All ot them working fine in th
 
 3. Please make migrations to update your databases.
 
-python manage.py migrate mto --database=vendor_os_db
+4. python manage.py migrate mto --database=vendor_os_db
+
 
 
 
