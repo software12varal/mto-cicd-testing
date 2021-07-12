@@ -3,7 +3,8 @@ class VendorOSRouter:
     A router to control all database operations on models in the
     auth and accounts applications. This is related to vendorOS DB.
     """
-    route_app_labels = {'users', 'auth', 'contenttypes', 'sessions', 'admin', 'mto'}
+    route_app_labels = {'users', 'auth',
+                        'contenttypes', 'sessions', 'admin', 'mto'}
 
     def db_for_read(self, model, **hints):
         if model._meta.app_label in self.route_app_labels:
@@ -34,7 +35,8 @@ class VaralJobPostingDBRouter:
     A router to control all database operations on models in the
     jobs and payments applications. This is related to VaralJobPostingDB.
     """
-    route_app_labels = {'users', 'auth', 'contenttypes', 'sessions', 'admin', 'jobs'}
+    route_app_labels = {'users', 'auth',
+                        'contenttypes', 'sessions', 'admin', 'jobs', 'super_admin'}
 
     def db_for_read(self, model, **hints):
         if model._meta.app_label in self.route_app_labels:

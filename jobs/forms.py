@@ -1,8 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import ModelForm
-
-from .models import MTOAdminUser, Jobs, Jobstatus, MicroTask
+from django.core.validators import RegexValidator
+from .models import MTOAdminUser, Jobs, MicroTask
 from django import forms
+job_categories = MicroTask.objects.all()
 
 
 class MTOAdminSignUpForm(UserCreationForm):
@@ -56,15 +57,15 @@ class JobsForm(forms.ModelForm):
         self.fields['time_required'].widget.attrs['class'] = 'form-control'
         self.fields['skills'].widget.attrs['class'] = 'form-control'
         self.fields['people_required_for_valid_tc'].widget.attrs['class'] = 'form-control'
-        self.fields['job_sample'].widget.attrs['class'] = 'form-control'
-        self.fields['job_instructions'].widget.attrs['class'] = 'form-control'
+        self.fields['sample'].widget.attrs['class'] = 'form-control'
+        self.fields['instructions'].widget.attrs['class'] = 'form-control'
         self.fields['tc_type'].widget.attrs['class'] = 'form-control'
         # self.fields['tc_type'].widget.attrs['type'] = 'select'
 
 
-class JobForm(ModelForm):  # change_from = MALRequirementForm
+class JobForm(ModelForm): 
     class Meta:
         model = Jobs
-        fields = '__all__'
-
-
+        fields = ['identification_number','assembly_line_id','assembly_line_name',
+                'person_name','output','job_name','cat_id','target_date','total_budget',
+                'job_description','job_quantity','input_folder','sample','instructions']

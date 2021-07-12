@@ -7,22 +7,23 @@ from django.views.generic import CreateView
 from django.views import View
 from django.conf import settings
 import random
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from users.decorators import mto_required
+from django.utils import timezone
 from django.template.context import RequestContext
 import json
 # from django.views.generic.base import View
 #
 # from jobs.models import MALRequirement, MicroTask, MTOJobCategory
-from jobs.models import MTOJob, Jobstatus, Jobs, MicroTask
+from jobs.models import MTOJob, Jobs, MicroTask
 from users.models import User
 from .forms import SignUpForm
 from .models import MTO
 from mto.forms import MTOUpdateProfileForm
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.db.models import Count, Sum
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
@@ -73,7 +74,8 @@ class SignUpView(CreateView):
                 fail_silently=False
 
             )
-            messages.success(self.request, f"Hi {user.full_name}, your account was created successfully.")
+            messages.success(
+                self.request, f"Hi {user.full_name}, your account was created successfully.")
             context['redirect'] = '/mto/login'
         return JsonResponse(context, status=200)
 
@@ -126,9 +128,12 @@ def dashboard(request):
                   ]
 
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
-    job_progress = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='in progress').count()
-    jobs_submitted = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='submitted').count()
-    jobs_completed = MTOJob.objects.filter(assigned_to=request.user.mto.id, job_status='Completed').count()
+    job_progress = MTOJob.objects.filter(
+        assigned_to=request.user.mto.id, job_status='in progress').count()
+    jobs_submitted = MTOJob.objects.filter(
+        assigned_to=request.user.mto.id, job_status='submitted').count()
+    jobs_completed = MTOJob.objects.filter(
+        assigned_to=request.user.mto.id, job_status='Completed').count()
     # jobs_submitted = jobs.filter(job_status = 'Created').count()
     # jobs_completed = jobs.filter(job_status = 'Completed').count()
     # jobs_approved = jobs.filter(job_status = 'Assigned').count()
@@ -139,7 +144,8 @@ def dashboard(request):
 
     totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
     total = '{:0.2f}'.format(totals)
-    context = {'jobs': jobs, 'jobs_submitted': jobs_submitted, 'jobs_completed': jobs_completed, 'total': total}
+    context = {'jobs': jobs, 'jobs_submitted': jobs_submitted,
+               'jobs_completed': jobs_completed, 'total': total}
 
     return render(request, 'mto/mto_dashboard.html', context)
 
@@ -156,11 +162,13 @@ class MTOProfileView(View):
         self.form = MTOUpdateProfileForm(instance=mto)
 
         # we get the items from string type to list type and get the users job categories
-        json_dec = json.decoder.JSONDecoder()
-        mto_preferred_categories = json_dec.decode(mto.job_category)
-        job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
+        jsonDec = json.decoder.JSONDecoder()
+        mto_preferred_categories = jsonDec.decode(mto.job_category)
+        job_categories = [Jobs.objects.get(id=job_id)
+                          for job_id in mto_preferred_categories]
 
-        context = {self.context_object_name: mto, 'form': self.form, 'job_categories': job_categories}
+        context = {self.context_object_name: mto,
+                   'form': self.form, 'job_categories': job_categories}
         return render(self.request, self.template_name, context)
 
     def post(self, *args, **kwargs):
@@ -261,14 +269,21 @@ class MTOProfileView(View):
 
 
 def view_jobs(request):  # MTO view all
-    if request.user.is_authenticated and request.user.is_mto:  # and not request.user.is_admin :
+    # and not request.user.is_admin :
+    if request.user.is_authenticated and request.user.is_mto:
         job = Jobs.objects.all()
-        mt = list(MTOJob.objects.values('job_id').order_by('job_id').annotate(count=Count('job_id')))
+        mt = list(MTOJob.objects.values('job_id').order_by(
+            'job_id').annotate(count=Count('job_id')))
         # ADDED BY SHAKEEL
-        ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).cat_id.people_required_for_valid_tc <= y else 0,
+
+        ls = list(map(lambda x, y: x if 10 <= y else 0,
                       list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
-        ujob = Jobs.objects.filter(target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
+        # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).cat_id.people_required_for_valid_tc <= y else 0,
+        #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+
+        ujob = Jobs.objects.filter(
+            target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
         p = Paginator(job, 5)
         page_num = request.GET.get('page')
         try:
@@ -283,6 +298,37 @@ def view_jobs(request):  # MTO view all
 def job_detail(request, slug):
     job_details = Jobs.objects.get(id=slug)
     return render(request, 'mto/apply_job.html', {'job_details': job_details})
+
+
+# This code can be refactored further using an if statement
+# Email notifications to MTO_admin
+def email_notification_job_applied(request):
+    # link = f'http://{domain_name}/verify/{token}'
+    email = EmailMessage(
+        'Job applied',
+        'User has applied for job',
+        settings.EMAIL_HOST_USER,
+        # [request.user.profile.email]
+        ['software8@varaluae.com'],
+    )
+
+    email.fail_silently = False
+    return email.send()
+
+
+# Email notifications to MTO_admin; add it to apply job function
+
+def email_notification_job_submit(request):
+    email = EmailMessage(
+        'Job ',
+        'User has submitted the job',
+        settings.EMAIL_HOST_USER,
+        # [request.user.profile.email]
+        ['software8@varaluae.com'],
+    )
+
+    email.fail_silently = False
+    return email.send()
 
 
 def apply_job(request, id):
@@ -300,12 +346,14 @@ def apply_job(request, id):
                        fees=fees)
         apply.save()
         messages.success(request, "Applied Successfully !")
+        email_notification_job_applied(request)
         return redirect('mto:view')
 
 
 def view_applied_jobs(request):
     mtos = MTO.objects.get(id=request.user.id)
-    jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id).order_by('-assigned_date')
+    jobs = MTOJob.objects.filter(
+        assigned_to=request.user.mto.id).order_by('-assigned_date')
 
     context = {'jobs': jobs}
     return render(request, 'mto/appliedjobs.html', context)
@@ -313,7 +361,8 @@ def view_applied_jobs(request):
 
 def view_applied_details(request, mto_id, job_id):
     mtos = MTO.objects.get(id=mto_id)
-    details = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto_id).first()
+    details = MTOJob.objects.filter(
+        job_id_id=job_id, assigned_to=mto_id).first()
     mtoss = mtos.full_name
 
     context = {'mto': mtos, 'details': details}
@@ -328,13 +377,52 @@ def submit_job(request):
         job_id = request.POST.get("job_id")
         output_path = request.FILES['file1']
         Jobs.objects.filter(id=job_id).first()
-        if MTOJob.objects.filter(job_id_id=job_id, is_submitted=True, assigned_to=mto.id).exists():
+        if MTOJob.objects.filter(job_id_id=job_id, job_status='sub', assigned_to=mto.id).exists():
+            messages.info(request, f'You already submitted')
+        elif MTOJob.objects.filter(job_id_id=job_id, job_status='co', assigned_to=mto.id).exists():
             messages.info(request, f'You already submitted')
         else:
-            instance = MTOJob.objects.filter(job_id_id=job_id, assigned_to=mto.id).first()
+            instance = MTOJob.objects.filter(
+                job_id_id=job_id, assigned_to=mto.id).first()
             instance.output_path = output_path
-            instance.is_submitted = True
+            instance.job_status = 'sub'
+            instance.submitted_date = datetime.now()
             instance.save()
             messages.success(request, f'Job successfully submitted')
+            email_notification_job_submit(request)
 
         return redirect('mto:applied')
+
+
+def notification(request):
+    return render(request, 'mto/notification.html')
+
+
+def recommended_jobs(request):
+    mto = MTO.objects.get(id=request.user.id)
+    print(mto.id)
+    jsonDec = json.decoder.JSONDecoder()
+    mto_preferred_categories = jsonDec.decode(mto.job_category)
+    print(mto_preferred_categories)
+    print(type(mto_preferred_categories))
+    # job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
+    # print(job_categories)
+    all_job = Jobs.objects.filter(cat_id__in=[job_id for job_id in mto_preferred_categories],
+                                  target_date__gte=datetime.now())
+    print(all_job)
+    context = {'jobs': all_job}
+    return render(request, 'mto/recommended_jobs.html', context)
+
+
+def view_payment_status(request):
+    job_payment_status = MTOJob.objects.filter(assigned_to=request.user.id)
+    context = {'jobs': job_payment_status}
+    return render(request, 'mto/view_payment_status.html', context)
+
+
+def view_job_deadline(request):
+    due_date = timezone.now() + timedelta(hours=4)
+    due_jobs = MTOJob.objects.filter(assigned_to=request.user.id, due_date__gte=timezone.now(
+    ), due_date__lte=due_date, job_status='in').order_by('-due_date')
+    context = {'jobs': due_jobs}
+    return render(request, 'mto/job_deadline.html', context)

@@ -1,0 +1,18 @@
+{% if mctsk %}
+    <option value="" selected="">---------</option>
+    {% for mc in mctsk %}
+    <option value="{{ mc.id }}">{{ mc.microtask_name }}</option>
+    {% endfor %}
+{% else %}
+    <b>Existing Job Sample:</b>
+    <a href="{{namee.sample}}">{{namee.sample}}</a>
+    <input name="sample" id="id_sample" type="file" value="{{namee.sample}}" class="form-control">
+    <div class="text-danger">{{form.errors.sample}}</div>
+
+    <br/>
+    <b>Existing Job Instructions:</b>
+    <a href="{{namee.instructions}}">{{namee.instructions}}</a>
+    <input name="instructions" id="id_instructions" type="file" value="{{namee.instructions}}" class="form-control">
+    <div class="text-danger">{{form.errors.instructions}}</div>
+    <br/>
+{% endif %}

@@ -84,13 +84,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='PaymentStatus',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('payment_status', models.CharField(max_length=200)),
-            ],
-        ),
-        migrations.CreateModel(
             name='MTOJob',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -105,7 +98,6 @@ class Migration(migrations.Migration):
                 ('evaluation_status', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='jobs.evaluationstatus')),
                 ('job_id', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='jobs.jobs')),
                 ('job_status', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='jobs.jobstatus', verbose_name='job status')),
-                ('payment_status', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='jobs.paymentstatus', verbose_name='payment status')),
             ],
         ),
         migrations.CreateModel(
