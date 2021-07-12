@@ -17,15 +17,15 @@ class VendorOSRouter:
 
     def allow_relation(self, obj1, obj2, **hints):
         if (
-            obj1._meta.app_label in self.route_app_labels or
-            obj2._meta.app_label in self.route_app_labels
+                obj1._meta.app_label in self.route_app_labels or
+                obj2._meta.app_label in self.route_app_labels
         ):
-           return True
+            return True
         return None
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if app_label in self.route_app_labels:
-            return db == 'vendor_os_db'
+            return True
         return None
 
 
@@ -48,15 +48,15 @@ class VaralJobPostingDBRouter:
 
     def allow_relation(self, obj1, obj2, **hints):
         if (
-            obj1._meta.app_label in self.route_app_labels or
-            obj2._meta.app_label in self.route_app_labels
+                obj1._meta.app_label in self.route_app_labels or
+                obj2._meta.app_label in self.route_app_labels
         ):
-           return True
+            return True
         return None
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if app_label in self.route_app_labels:
-            return db == 'varal_job_posting_db'
+            return True
         return None
 
 
@@ -79,10 +79,10 @@ class AccountsDBRouter:
 
     def allow_relation(self, obj1, obj2, **hints):
         if (
-            obj1._meta.app_label in self.route_app_labels or
-            obj2._meta.app_label in self.route_app_labels
+                obj1._meta.app_label in self.route_app_labels or
+                obj2._meta.app_label in self.route_app_labels
         ):
-           return True
+            return True
         return None
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
