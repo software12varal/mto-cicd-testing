@@ -39,6 +39,7 @@ class SignUpForm(UserCreationForm):
     #         user.job_category = job_categories_ids
     #         user.save()
     #         return user
+    #hai.save()
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
