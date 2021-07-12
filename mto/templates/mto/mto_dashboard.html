@@ -26,7 +26,7 @@
             <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Total jobs approved</h5>
-                <p class="card-text">{{jobs_approved}}</p>
+                <p class="card-text">{{jobs_completed}}</p>
             
             </div>
             </div>
@@ -66,7 +66,7 @@
             <!-- displays job title -->
              <td>{{job.job_id.job_name}}</td>  
             <!-- displays job category-->             
-                <td>{{job.job_id.cat_id.micro_task_category}}</td>
+                <td>{{job.job_id.cat_id}}</td>
             
                  <!--displays date of acceptance -->           
             <td>{{job.assigned_date}}</td>
@@ -77,7 +77,7 @@
                 
                 <!--displays job status-->
                 
-                    <td>{{job.job_status.job_status}}</td>
+                    <td>{{job.job_status}}</td>
                 
             
                   <!--displays fees -->  
@@ -86,7 +86,7 @@
               
                 <!--displays payments status-->
                 
-                    <td>{{job.payment_status.payment_status}}</td>
+                    <td>{{job.payment_status}}</td>
                
                 <!--rating eveluation -->
             <td>{{job.rating_evaluation}}</td>

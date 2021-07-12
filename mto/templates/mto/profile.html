@@ -49,6 +49,7 @@
 							<li class="mb-1"><span data-feather="briefcase" class="feather-sm mr-1"></span> PayPal ID <a href="#">{{ mto.paypal_id }}</a></li>
 							<li class="mb-1"><span data-feather="home" class="feather-sm mr-1"></span> Location <a href="#">{{ mto.location.name }}</a></li>
 							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Date Joined <a href="#">{{ mto.timestamp }}</a></li>
+							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Job categories <a href="#">{% for i in job_categories %}{{i}},{% endfor %}</a></li>
 						</ul>
 					</div>
 					<hr class="my-0" />

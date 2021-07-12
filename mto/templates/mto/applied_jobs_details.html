@@ -18,7 +18,7 @@
         <hr>
         <div class="row">
             <div class="col-sm-3"><h6 class="mb-0">Job Category</h6></div>
-            <div class="col-sm-9 text-secondary">{{ details.job_id.cat_id.microtask_name }}</div>
+            <div class="col-sm-9 text-secondary">{{ details.job_id.cat_id }}</div>
         </div>
         <hr>
         <div class="row">
@@ -55,11 +55,12 @@
             <div class="col-sm-9 text-secondary"><input type="file" name="file1" id="file"></div>
             </div>
             <hr>
-
+            {% if details.job_status == 'in' %}
             <div class="row">
             <div class="col-sm-3"><h6 class="mb-0"><input type="submit" class="btn btn-primary"></h6></div>
             <hr>
             </div>
+            {% endif %}
 
         </form>
     </div>
