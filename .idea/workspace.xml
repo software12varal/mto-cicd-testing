@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c4a7dfd3-7c53-48f5-8b32-2504e6611aee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/varal_job_posting.db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/varal_job_posting.db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor_os.db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/vendor_os.db.sqlite3" afterDir="false" />
-    </list>
+    <list default="true" id="c4a7dfd3-7c53-48f5-8b32-2504e6611aee" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
