@@ -276,15 +276,13 @@ def view_jobs(request):  # MTO view all
         ls = list(map(lambda x, y: x if (Jobs.objects.get(id=x).job_quantity * MicroTask.objects.get(
             microtask_name=Jobs.objects.get(id=x).job_name).people_required_for_valid_tc) <= y else 0,
                       list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
-        print(f"ls {ls}")
-        print(f"ls {mt}")
 
         # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x) <= y else 0,
         #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         ujob = Jobs.objects.filter(
             target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
-        p = Paginator(job, 5)
+        p = Paginator(ujob, 5)
         page_num = request.GET.get('page')
         try:
             data = p.page(page_num)
@@ -345,6 +343,8 @@ def apply_job(request, id):
                        assigned_date=assigned_date,
                        fees=fees)
         apply.save()
+        job_details.job_status = "as"
+        job_details.save()
         messages.success(request, "Applied Successfully !")
         email_notification_job_applied(request)
         return redirect('mto:view')

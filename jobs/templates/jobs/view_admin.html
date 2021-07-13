@@ -81,7 +81,7 @@
                 <tr>
                 <th scope="row">{{dat.id}}</th>
                 <td>{{dat.job_name}}</td>
-                <td>{{dat.cat_id.microtask_category}}</td>
+                <td>{{dat.job.get_microtask_category_display}}</td>
                 <td>{{dat.posted_date}}</td>
                 <td>{% for d in total_jobs %} {% if d.job_id_id == dat.id %} {{d.assigned_date}} {% endif %}  {% endfor %}</td>
                 <td>{{dat.target_date}}</td>
