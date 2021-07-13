@@ -1,79 +1,137 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico" />
 
     <title>Home</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css'>
-	<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css'>
-    {% block csrf %}
-    {% endblock %}
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css"
+    />
+    {% block csrf %} {% endblock %}
   </head>
 
   <body>
-
     <header>
       <!-- Fixed navbar -->
       <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <a class="navbar-brand" href="#">Fixed navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarCollapse"
+          aria-controls="navbarCollapse"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="{% url 'jobs:adminDashboard' %}">Admin Dashboard<span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="{% url 'jobs:adminDashboard' %}"
+                >Admin Dashboard<span class="sr-only">(current)</span></a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'jobs:mto_bank' %}">MTO bank</a>
             </li>
-            {% comment %} <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:microtask' %}">Microtask Page</a>
-            </li> {% endcomment %}
+            {% comment %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:alljobs' %}">View All Jobs</a>
+              <a class="nav-link" href="{% url 'jobs:microtask' %}"
+                >Microtask Page</a
+              >
+            </li>
+            {% endcomment %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:alljobs' %}"
+                >View All Jobs</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:appliedjobs' %}">Applied Jobs</a>
-            </li>     {% if request.user.is_admin and not request.user.is_super_admin %}
+              <a class="nav-link" href="{% url 'jobs:appliedjobs' %}"
+                >Applied Jobs</a
+              >
+            </li>
+            {% if request.user.is_admin and not request.user.is_super_admin %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:admin_profile' %}">View Profile</a>
+              <a class="nav-link" href="{% url 'jobs:admin_profile' %}"
+                >View Profile</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:add_job' %}">Create Microtask</a>
+              <a class="nav-link" href="{% url 'jobs:add_job' %}"
+                >Create Microtask</a
+              >
             </li>
             {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'super_admin:create_admin' %}">Create Varal Admin</a>
+              <a class="nav-link" href="{% url 'super_admin:create_admin' %}"
+                >Create Varal Admin</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:add_job' %}">Create Microtask</a>
+              <a class="nav-link" href="{% url 'jobs:add_job' %}"
+                >Create Microtask</a
+              >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'super_admin:super_admin_profile' %}">View Profile</a>
+              <a
+                class="nav-link"
+                href="{% url 'super_admin:super_admin_profile' %}"
+                >View Profile</a
+              >
             </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}"
+                >Admin Monitoring</a
+              >
+            </li>
+
             {% endif %}
             <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:add_mal' %}">Post requirements</a>
+              <a class="nav-link" href="{% url 'jobs:add_mal' %}"
+                >Post requirements</a
+              >
             </li>
-<!--            {% if request.user.is_super_admin %}-->
+            <!--            {% if request.user.is_super_admin %}-->
 
-<!--             {% endif %}-->
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'jobs:admin_monitoring' %}">Admin Monitoring</a>
-            </li>
+            <!--             {% endif %}-->
           </ul>
           {% if request.user.is_authenticated %}
-          <form class="form-inline mt-2 mt-md-0" method="post" action="{% url 'mto:logout' %}">
+          <form
+            class="form-inline mt-2 mt-md-0"
+            method="post"
+            action="{% url 'mto:logout' %}"
+          >
             {% csrf_token %}
-            <button class="btn btn-outline-success btn-sm my-2 my-sm-0" type="submit">Logout</button>
+            <button
+              class="btn btn-outline-success btn-sm my-2 my-sm-0"
+              type="submit"
+            >
+              Logout
+            </button>
           </form>
           {% endif %}
         </div>
@@ -82,26 +140,34 @@
 
     <!-- Begin page content -->
     <main role="main" class="container mt-5">
-      {% if messages %}
-                  {% for message in messages %}
-                      <div class="alert alert-{{ message.tags }} mt-3">
-                        <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
-                        <span data-notify="message">{{ message }}</span>
-                      </div>
-                  {% endfor %}
-              {% endif %}
-		{% block content %}{% endblock content%}
+      {% if messages %} {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} mt-3">
+        <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
+        <span data-notify="message">{{ message }}</span>
+      </div>
+      {% endfor %} {% endif %} {% block content %}{% endblock content%}
     </main>
 
-
-      <!-- Bootstrap core JavaScript
+    <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js'></script>
-	<script src='https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.js'></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.js"></script>
     {% block scripts %} {% endblock %}
   </body>
 </html>
