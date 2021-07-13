@@ -83,7 +83,7 @@ def add_jobstatus(request, job_id):
 
 
 def appliedjobs(request):
-    job = MTOJob.objects.all().order_by('-id')
+    job = MTOJob.objects.filter(job_id__person_name=request.user.id).order_by('-id')
     p = Paginator(job, 5)
     page_num = request.GET.get('page')
     try:
@@ -96,7 +96,7 @@ def appliedjobs(request):
 
 
 def alljobs(request):
-    jobs = Jobs.objects.all().order_by('-id')
+    jobs = Jobs.objects.filter(person_name=request.user.id).order_by('-id')
     p = Paginator(jobs, 5)
     page_num = request.GET.get('page')
     try:
@@ -292,7 +292,7 @@ def create_jobs(request):
         if form.is_valid():
             # if
             if request.FILES.get('sample') is None or request.FILES.get('instructions') is None:
-                mic_ojbs = MicroTask.objects.filter(id=request.POST.get('job_name')).first()
+                mic_ojbs = MicroTask.objects.filter(microtask_name=request.POST.get('job_name')).first()
                 instance = form.save(commit=False)
                 if request.FILES.get('sample') is None:
                     instance.sample = mic_ojbs.sample
@@ -387,5 +387,5 @@ def displaying_microtask(request):
 
 def displaying_files(request):
     jb_namw = request.GET.get('jb_name')
-    namee = MicroTask.objects.filter(id=jb_namw).first()
+    namee = MicroTask.objects.filter(microtask_name=jb_namw).first()
     return render(request, 'jobs/cat_name.html', {'namee': namee})

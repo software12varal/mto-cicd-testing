@@ -174,6 +174,12 @@ class Jobs(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     posted_date = models.DateTimeField(auto_now_add=True)
 
+
+    @property
+    def job(self):
+        job = MicroTask.objects.filter(microtask_name=self.job_name).first()
+        return job
+
     def __str__(self):
         return self.job_name
 
@@ -189,7 +195,6 @@ class MTOJob(models.Model):
     JOB_STATUS = [('in', 'in progress'),
                   ('sub', 'submitted'),
                   ('co', 'Completed'),
-
                   ]
     PAYMENT_CHOICES = [('uninitiated', 'uninitiated'),
                        ('pending', 'pending'),
