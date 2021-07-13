@@ -174,8 +174,22 @@ class Jobs(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     posted_date = models.DateTimeField(auto_now_add=True)
 
+
+    @property
+    def job(self):
+        job = MicroTask.objects.filter(microtask_name=self.job_name).first()
+        return job
+
     def __str__(self):
         return self.job_name
+
+    @property
+    def instructions_filename(self):
+        return os.path.basename(self.instructions.name)
+
+    @property
+    def sample_filename(self):
+        return os.path.basename(self.sample.name)
 
 
 def output_directory_path(instance, filename):
@@ -189,7 +203,6 @@ class MTOJob(models.Model):
     JOB_STATUS = [('in', 'in progress'),
                   ('sub', 'submitted'),
                   ('co', 'Completed'),
-
                   ]
     PAYMENT_CHOICES = [('uninitiated', 'uninitiated'),
                        ('pending', 'pending'),
@@ -221,21 +234,11 @@ class MTOJob(models.Model):
 
     @property
     def average_time(self):
-        if self.completed_date is None:
+        if self.submitted_date is None:
             time = 0
         else:
 
-            time = self.completed_date - self.assigned_date
-            # try:
-            #     if time.days >= 1:
-            #         days = time
-            #     else:
-            #         days = 1
-            # except:
-            #     if self.completed_date == self.assigned_date:
-            #         days = 1
-            #     else:
-            #         days = 0
+            time = self.submitted_date - self.assigned_date
         return time
 
     @property

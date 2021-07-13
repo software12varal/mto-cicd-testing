@@ -6,7 +6,7 @@
         <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="career-search mb-60">
-                        <h2>Recommende Jobs</h2>
+                        <h2>Recommended Jobs</h2>
                         {% for job in jobs %}
                         <div class="filter-result" style="margin-top: 40px;">
 
@@ -27,7 +27,7 @@
                                                 <i class="bi bi-tag-fill mr-2"></i> Category : {{ job.cat_id }}
                                             </li>
                                             <li class="mr-md-4">
-                                                <i class="zmdi zmdi-money mr-2"></i>{{ job.cat_id.job_cost }}
+                                                <i class="zmdi zmdi-money mr-2"></i>{{ job.job.job_cost }}
                                             </li>
                                             <li class="mr-md-4">
                                                 <i class="zmdi zmdi-time mr-2"></i> Target Date: {{ job.target_date }}

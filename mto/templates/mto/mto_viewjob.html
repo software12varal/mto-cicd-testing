@@ -25,8 +25,8 @@
           <a href="{% url 'mto:job_detail' slug=i.id %}">
             <h5 class="card-title mx-4" style="color: white;"><strong><u>{{i.job_name}}</u></strong></h5></a>
           <p class="card-text" style="color: white;">
-            <label class="px-4"><strong>Target Date : {{i.target_date}}</strong></label> <label class="px-5" style="margin-left: 70px;" ><strong>Skills : {{i.cat_id.skills}}</strong></label><br>
-            <label class="px-4"><strong>No. of People Required : {{i.cat_id.people_required_for_valid_tc}}</strong></label> <label class="px-5"><strong>Salary : {{i.cat_id.job_cost}}</strong></label><br>
+            <label class="px-4"><strong>Target Date : {{i.target_date}}</strong></label> <label class="px-5" style="margin-left: 70px;" ><strong>Skills : {{i.job.skills}}</strong></label><br>
+            <label class="px-4"><strong>No. of People Required : {{i.job.people_required_for_valid_tc}}</strong></label> <label class="px-5"><strong>Salary : {{i.job.job_cost}}</strong></label><br>
           </p>
         </div>
       </div>
