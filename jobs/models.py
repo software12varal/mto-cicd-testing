@@ -177,6 +177,14 @@ class Jobs(models.Model):
     def __str__(self):
         return self.job_name
 
+    @property
+    def instructions_filename(self):
+        return os.path.basename(self.instructions.name)
+
+    @property
+    def sample_filename(self):
+        return os.path.basename(self.sample.name)
+
 
 def output_directory_path(instance, filename):
     job = instance.job_id.job_name
