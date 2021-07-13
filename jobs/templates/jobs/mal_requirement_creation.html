@@ -60,7 +60,37 @@ const csrftoken = getCookie('csrftoken');
                     <select name="cat_id" class="form-control" required="" id="id_cat_id">
                         <option value="" selected="">---------</option>
                         {% for i in jobs %}
-                            <option value="{{i}}"> {{i}}</option>
+                            {% if i == 'cw' %}
+                                <option value="{{i}}"> Content Writing</option>
+                            {% elif i == 'da' %}
+                                <option value="{{i}}"> Document Analysis</option>
+                            {% elif i == 'de' %}
+                                <option value="{{i}}"> Data Entry</option>
+                            {% elif i == 'cr' %}
+                                <option value="{{i}}"> Combining Rules from Semi-Legal documents</option>
+                            {% elif i == 'df' %}
+                                <option value="{{i}}"> Data Entry(Fields)</option>
+                            {% elif i == 'cd' %}
+                                <option value="{{i}}"> Collecting copies of documents</option>
+                            {% elif i == 'cp' %}
+                                <option value="{{i}}"> Content Copy & Paste</option>
+                            {% elif i == 'cf' %}
+                                <option value="{{i}}"> Combining Data Entry Fields</option>
+                            {% elif i == 'fn' %}
+                                <option value="{{i}}"> Find Non-Copyrighted Images and Uploading</option>
+                            {% elif i == 'ac' %}
+                                <option value="{{i}}"> Apply Compliance to Fields</option>
+                            {% elif i == 'ng' %}
+                                <option value="{{i}}"> Naming</option>
+                            {% elif i == 'ce' %}
+                                <option value="{{i}}"> Compliance Extraction</option>
+                            {% elif i == 'id' %}
+                                <option value="{{i}}"> Identifying One Line Decision</option>
+                            {% elif i == 'ab' %}
+                                <option value="{{i}}"> A+B TC For Document Extraction</option>
+                            {% elif i == 'c' %}
+                                <option value="{{i}}"> TC For One Line Decision</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                 </div>

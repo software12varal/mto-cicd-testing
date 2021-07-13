@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="varal_job_posting.db" uuid="6ed7608c-90b6-43d8-b089-36771137b9b4">
+    <data-source source="LOCAL" name="varal_job_posting.db" uuid="5a10b027-e584-4987-9a37-f501dca7c693">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\sruji\MTO\varal_job_posting.db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:F:\varal\MTO-final\MTO\varal_job_posting.db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>
@@ -13,23 +13,11 @@
         </library>
       </libraries>
     </data-source>
-    <data-source source="LOCAL" name="vendor_os.db" uuid="39450914-99a2-4ae5-97bc-10c44e479ac6">
+    <data-source source="LOCAL" name="vendor_os.db" uuid="93b6b828-e5f4-45a9-a574-dbc3510cf0d2">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:F:\varal\MTO\vendor_os.db.sqlite3</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-      <libraries>
-        <library>
-          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.31.1/sqlite-jdbc-3.31.1.jar</url>
-        </library>
-      </libraries>
-    </data-source>
-    <data-source source="LOCAL" name="varal_job_posting.db [2]" uuid="35e3972a-926b-4830-9c55-6128ae8d041e">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:F:\varal\MTO\varal_job_posting.db.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:F:\varal\MTO-final\MTO\vendor_os.db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

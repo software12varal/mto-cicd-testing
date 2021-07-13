@@ -83,9 +83,15 @@ def add_jobstatus(request, job_id):
 
 
 def appliedjobs(request):
-    job = MTOJob.objects.filter(job_id__person_name=request.user.id).order_by('-id')
-    p = Paginator(job, 5)
-    page_num = request.GET.get('page')
+
+    if request.user.is_super_admin:
+        job = MTOJob.objects.all().order_by('-id')
+        p = Paginator(job, 5)
+        page_num = request.GET.get('page')
+    else:
+        job = MTOJob.objects.filter(job_id__person_name=request.user.id).order_by('-id')
+        p = Paginator(job, 5)
+        page_num = request.GET.get('page')
     try:
         data = p.page(page_num)
     except PageNotAnInteger:
@@ -96,9 +102,15 @@ def appliedjobs(request):
 
 
 def alljobs(request):
-    jobs = Jobs.objects.filter(person_name=request.user.id).order_by('-id')
-    p = Paginator(jobs, 5)
-    page_num = request.GET.get('page')
+
+    if request.user.is_super_admin:
+        jobs = Jobs.objects.all().order_by('-id')
+        p = Paginator(jobs, 5)
+        page_num = request.GET.get('page')
+    else:
+        jobs = Jobs.objects.filter(person_name=request.user.id).order_by('-id')
+        p = Paginator(jobs, 5)
+        page_num = request.GET.get('page')
     try:
         data = p.page(page_num)
     except PageNotAnInteger:
@@ -224,7 +236,7 @@ def view_mto(request, id):
         accept_seconds = 0
     mto_job = MTOJob.objects.filter(assigned_to=id).count()
     total_completed = MTOJob.objects.filter(
-        completed_date__isnull=False, assigned_to=id).count()
+        job_status = "sub", assigned_to=id).count()
     total_job = Jobs.objects.all().count()
 
     try:
