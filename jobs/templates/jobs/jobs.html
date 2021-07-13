@@ -28,7 +28,7 @@
           <th scope="col">Job Quantity</th>
           <th scope="col">People Required</th>
           <th scope="col">Skills</th>
-          <th scope="col">Job Quantity</th>
+          <th scope="col">Job Cost</th>
           
 
           
@@ -45,9 +45,9 @@
           <td>{{dat.sample}}</td>
           <td>{{dat.instructions}}</td>
           <td>{{dat.job_quantity}}</td>
-          <td>{{dat.people_required_for_valid_tc}}</td>
-          <td>{{dat.skills}}</td>
-          <td>{{dat.job_cost}}</td>
+          <td>{{dat.job.people_required_for_valid_tc}}</td>
+          <td>{{dat.job.skills}}</td>
+          <td>{{dat.job.job_cost}}</td>
          
         </tr>
     {% endfor %}

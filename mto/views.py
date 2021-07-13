@@ -57,7 +57,7 @@ class SignUpView(CreateView):
             context['info'] = f"{user.username} exists in vendor os db"
         else:
             job_categories = form.cleaned_data['job_category']
-            job_categories_ids = json.dumps([job.id for job in job_categories])
+            job_categories_ids = json.dumps([job for job in job_categories])
             domain_name = get_current_site(self.request).domain
             token = str(random.random()).split('.')[1]
             user.token = token
@@ -129,18 +129,11 @@ def dashboard(request):
 
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
     job_progress = MTOJob.objects.filter(
-        assigned_to=request.user.mto.id, job_status='in progress').count()
+        assigned_to=request.user.mto.id, job_status='in').count()
     jobs_submitted = MTOJob.objects.filter(
-        assigned_to=request.user.mto.id, job_status='submitted').count()
+        assigned_to=request.user.mto.id, job_status='sub').count()
     jobs_completed = MTOJob.objects.filter(
-        assigned_to=request.user.mto.id, job_status='Completed').count()
-    # jobs_submitted = jobs.filter(job_status = 'Created').count()
-    # jobs_completed = jobs.filter(job_status = 'Completed').count()
-    # jobs_approved = jobs.filter(job_status = 'Assigned').count()
-    # jobs_under_review = jobs.filter(job_status = 'Under review').count()
-    print(f'job submitted {jobs_submitted}')
-    print(f'job Completed {jobs_completed}')
-    print(f'job approved {job_progress}')
+        assigned_to=request.user.mto.id, job_status='co').count()
 
     totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
     total = '{:0.2f}'.format(totals)
@@ -164,7 +157,8 @@ class MTOProfileView(View):
         # we get the items from string type to list type and get the users job categories
         jsonDec = json.decoder.JSONDecoder()
         mto_preferred_categories = jsonDec.decode(mto.job_category)
-        job_categories = [Jobs.objects.get(id=job_id)
+        print(mto_preferred_categories)
+        job_categories = [job_id
                           for job_id in mto_preferred_categories]
 
         context = {self.context_object_name: mto,
@@ -180,7 +174,7 @@ class MTOProfileView(View):
 
             # convert the job categories to a list then save them as a JSON string in the database.
             job_categories = form.cleaned_data['job_category']
-            job_categories_ids = json.dumps([job.id for job in job_categories])
+            job_categories_ids = json.dumps([job for job in job_categories])
 
             # update our fields in the database
             MTO.objects.filter(id=self.request.user.id).update(contact_number=phone, location=location,
@@ -276,10 +270,16 @@ def view_jobs(request):  # MTO view all
             'job_id').annotate(count=Count('job_id')))
         # ADDED BY SHAKEEL
 
-        ls = list(map(lambda x, y: x if 10 <= y else 0,
-                      list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+        # ls = list(map(lambda x, y: x if 10 <= y else 0,
+        #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
-        # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x).cat_id.people_required_for_valid_tc <= y else 0,
+        ls = list(map(lambda x, y: x if (Jobs.objects.get(id=x).job_quantity * MicroTask.objects.get(
+            microtask_name=Jobs.objects.get(id=x).job_name).people_required_for_valid_tc) <= y else 0,
+                      list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+        print(f"ls {ls}")
+        print(f"ls {mt}")
+
+        # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x) <= y else 0,
         #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         ujob = Jobs.objects.filter(
@@ -362,7 +362,7 @@ def view_applied_jobs(request):
 def view_applied_details(request, mto_id, job_id):
     mtos = MTO.objects.get(id=mto_id)
     details = MTOJob.objects.filter(
-        job_id_id=job_id, assigned_to=mto_id).first()
+        job_id=job_id, assigned_to=mto_id).first()
     mtoss = mtos.full_name
 
     context = {'mto': mtos, 'details': details}
