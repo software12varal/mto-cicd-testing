@@ -8,6 +8,7 @@ class MtoTestDbMixin:
     # maps to the vendor_os_db
     databases = {"vendor_os_db", }
 
+
 # Mixin should always come first
 class TestNew(MtoTestDbMixin, TestCase):
 

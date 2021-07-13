@@ -1,3 +1,6 @@
 # Project exclude paths
 /venv/
 /env/
+varal_job_posting.db.sqlite3
+vendor_os.db.sqlite3
+accounts.db.sqlite3
