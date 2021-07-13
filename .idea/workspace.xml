@@ -2,25 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4a7dfd3-7c53-48f5-8b32-2504e6611aee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/35e3972a-926b-4830-9c55-6128ae8d041e.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/39450914-99a2-4ae5-97bc-10c44e479ac6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6ed7608c-90b6-43d8-b089-36771137b9b4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mto1.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/jobs.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/jobs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/mal_requirement_creation.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/mal_requirement_creation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/view_admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/view_admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/varal_job_posting.db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/varal_job_posting.db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vendor_os.db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/vendor_os.db.sqlite3" afterDir="false" />
     </list>
@@ -78,6 +63,9 @@
       <option name="presentableId" value="Default" />
       <updated>1626144080440</updated>
       <workItem from="1626144083525" duration="3134000" />
+      <workItem from="1626154945345" duration="269000" />
+      <workItem from="1626164276000" duration="681000" />
+      <workItem from="1626165406439" duration="3422000" />
     </task>
     <servers />
   </component>
