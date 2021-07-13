@@ -226,21 +226,11 @@ class MTOJob(models.Model):
 
     @property
     def average_time(self):
-        if self.completed_date is None:
+        if self.submitted_date is None:
             time = 0
         else:
 
-            time = self.completed_date - self.assigned_date
-            # try:
-            #     if time.days >= 1:
-            #         days = time
-            #     else:
-            #         days = 1
-            # except:
-            #     if self.completed_date == self.assigned_date:
-            #         days = 1
-            #     else:
-            #         days = 0
+            time = self.submitted_date - self.assigned_date
         return time
 
     @property

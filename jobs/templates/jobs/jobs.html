@@ -38,7 +38,8 @@
       {% for dat in data %}
         <tr>
           <th scope="row">{{dat.id}}</th>
-          <td>{{dat.job_name}}</td>
+          <td><a href="{% url 'jobs:microtask_job_details' id=dat.id %}">{{dat.job_name}}</a></td>
+          <!-- <td>{{dat.job_name}}</td> -->
           <td>{{dat.cat_id}}</td>
           <td>{{dat.target_date}}</td>
           <td>{{dat.job_description}}</td>
