@@ -26,24 +26,24 @@ def home(request):
     return render(request, 'jobs/index.html', context)
 
 
-def mto_admin_login(request):
-    # if request.method == 'POST':
-    #     f = MTOAdminSignUpForm(request.POST)
-    #     if f.is_valid():
-    #         instance = f.save(commit=False)
-    #         instance.is_admin = True
-    #         instance.is_active = True
-    #         instance.is_mto = False
-    #         instance.save()
-    #         f.save()
-    #         return redirect('/admin-login')  # Redirect to Dashboard Page
-    #     else:
-    #         return render(request, 'jobs/admin-register.html', {'form': f})
-    # context = {
-    #     'jobs': MTOJob.objects.all(),
-    #     'form': MTOAdminSignUpForm()
-    # }
-    return render(request, 'jobs/admin-register.html')
+def mto_admin_signup(request):
+    if request.method == 'POST':
+        f = MTOAdminSignUpForm(request.POST)
+        if f.is_valid():
+            instance = f.save(commit=False)
+            instance.is_admin = True
+            instance.is_active = True
+            instance.is_mto = False
+            instance.save()
+            f.save()
+            return redirect('/admin-login')  # Redirect to Dashboard Page
+        else:
+            return render(request, 'jobs/admin-register.html', {'form': f})
+    context = {
+        'jobs': MTOJob.objects.all(),
+        'form': MTOAdminSignUpForm()
+    }
+    return render(request, 'jobs/admin-register.html', context)
 
 
 def add_job(request):
