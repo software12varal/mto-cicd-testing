@@ -2,10 +2,74 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4a7dfd3-7c53-48f5-8b32-2504e6611aee" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/MTO.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/dataSources/93b6b828-e5f4-45a9-a574-dbc3510cf0d2.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jobs/migrations/0009_auto_20210705_2059.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_10.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_13.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_14.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_15.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_7.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_7.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_8.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_8.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_9.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/instructions_None.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/instructions_None_5inHgIE.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/instructions_None_7448wud.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_10.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_13.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_14.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_15.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_7.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_7.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_8.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_8.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_9.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/sample_None.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/sample_None_IsPTYOZ.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/sample_None_uKizT6I.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_submissions/Username_php_developer.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_submissions/mto_srujith_compliance.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_submissions/mtotest1_4.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_submissions/srujithmto1_data_entry_for_overseas_company_registration.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/images/job_documents/job_submissions/testmto123_test_microtask.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/media/documents/test_py.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/6ed7608c-90b6-43d8-b089-36771137b9b4.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/5a10b027-e584-4987-9a37-f501dca7c693.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/mto1.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/admin_monitoring.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/admin_monitoring.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/appliedjobs.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/appliedjobs.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/cat_name.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/cat_name.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/jobs.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/jobs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/mal_requirement_creation.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/mal_requirement_creation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/view_admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/view_admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/tests/test_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/tests/test_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/templates/mto/applied_jobs_details.html" beforeDir="false" afterPath="$PROJECT_DIR$/mto/templates/mto/applied_jobs_details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/templates/mto/apply_job.html" beforeDir="false" afterPath="$PROJECT_DIR$/mto/templates/mto/apply_job.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/templates/mto/mto_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/mto/templates/mto/mto_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/templates/mto/mto_viewjob.html" beforeDir="false" afterPath="$PROJECT_DIR$/mto/templates/mto/mto_viewjob.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/templates/mto/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/mto/templates/mto/profile.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/templates/mto/recommended_jobs.html" beforeDir="false" afterPath="$PROJECT_DIR$/mto/templates/mto/recommended_jobs.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/templates/mto/view_payment_status.html" beforeDir="false" afterPath="$PROJECT_DIR$/mto/templates/mto/view_payment_status.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/tests/test_models.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/tests/test_models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/tests/test_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/tests/test_views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routers/db_routers.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/db_routers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/varal_job_posting.db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/varal_job_posting.db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vendor_os.db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/vendor_os.db.sqlite3" afterDir="false" />
     </list>
