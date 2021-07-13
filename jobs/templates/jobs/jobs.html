@@ -43,8 +43,8 @@
           <td>{{dat.cat_id}}</td>
           <td>{{dat.target_date}}</td>
           <td>{{dat.job_description}}</td>
-          <td>{{dat.sample}}</td>
-          <td>{{dat.instructions}}</td>
+          <td><a href="/media/{{ dat.sample }}" target="_blank">{{ dat.sample_filename }}</a></td>
+          <td><a href="/media/{{ dat.instructions }}" target="_blank">{{ dat.instructions_filename }}</a></td>
           <td>{{dat.job_quantity}}</td>
           <td>{{dat.job.people_required_for_valid_tc}}</td>
           <td>{{dat.job.skills}}</td>
