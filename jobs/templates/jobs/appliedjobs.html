@@ -20,6 +20,7 @@
         <tr>
           <th scope="col">Id</th>
           <th scope="col">Job Name</th>
+          <th scope="col">MTO Name</th>
           <th scope="col">Category ID</th>
           <th scope="col">Target Date</th>
           <th scope="col">Job Description</th>
@@ -39,12 +40,13 @@
       {% for dat in data %}
         <tr>
           <th scope="row">{{dat.id}}</th>
-          <td>{{dat.job_id.job_name}}</td>
+          <td><a href="{% url 'jobs:microtask_job_details' id=dat.job_id.id %}">{{dat.job_id.job_name}}</a></td>
+          <td>{{dat.mto.full_name}}</td>
           <td>{{dat.job_id.cat_id}}</td>
           <td>{{dat.job_id.target_date}}</td>
           <td>{{dat.job_id.job_description}}</td>
-          <td>{{dat.job_id.sample}}</td>
-          <td>{{dat.job_id.instructions}}</td>
+          <td><a href="/media/images/job_documents/job_samples/{{ dat.job_id.sample_filename }}" target="_blank">{{ dat.job_id.sample_filename }}</a></td>
+          <td><a href="/media/images/job_documents/job_instructions/{{ dat.job_id.instructions_filename }}" target="_blank">{{ dat.job_id.instructions_filename }}</a></td>
           <td>{{dat.job_id.job_quantity}}</td>
           <td>{{dat.job_id.job.people_required_for_valid_tc}}</td>
           <td>{{dat.job_id.job.skills}}</td>
