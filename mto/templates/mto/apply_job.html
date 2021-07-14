@@ -21,8 +21,8 @@
     <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Category :</strong> {{job_details.cat_id}}</label><br><br>
     <label style="color: white;margin-left: 350px; font-size: large;"><strong>Target Date :</strong> {{job_details.target_date}}</label><br><br>
     <label style="color: white;margin-left: 350px; font-size: large;"><strong>Job Description : </strong>{{job_details.job_description}}</label><br><br>
-    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Sample :</strong> {{job_details.job.sample}}</label><br><br>
-    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Instructions :</strong> {{job_details.job.instructions}}</label><br><br>
+            <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Sample :</strong><a href="/media/images/job_documents/job_samples/{{ job_details.sample_filename }}" >{{job_details.sample_filename}}</a></label><br><br>
+            <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Instructions :</strong><a href="/media/images/job_documents/job_instructions/{{ job_details.instructions_filename }}">{{job_details.instructions_filename}}</a></label><br><br>
     <label style="color: white;margin-left: 350px; font-size: large;"><strong>Job Quantity :</strong> {{job_details.job_quantity}}</label><br><br>
     <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Number of People Required : </strong>{{job_details.job.people_required_for_valid_tc}}</label><br><br>
     <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Skills : </strong>{{job_details.job.skills}}</label><br><br>

@@ -248,5 +248,9 @@ class MTOJob(models.Model):
         # context = dict({'days':time.days,'seconds':time.seconds})
         return time
 
+    @property
+    def submitted_file_name(self):
+        return os.path.basename(self.output_path.name)
+
     def __str__(self):
         return f"{self.job_id.job_name} :: {self.mto.full_name}"
