@@ -14,3 +14,15 @@
 /users/migrations/
 /accounts/migrations/
 /super_admin/migrations/
+#ignoring pycache
+/jobs/migrations/__pycache__/
+/mto/migrations/__pycache__/
+/users/migrations/__pycache__/
+/accounts/migrations/__pycache__/
+/super_admin/migrations/__pycache__/
+/jobs/__pycache__/
+/mto/__pycache__/
+/users/__pycache__/
+/accounts/__pycache__/
+/super_admin/__pycache__/
+
