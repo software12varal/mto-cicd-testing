@@ -103,6 +103,7 @@ DATABASES = {
 
 DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
                     'routers.db_routers.AccountsDBRouter']
+UNDER_TESTING = False
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

@@ -1,3 +1,6 @@
+from django.conf import settings
+
+
 class VendorOSRouter:
     """
     A router to control all database operations on models in the
@@ -26,7 +29,10 @@ class VendorOSRouter:
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if app_label in self.route_app_labels:
-            return True
+            if settings.UNDER_TESTING:
+                return True
+            else:
+                return db == 'vendor_os_db'
         return None
 
 
@@ -58,7 +64,10 @@ class VaralJobPostingDBRouter:
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if app_label in self.route_app_labels:
-            return True
+            if settings.UNDER_TESTING:
+                return True
+            else:
+                return db == 'varal_job_posting_db'
         return None
 
 
