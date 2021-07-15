@@ -1,6 +1,13 @@
 # Project exclude paths
 /venv/
 /env/
-varal_job_posting.db.sqlite3
-vendor_os.db.sqlite3
-accounts.db.sqlite3
+# ignoring databases
+/varal_job_posting.db.sqlite3
+/vendor_os.db.sqlite3
+/accounts.db.sqlite3
+#ignoring migrations
+/jobs/migrations/
+/mto/migrations/
+/users/migrations/
+/accounts/migrations/
+/super_admin/migrations/
