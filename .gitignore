@@ -1,6 +1,9 @@
 # Project exclude paths
 /venv/
 /env/
+#ignoring idea
+/.idea/
+/vscode/
 # ignoring databases
 /varal_job_posting.db.sqlite3
 /vendor_os.db.sqlite3
