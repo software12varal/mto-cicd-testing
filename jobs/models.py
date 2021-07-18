@@ -67,32 +67,18 @@ class MicroTask(models.Model):
     def __str__(self):
         return f'{self.microtask_category}'
 
-
-@receiver(signal=post_save, sender=MicroTask)
-def rename_file(sender, instance, created, **kwargs):
-    if created:
-        def content_file_name(instance, is_sample=None):
-            if is_sample:
-                filename = os.path.basename(instance.sample.name)
-                ext = filename.split('.')[-1]
-                filena = "Samples_%s.%s" % (instance.id, ext)
-                new_path = os.path.join(
-                    settings.MEDIA_ROOT, 'images/job_documents/job_samples/', filena)
-                os.rename(instance.sample.path, new_path)
-                instance.sample.name = new_path
-                instance.save()
-            else:
-                filename = os.path.basename(instance.instructions.name)
-                ext = filename.split('.')[-1]
-                filena = "Instructions_%s.%s" % (instance.id, ext)
-                new_path = os.path.join(
-                    settings.MEDIA_ROOT, 'images/job_documents/job_instructions/', filena)
-                os.rename(instance.instructions.path, new_path)
-                instance.instructions.name = new_path
-                instance.save()
-
-        content_file_name(instance=instance, is_sample=True)
-        content_file_name(instance=instance, is_sample=False)
+    def save(self, *args, **kwargs):
+        if self.id is None:
+            saved_sample = self.sample
+            saved_instructions = self.instructions
+            self.sample = None
+            self.instructions = None
+            super(MicroTask, self).save(*args, **kwargs)
+            self.sample = saved_sample
+            self.instructions = saved_instructions
+            if 'force_insert' in kwargs:
+                kwargs.pop('force_insert')
+        super(MicroTask, self).save(*args, **kwargs)
 
 
 class EvaluationStatus(models.Model):

@@ -45,6 +45,7 @@ I have managed to add 3 databases to the project. All ot them working fine in th
 
 4. python manage.py migrate mto --database=vendor_os_db
 5. We will not be pushing migrations and databases to the project
+6. Removed all the databases and migrations
 
 
 
