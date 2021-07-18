@@ -159,8 +159,7 @@ LOGIN_URL = reverse_lazy("mto:login")
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "mto:dashboard"
 
-# smpt config
-
+# smut config
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
