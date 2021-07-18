@@ -298,7 +298,14 @@ def create_jobs(request):
     abc = MicroTask.objects.values('microtask_category').all()
     xyz = {i['microtask_category'] for i in abc}
     context["jobs"] = list(xyz)
-    form = JobForm()
+    
+    if request.user.is_admin and not request.user.is_super_admin:
+        form = JobForm(initial={'person_name': MTOAdminUser.objects.get(id=request.user.id)})
+    else:
+        form = JobForm()
+    
+    print(form['person_name'])
+
     if request.method == 'POST':
         form = JobForm(request.POST, request.FILES)
         print(form)
