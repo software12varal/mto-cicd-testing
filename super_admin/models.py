@@ -10,7 +10,7 @@ User = get_user_model()
 class SuperAdmin(User):
     contact_number = PhoneNumberField(blank=True)
     designation = models.CharField(max_length=500, blank=True)
-    department = models.CharField(max_length=500, blank=True)
+    # department = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return self.full_name
