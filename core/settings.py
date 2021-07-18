@@ -101,7 +101,7 @@ DATABASES = {
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
+DATABASE_ROUTERS = ['routers.db_routers.VaralJobPostingDBRouter', 'routers.db_routers.VendorOSRouter',
                     'routers.db_routers.AccountsDBRouter']
 UNDER_TESTING = False
 
