@@ -4,7 +4,7 @@ from django import forms
 from django_countries.widgets import CountrySelectWidget
 
 from .models import MTO
-from jobs.models import Jobs,MicroTask
+from jobs.models import Jobs, MicroTask
 
 User = get_user_model()
 

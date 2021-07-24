@@ -149,18 +149,20 @@ class MTOProfileView(View):
     template_name = 'mto/profile.html'
     context_object_name = 'mto'
     form = MTOUpdateProfileForm
-
+    
     def get(self, *args, **kwargs):
         mto = MTO.objects.get(id=self.request.user.id)
         self.form = MTOUpdateProfileForm(instance=mto)
-
+        job_categories =[]
         # we get the items from string type to list type and get the users job categories
         jsonDec = json.decoder.JSONDecoder()
         mto_preferred_categories = jsonDec.decode(mto.job_category)
-        print(mto_preferred_categories)
-        job_categories = [job_id
-                          for job_id in mto_preferred_categories]
-
+        for i in MicroTask.job_category :
+            for j in mto_preferred_categories:
+                if j in i:
+                    job_categories.append(i)
+        
+        print(job_categories)
         context = {self.context_object_name: mto,
                    'form': self.form, 'job_categories': job_categories}
         return render(self.request, self.template_name, context)
@@ -181,86 +183,6 @@ class MTOProfileView(View):
                                                                job_category=job_categories_ids, paypal_id=paypal)
             messages.success(self.request, 'Changes saved successfully')
         return redirect(reverse('mto:profile'))
-
-
-# def microtask(request):
-#     if request.method == 'POST':
-#         form = MicroTaskForm(request.POST, request.FILES)
-#         if form.is_valid():
-#
-#             job_name = form.cleaned_data['job_name']
-#
-#             form.save()
-#             messages.success(request, f'Account created for {job_name}! You have to login')
-#             return redirect('/')
-#     else:
-#         form = MicroTaskForm()
-#
-#     return render(request, 'microtask.html', {'form': form})
-#
-#
-# def index(request):
-#     microtask = MicroTask.objects.all()
-#     # category = MAL_Requirements.objects.get(microtask.Category_of_the_microtask)
-#
-#     context = {'microtask':microtask,
-#
-#                 }
-#     return render(request, 'MalForm.html', context)
-#
-# def handleSubmit(request):
-#     if request.method == 'POST':
-#         MAL_Job_Identification_Number = request.POST['malno']
-#         Assembly_line_ID = request.POST['asi']
-#         Name_of_the_Assembly_line = request.POST['nameassembly']
-#         Name_of_the_person_incharge_of_the_MAL = request.POST['personname']
-#         Link_of_the_output_folder = request.POST['link1']
-#         Name_of_the_micro_task = request.POST['microtask']
-#         Category_of_the_Microtask = request.POST['category']
-#         Target_date = request.POST['td']
-#         Total_budget_allocated_for_the_job = request.POST['budget']
-#         Job_description = request.POST['jd']
-#         Upload_job_sample = request.POST['jobsample']
-#         Upload_Job_instructions = request.POST['instruction']
-#         Quantity_of_the_Job = request.POST['quantity']
-#         Link_of_the_Input_folder = request.POST['link2']
-#
-#         job = MicroTask.objects.get(id=Name_of_the_micro_task)
-#         cat = MTOJobCategory.objects.get(id=Category_of_the_Microtask)
-#
-#         data = MALRequirement(MAL_Job_Identification_Number=MAL_Job_Identification_Number, Assembly_line_ID=Assembly_line_ID,
-#                                 Name_of_the_Assembly_line=Name_of_the_Assembly_line, Name_of_the_person_incharge_of_the_MAL=Name_of_the_person_incharge_of_the_MAL, Link_of_the_output_folder=Link_of_the_output_folder,
-#                                 microtask=job, microtask_category=cat, Target_date=Target_date, Total_budget_allocated_for_the_job=Total_budget_allocated_for_the_job,Job_description=Job_description,
-#                                 Uploadjob_sample=Upload_job_sample, UploadJob_instructions=Upload_Job_instructions, Quantity_of_the_Job=Quantity_of_the_Job, Link_of_the_Input_folder=Link_of_the_Input_folder)
-#         data.save()
-#     return redirect('index')
-#
-# def posting_page(request,pk=None):
-#     #if request.user.is_active:
-#     if pk is not None:
-#         try:
-#             data = MicroTask.objects.get(id=pk)
-#         except:
-#             data = "NA"
-#         return render(request,'JobPosting_Page.html', {'datas': data})
-#     return render(request,'JobPosting_Page.html')
-# def jobsmto(request):
-#     if request.user.is_authenticated and request.user.is_mto:# and not request.user.is_admin :
-#         job = Jobs.objects.filter(target_date__gte=datetime.now()).all()
-#         # job = Jobs.objects.filter(target_date__gte=datetime.now() and people_required__lt=MTOJob.objects.filter(job_id=id).Count()).all()
-#         mto = MTOJob.objects.values('job_id').order_by('job_id').annotate(count=Count('job_id'))
-#         ls = []
-#         # print(ls)
-#         for i in job:
-#             for j in range(len(mto)):
-#                 if i.id == mto[j]['job_id']:
-#                     if i.people_required <= mto[j]['count']:
-#                         ls.append(i.id)
-#         job = Jobs.objects.filter(target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
-#         return render(request,'mto/mtojobs.html',{'data':job})
-#     else:
-#         return redirect('mto:login')
-
 
 def view_jobs(request):  # MTO view all
     # and not request.user.is_admin :
