@@ -25,4 +25,16 @@
 /users/__pycache__/
 /accounts/__pycache__/
 /super_admin/__pycache__/
+/super_admin/migrations/__pycache__/
+/routers/__pycache__/
+/.idea/workspace.xml
+/core/__pycache__/
+/accounts/tests/__pycache__/
+/jobs/tests/__pycache__/
+/mto/tests/__pycache__/
+/users/tests/__pycache__/
+/media/
+/super_admin/tests/__pycache__/
+
+
 

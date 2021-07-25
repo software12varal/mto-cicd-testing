@@ -8,4 +8,4 @@ from .models import SuperAdmin
 class SuperAdminUpdateProfileForm(forms.ModelForm):
     class Meta:
         model = SuperAdmin
-        fields = ['full_name', 'contact_number', 'email', 'designation', 'department']
+        fields = ['full_name', 'contact_number', 'email', 'designation']
