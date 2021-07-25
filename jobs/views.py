@@ -15,6 +15,7 @@ from mto.models import MTO
 from functools import reduce
 import json
 from django.db.models import Count, Sum
+from .filters import JobsFilterForSuperadmin, JobsFilterForVaraladmin, OngoingJobsFilterForSuperadmin, OngoingJobsFilterForadmin
 
 
 def home(request):
@@ -88,11 +89,15 @@ def add_jobstatus(request, job_id):
 def appliedjobs(request):
 
     if request.user.is_super_admin:
-        job = MTOJob.objects.all().order_by('-id')
+        jobs = MTOJob.objects.all().order_by('-id')
+        myFilter = OngoingJobsFilterForSuperadmin(request.GET, queryset=jobs)
+        job = myFilter.qs
         p = Paginator(job, 5)
         page_num = request.GET.get('page')
     else:
-        job = MTOJob.objects.filter(job_id__person_name=request.user.id).order_by('-id')
+        jobs = MTOJob.objects.filter(job_id__person_name=request.user.id).order_by('-id')
+        myFilter = OngoingJobsFilterForadmin(request.GET, queryset=jobs)
+        job = myFilter.qs
         p = Paginator(job, 5)
         page_num = request.GET.get('page')
     try:
@@ -101,18 +106,22 @@ def appliedjobs(request):
         data = p.page(1)
     except EmptyPage:
         data = p.page(p.num_pages)
-    return render(request, 'jobs/appliedjobs.html', {'data': data})
+    return render(request, 'jobs/appliedjobs.html', {'myFilter': myFilter,'data': data})
 
 
 def alljobs(request):
 
     if request.user.is_super_admin:
         jobs = Jobs.objects.all().order_by('-id')
-        p = Paginator(jobs, 5)
+        myFilter = JobsFilterForSuperadmin(request.GET, queryset=jobs)
+        job = myFilter.qs
+        p = Paginator(job, 5)
         page_num = request.GET.get('page')
     else:
         jobs = Jobs.objects.filter(person_name=request.user.id).order_by('-id')
-        p = Paginator(jobs, 5)
+        myFilter = JobsFilterForVaraladmin(request.GET, queryset=jobs)
+        job = myFilter.qs
+        p = Paginator(job, 5)
         page_num = request.GET.get('page')
     try:
         data = p.page(page_num)
@@ -120,7 +129,7 @@ def alljobs(request):
         data = p.page(1)
     except EmptyPage:
         data = p.page(p.num_pages)
-    return render(request, 'jobs/jobs.html', {'data': data})
+    return render(request, 'jobs/jobs.html', {'myFilter': myFilter, 'data': data})
 
 
 def microtask_job_details(request, id):
