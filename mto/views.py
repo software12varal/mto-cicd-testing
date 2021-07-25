@@ -335,6 +335,7 @@ def apply_job(request, id):
         return redirect('mto:view')
     else:
         job_details = Jobs.objects.get(id=id)
+        print(job_details)
         assigned_to = request.user.mto.id
         due_date = job_details.target_date
         assigned_date = datetime.now()

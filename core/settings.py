@@ -101,7 +101,7 @@ DATABASES = {
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
+DATABASE_ROUTERS = ['routers.db_routers.VaralJobPostingDBRouter','routers.db_routers.VendorOSRouter',
                     'routers.db_routers.AccountsDBRouter']
 UNDER_TESTING = False
 
@@ -124,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'users.backends.VaralOSDBAuthBackend', 'django.contrib.auth.backends.ModelBackend']
+     'django.contrib.auth.backends.ModelBackend', 'users.backends.VaralOSDBAuthBackend',]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
