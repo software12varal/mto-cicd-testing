@@ -39,37 +39,8 @@
 						<h5 class="h6 card-title">Interests</h5>
 						{% for i in job_categories %}
 						<a href="#" class="badge badge-primary mr-1 my-1">
-							{% if i == 'cw' %}
-                                <span> Content Writing,</span>
-                            {% elif i == 'da' %}
-                                <span> Document Analysis,</span>
-                            {% elif i == 'de' %}
-                                <span> Data Entry</span>
-                            {% elif i == 'cr' %}
-                                <span> Combining Rules from Semi-Legal documents,</span>
-                            {% elif i == 'df' %}
-                                <span> Data Entry(Fields),</span>
-                            {% elif i == 'cd' %}
-                                <span> Collecting copies of documents,</span>
-                            {% elif i == 'cp' %}
-                                <span> Content Copy & Paste,</span>
-                            {% elif i == 'cf' %}
-                                <span> Combining Data Entry Fields,</span>
-                            {% elif i == 'fn' %}
-                                <span> Find Non-Copyrighted Images and Uploading,</span>
-                            {% elif i == 'ac' %}
-                                <span> Apply Compliance to Fields,</span>
-                            {% elif i == 'ng' %}
-                                <span> Naming,</span>
-                            {% elif i == 'ce' %}
-                                <span> Compliance Extraction,</span>
-                            {% elif i == 'id' %}
-                                <span> Identifying One Line Decision,</span>
-                            {% elif i == 'ab' %}
-                                <span> A+B TC For Document Extraction,</span>
-                            {% elif i == 'tc' %}
-                                <span> TC For One Line Decision</span>
-                        {% endif %}</a>
+							<span>{{i.1}} , &nbsp;</span>
+							</a>
 						{% endfor %}
 					</div>
 					<hr class="my-0" />
@@ -80,37 +51,10 @@
 							<li class="mb-1"><span data-feather="briefcase" class="feather-sm mr-1"></span> PayPal ID <a href="#">{{ mto.paypal_id }}</a></li>
 							<li class="mb-1"><span data-feather="home" class="feather-sm mr-1"></span> Location <a href="#">{{ mto.location.name }}</a></li>
 							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Date Joined <a href="#">{{ mto.timestamp }}</a></li>
-							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Job categories {% for i in job_categories %}<a href="#">{% if i == 'cw' %}
-                                <span> Content Writing,</span>
-                            {% elif i == 'da' %}
-                                <span> Document Analysis,</span>
-                            {% elif i == 'de' %}
-                                <span> Data Entry</span>
-                            {% elif i == 'cr' %}
-                                <span> Combining Rules from Semi-Legal documents,</span>
-                            {% elif i == 'df' %}
-                                <span> Data Entry(Fields),</span>
-                            {% elif i == 'cd' %}
-                                <span> Collecting copies of documents,</span>
-                            {% elif i == 'cp' %}
-                                <span> Content Copy & Paste,</span>
-                            {% elif i == 'cf' %}
-                                <span> Combining Data Entry Fields,</span>
-                            {% elif i == 'fn' %}
-                                <span> Find Non-Copyrighted Images and Uploading,</span>
-                            {% elif i == 'ac' %}
-                                <span> Apply Compliance to Fields,</span>
-                            {% elif i == 'ng' %}
-                                <span> Naming,</span>
-                            {% elif i == 'ce' %}
-                                <span> Compliance Extraction,</span>
-                            {% elif i == 'id' %}
-                                <span> Identifying One Line Decision,</span>
-                            {% elif i == 'ab' %}
-                                <span> A+B TC For Document Extraction,</span>
-                            {% elif i == 'tc' %}
-                                <span> TC For One Line Decision</span>
-                        {% endif %}</a>{% endfor %}</li>
+							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Job categories {% for i in job_categories %}<a href="#">
+								<span>{{i.1}} , &nbsp;</span>
+								
+					</a>{% endfor %}</li>
 						</ul>
 					</div>
 					<hr class="my-0" />
