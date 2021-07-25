@@ -25,7 +25,7 @@ class MicroTask(models.Model):
     type_of_tc = [('M', 'Manual'),
                   ('A', 'Automatic')
                   ]
-
+    # If you are adding job category choice here kindly add in filters.py
     job_category = [
         ('cw', 'Content Writing'),
         ('da', 'Document Analysis'),
@@ -43,6 +43,7 @@ class MicroTask(models.Model):
         ('ab', 'A+B TC For Document Extraction'),
         ('tc', 'TC For One Line Decision'),
     ]
+    # If you are adding job category choice kindly add in filters.py
 
     microtask_name = models.CharField(
         max_length=300, help_text='e.g develop website')

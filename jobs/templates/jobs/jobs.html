@@ -13,6 +13,16 @@
 </head>
 <body>
 {% block content %}
+<br><br><br>
+<div class="row">
+        <div class="col">
+            <div class="card card-body">
+                <form method="get"> {{myFilter.form}}
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 <div class="container">
     <table class="table table-hover">
@@ -20,7 +30,7 @@
         <tr>
           <th scope="col">Id</th>
           <th scope="col">Job Name</th>
-          <th scope="col">Category ID</th>
+          <th scope="col">Category Name</th>
           <th scope="col">Target Date</th>
           <th scope="col">Job Description</th>
           <th scope="col">Job Sample</th>
