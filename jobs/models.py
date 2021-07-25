@@ -11,6 +11,7 @@ import os
 from django.conf import settings
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 def sample_directory_path(instance, filename):
     job = instance.id
     return f"images/job_documents/job_samples/sample_{job}.{filename.split('.')[-1]}"
