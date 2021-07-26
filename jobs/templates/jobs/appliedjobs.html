@@ -55,8 +55,8 @@
           <td>{{dat.job_id.cat_id}}</td>
           <td>{{dat.job_id.target_date}}</td>
           <td>{{dat.job_id.job_description}}</td>
-          <td><a href="/media/images/job_documents/job_samples/{{ dat.job_id.sample_filename }}" target="_blank">{{ dat.job_id.sample_filename }}</a></td>
-          <td><a href="/media/images/job_documents/job_instructions/{{ dat.job_id.instructions_filename }}" target="_blank">{{ dat.job_id.instructions_filename }}</a></td>
+          <td><a href="{{ dat.job_id.job.sample.url }}" target="_blank">{{ dat.job_id.sample_filename }}</a></td>
+          <td><a href="{{ dat.job_id.job.instructions.url }}" target="_blank">{{ dat.job_id.instructions_filename }}</a></td>
           <td>{{dat.job_id.job_quantity}}</td>
           <td>{{dat.job_id.job.people_required_for_valid_tc}}</td>
           <td>{{dat.job_id.job.skills}}</td>

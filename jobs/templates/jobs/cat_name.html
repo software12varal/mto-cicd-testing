@@ -5,13 +5,13 @@
     {% endfor %}
 {% else %}
     <b>Existing Job Sample:</b>
-    <a href="{{namee.sample}}">{{namee.sample}}</a>
+    <a href="{{namee.sample.url}}">{{namee.sample_filename}}</a>
     <input name="sample" id="id_sample" type="file" value="{{namee.sample}}" class="form-control">
     <div class="text-danger">{{form.errors.sample}}</div>
 
     <br/>
     <b>Existing Job Instructions:</b>
-    <a href="{{namee.instructions}}">{{namee.instructions}}</a>
+    <a href="{{namee.instructions.url}}">{{namee.instructions_filename}}</a>
     <input name="instructions" id="id_instructions" type="file" value="{{namee.instructions}}" class="form-control">
     <div class="text-danger">{{form.errors.instructions}}</div>
     <br/>
