@@ -1,30 +1,21 @@
 from django.test import TestCase
 
 # for connecting to Database
+from core import settings
 from super_admin.models import SuperAdmin
 
 
-class SuperAdminTestDbMixin:
-    databases = {}
+class SuperAdminModelTestDbMixin:
+    settings.UNDER_TESTING = True
+    databases = {"varal_job_posting_db", "vendor_os_db"}
 
 
 # Testing the models
-class TestNew(SuperAdminTestDbMixin, TestCase, ):
+class SuperAdminModelTest(SuperAdminModelTestDbMixin, TestCase, ):
     '''without baker'''
 
     def test_model_str(self):
-        full_name = SuperAdmin.objects.create(full_name="DjangoTesting")
+        full_name = SuperAdmin.objects.create(full_name="Super Admin")
         print(full_name)
-        self.assertEqual(str(full_name), "DjangoTesting")
+        self.assertEqual(str(full_name), "Super Admin")
 
-    '''Using baker'''
-    # def setUp(self):
-    #     self.description = baker.make('accounts.MTOPaymentStatus')
-    #     # pprint(self.description.__dict__)
-
-    # def test_model_str(self):
-
-    #     sample_status = baker.prepare('accounts.MTOPaymentStatus')
-    #     print(sample_status)
-    #     MTOPaymentStatus.objects.create(description= sample_status)
-    #     self.assertEqual(str(sample_status), MTOPaymentStatus.objects.last().description)

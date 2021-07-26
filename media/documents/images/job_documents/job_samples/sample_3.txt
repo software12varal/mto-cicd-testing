@@ -13,5 +13,5 @@ class JobsTestDbMixin:
 
 
 class TestViews(JobsTestDbMixin, TestCase):
-    def test_home_GET(self):
+    def test_home_GET(cls):
         client = Clie
