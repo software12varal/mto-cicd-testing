@@ -262,7 +262,7 @@ def apply_job(request, id):
         due_date = job_details.target_date
         assigned_date = datetime.now()
         fees = job_details.total_budget
-        apply = MTOJob(job_id=job_details, assigned_to=assigned_to, evaluation_status_id=2, due_date=due_date,
+        apply = MTOJob(job_id=job_details, assigned_to=assigned_to, due_date=due_date,
                        assigned_date=assigned_date,
                        fees=fees)
         apply.save()
