@@ -69,7 +69,7 @@
         <hr>
         <div class="row">
             <div class="col-sm-3">
-                <h6 class="mb-0">Total cost of the MTO job</h6>
+                <h6 class="mb-0">Total Budget of the MTO job</h6>
             </div>
             <div class="col-sm-9 text-secondary">{{ job.total_budget }}</div>
         </div>
@@ -105,14 +105,14 @@
             <div class="col-sm-3">
                 <h6 class="mb-0">Job instruction </h6>
             </div>
-            <div class="col-sm-9 text-secondary"><a href="/media/images/job_documents/job_instructions/{{ job.instructions_filename }}">{{job.instructions_filename}}</a></div>
+            <div class="col-sm-9 text-secondary"><a href="{{ job.job.instructions.url }}">{{job.instructions_filename}}</a></div>
         </div>
         <hr>
         <div class="row">
             <div class="col-sm-3">
                 <h6 class="mb-0">Job sample</h6>
             </div>
-            <div class="col-sm-9 text-secondary"><a href="/media/images/job_documents/job_samples/{{ job.sample_filename }}" >{{job.sample_filename}}</a></div>
+            <div class="col-sm-9 text-secondary"><a href="{{ job.job.sample.url }}" >{{job.sample_filename}}</a></div>
         </div>
         <hr>
         <div class="row">
