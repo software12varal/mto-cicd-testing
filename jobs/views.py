@@ -27,7 +27,6 @@ def home(request):
     return render(request, 'jobs/index.html', context)
 
 
-
 # updated
 def mto_admin_login(request):
     # if request.method == 'POST':
@@ -47,7 +46,6 @@ def mto_admin_login(request):
     #     'form': MTOAdminSignUpForm()
     # }
     return render(request, 'jobs/admin-register.html')
-
 
 
 def add_job(request):
@@ -95,7 +93,8 @@ def appliedjobs(request):
         p = Paginator(job, 5)
         page_num = request.GET.get('page')
     else:
-        jobs = MTOJob.objects.filter(job_id__person_name=request.user.id).order_by('-id')
+        jobs = MTOJob.objects.filter(
+            job_id__person_name=request.user.id).order_by('-id')
         myFilter = OngoingJobsFilterForadmin(request.GET, queryset=jobs)
         job = myFilter.qs
         p = Paginator(job, 5)
@@ -106,7 +105,7 @@ def appliedjobs(request):
         data = p.page(1)
     except EmptyPage:
         data = p.page(p.num_pages)
-    return render(request, 'jobs/appliedjobs.html', {'myFilter': myFilter,'data': data})
+    return render(request, 'jobs/appliedjobs.html', {'myFilter': myFilter, 'data': data})
 
 
 def alljobs(request):
@@ -248,7 +247,7 @@ def view_mto(request, id):
         accept_seconds = 0
     mto_job = MTOJob.objects.filter(assigned_to=id).count()
     total_completed = MTOJob.objects.filter(
-        job_status = "sub", assigned_to=id).count()
+        job_status="co", assigned_to=id).count()
     total_job = Jobs.objects.all().count()
 
     try:
@@ -307,12 +306,13 @@ def create_jobs(request):
     abc = MicroTask.objects.values('microtask_category').all()
     xyz = {i['microtask_category'] for i in abc}
     context["jobs"] = list(xyz)
-    
+
     if request.user.is_admin and not request.user.is_super_admin:
-        form = JobForm(initial={'person_name': MTOAdminUser.objects.get(id=request.user.id)})
+        form = JobForm(
+            initial={'person_name': MTOAdminUser.objects.get(id=request.user.id)})
     else:
         form = JobForm()
-    
+
     print(form['person_name'])
 
     if request.method == 'POST':
@@ -323,7 +323,8 @@ def create_jobs(request):
         if form.is_valid():
             # if
             if request.FILES.get('sample') is None or request.FILES.get('instructions') is None:
-                mic_ojbs = MicroTask.objects.filter(microtask_name=request.POST.get('job_name')).first()
+                mic_ojbs = MicroTask.objects.filter(
+                    microtask_name=request.POST.get('job_name')).first()
                 instance = form.save(commit=False)
                 if request.FILES.get('sample') is None:
                     instance.sample = mic_ojbs.sample
@@ -364,13 +365,17 @@ def admin_monitoring(request):
 def view_admin(request, id):
     job_admin = MTOAdminUser.objects.get(id=id)
     Total_Jobs_Posted = Jobs.objects.filter(person_name=job_admin.id).count()
-    No_of_Jobs_Allocated = Jobs.objects.filter(person_name=job_admin.id, job_status='as').count()
-    Total_Jobs_Completed = Jobs.objects.filter(person_name=job_admin.id, job_status='co').count()
+    No_of_Jobs_Allocated = Jobs.objects.filter(
+        person_name=job_admin.id, job_status='as').count()
+    Total_Jobs_Completed = Jobs.objects.filter(
+        person_name=job_admin.id, job_status='co').count()
 
     jobs = Jobs.objects.filter(person_name=job_admin.id)
     total_Jobs_Posted_by_admin = Jobs.objects.filter(person_name=job_admin.id)
-    Number_of_MTOs_working_on_a_Job = MTOJob.objects.filter(job_id__in=[job.id for job in jobs]).count()
-    Number_of_Ongoing_Jobs = MTOJob.objects.filter(job_id__in=[job.id for job in jobs], job_status='in').count()
+    Number_of_MTOs_working_on_a_Job = MTOJob.objects.filter(
+        job_id__in=[job.id for job in jobs]).count()
+    Number_of_Ongoing_Jobs = MTOJob.objects.filter(
+        job_id__in=[job.id for job in jobs]).count()
 
     # these line for total amount spent
     totals = jobs.aggregate(Sum('total_budget'))['total_budget__sum'] or 0
@@ -390,7 +395,8 @@ def view_admin(request, id):
 
 def displaying_microtask(request):
     cat_idw = request.GET.get('cat_ide')
-    mctsk = MicroTask.objects.filter(microtask_category__icontains=cat_idw).all()
+    mctsk = MicroTask.objects.filter(
+        microtask_category__icontains=cat_idw).all()
     return render(request, 'jobs/cat_name.html', {'mctsk': mctsk})
 
 

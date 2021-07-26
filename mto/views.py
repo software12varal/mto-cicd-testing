@@ -126,7 +126,6 @@ def dashboard(request):
                   ('co', 'Completed'),
 
                   ]
-
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
     job_progress = MTOJob.objects.filter(
         assigned_to=request.user.mto.id, job_status='in').count()
@@ -134,9 +133,11 @@ def dashboard(request):
         assigned_to=request.user.mto.id, job_status='sub').count()
     jobs_completed = MTOJob.objects.filter(
         assigned_to=request.user.mto.id, job_status='co').count()
-
-    totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
-    total = '{:0.2f}'.format(totals)
+    if MTOJob.objects.filter(job_status='co'):
+        totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
+        total = '{:0.2f}'.format(totals)
+    else:
+        total = 0
     context = {'jobs': jobs, 'jobs_submitted': jobs_submitted,
                'jobs_completed': jobs_completed, 'total': total}
 
@@ -149,19 +150,19 @@ class MTOProfileView(View):
     template_name = 'mto/profile.html'
     context_object_name = 'mto'
     form = MTOUpdateProfileForm
-    
+
     def get(self, *args, **kwargs):
         mto = MTO.objects.get(id=self.request.user.id)
         self.form = MTOUpdateProfileForm(instance=mto)
-        job_categories =[]
+        job_categories = []
         # we get the items from string type to list type and get the users job categories
         jsonDec = json.decoder.JSONDecoder()
         mto_preferred_categories = jsonDec.decode(mto.job_category)
-        for i in MicroTask.job_category :
+        for i in MicroTask.job_category:
             for j in mto_preferred_categories:
                 if j in i:
                     job_categories.append(i)
-        
+
         print(job_categories)
         context = {self.context_object_name: mto,
                    'form': self.form, 'job_categories': job_categories}
@@ -184,6 +185,7 @@ class MTOProfileView(View):
             messages.success(self.request, 'Changes saved successfully')
         return redirect(reverse('mto:profile'))
 
+
 def view_jobs(request):  # MTO view all
     # and not request.user.is_admin :
     if request.user.is_authenticated and request.user.is_mto:
@@ -197,7 +199,7 @@ def view_jobs(request):  # MTO view all
 
         ls = list(map(lambda x, y: x if (Jobs.objects.get(id=x).job_quantity * MicroTask.objects.get(
             microtask_name=Jobs.objects.get(id=x).job_name).people_required_for_valid_tc) <= y else 0,
-                      list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+            list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x) <= y else 0,
         #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
@@ -257,11 +259,12 @@ def apply_job(request, id):
         return redirect('mto:view')
     else:
         job_details = Jobs.objects.get(id=id)
-        print(job_details)
+        microtask = MicroTask.objects.get(microtask_name=job_details.job_name)
+        print(microtask)
         assigned_to = request.user.mto.id
         due_date = job_details.target_date
         assigned_date = datetime.now()
-        fees = job_details.total_budget
+        fees = microtask.job_cost
         apply = MTOJob(job_id=job_details, assigned_to=assigned_to, due_date=due_date,
                        assigned_date=assigned_date,
                        fees=fees)
