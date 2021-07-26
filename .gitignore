@@ -33,6 +33,7 @@
 /jobs/tests/__pycache__/
 /mto/tests/__pycache__/
 /users/tests/__pycache__/
+/media/
 /super_admin/tests/__pycache__/
 # ignoring coverage results
 /htmlcov/
