@@ -195,6 +195,9 @@ class MTOJob(models.Model):
                        ('pending', 'pending'),
                        ('paid', 'paid'),
                        ]
+    EVALUATION_CHOICES = [('pending','pending'),
+                          ('under review','under review'),
+                          ('complete','complete')]
 
     job_id = models.ForeignKey(Jobs, on_delete=models.PROTECT, null=True)
     assigned_to = models.IntegerField(help_text='related to MTO')
@@ -211,8 +214,8 @@ class MTOJob(models.Model):
     completed_date = models.DateTimeField(null=True)
     output_path = models.FileField(upload_to=output_directory_path)
     submitted_date = models.DateTimeField(null=True)
-    evaluation_status = models.ForeignKey(
-        EvaluationStatus, on_delete=models.CASCADE)
+    evaluation_status = models.CharField(
+        max_length=50,choices=EVALUATION_CHOICES,default="pending")
 
     @property
     def mto(self):
