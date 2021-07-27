@@ -301,7 +301,7 @@ def submit_job(request):
     # jobs = MTOJob.objects.get(assigned_to=request.user.mto.id)
     if request.method == 'POST':
         job_id = request.POST.get("job_id")
-        output_path = request.FILES['file1']
+        output_path = request.FILES.get('file1','NA') #['file1']
         Jobs.objects.filter(id=job_id).first()
         if MTOJob.objects.filter(job_id_id=job_id, job_status='sub', assigned_to=mto.id).exists():
             messages.info(request, f'You already submitted')
