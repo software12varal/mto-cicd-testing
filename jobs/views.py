@@ -169,7 +169,7 @@ def convert_seconds(performance):
             else:
                 time = f"{round(hours)} hours"
     else:
-        time = performance
+        time = f"{round(performance)} seconds"
     return time
 
 

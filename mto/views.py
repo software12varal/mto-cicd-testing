@@ -312,7 +312,7 @@ def submit_job(request):
                 job_id_id=job_id, assigned_to=mto.id).first()
             instance.output_path = output_path
             instance.job_status = 'sub'
-            instance.submitted_date = datetime.now()
+            instance.submitted_date = timezone.now()
             instance.save()
             messages.success(request, f'Job successfully submitted')
             email_notification_job_submit(request)

@@ -236,7 +236,6 @@ class MTOJob(models.Model):
         if self.submitted_date is None:
             time = 0
         else:
-
             time = self.submitted_date - self.assigned_date
         return time
 
