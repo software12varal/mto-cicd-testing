@@ -35,7 +35,9 @@
 /users/tests/__pycache__/
 /media/
 /super_admin/tests/__pycache__/
+#ignoring htmlcov
 /htmlcov/
+/.coverage/
 
 
 
