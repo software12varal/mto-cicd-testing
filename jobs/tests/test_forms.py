@@ -32,7 +32,7 @@ class AddJobsTest(JobsTestDbMixin, TestCase):
 
 
     def test_jobs_form_success(self):
-        print('success')
+       
         upload_file = open(str(settings.MEDIA_ROOT) + '/' + 'Onkar_py.txt', 'rb')
         form_data = {'microtask_name':'develop website','microtask_category': 'cw','job_cost':22,'time_required':23,'skills':'coding','people_required_for_valid_tc':2,'sample':upload_file.read(),'instructions':upload_file.read(),'tc_type': 'M','updated_date':timezone.now()}
 
