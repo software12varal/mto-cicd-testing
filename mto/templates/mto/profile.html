@@ -75,7 +75,7 @@
 							<script>
 							$("#id_job_category").ready(function () {
 								{% for i in job_categories %}
-									$('#id_job_category option[value="{{i}}"]').attr("selected", "selected");
+									$('#id_job_category option[value="{{i.0}}"]').attr("selected", "selected");
 								{% endfor %}	
 							});
 							</script>

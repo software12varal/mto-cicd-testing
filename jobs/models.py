@@ -11,6 +11,7 @@ import os
 from django.conf import settings
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 def sample_directory_path(instance, filename):
     job = instance.id
     return f"images/job_documents/job_samples/sample_{job}.{filename.split('.')[-1]}"
@@ -25,7 +26,7 @@ class MicroTask(models.Model):
     type_of_tc = [('M', 'Manual'),
                   ('A', 'Automatic')
                   ]
-
+    # If you are adding job category choice here kindly add in filters.py
     job_category = [
         ('cw', 'Content Writing'),
         ('da', 'Document Analysis'),
@@ -43,6 +44,7 @@ class MicroTask(models.Model):
         ('ab', 'A+B TC For Document Extraction'),
         ('tc', 'TC For One Line Decision'),
     ]
+    # If you are adding job category choice kindly add in filters.py
 
     microtask_name = models.CharField(
         max_length=300, help_text='e.g develop website')
@@ -79,6 +81,14 @@ class MicroTask(models.Model):
             if 'force_insert' in kwargs:
                 kwargs.pop('force_insert')
         super(MicroTask, self).save(*args, **kwargs)
+
+    @property
+    def instructions_filename(self):
+        return os.path.basename(self.instructions.name)
+
+    @property
+    def sample_filename(self):
+        return os.path.basename(self.sample.name)
 
 
 class EvaluationStatus(models.Model):
@@ -143,7 +153,8 @@ class Jobs(models.Model):
     # models.ForeignKey(MicroTask, on_delete=models.CASCADE)
     job_name = models.CharField(
         max_length=300, help_text='e.g develop website')
-    cat_id = models.CharField(max_length=50) #models.ForeignKey(MicroTask, on_delete=models.CASCADE)
+    # models.ForeignKey(MicroTask, on_delete=models.CASCADE)
+    cat_id = models.CharField(max_length=50)
     target_date = models.DateTimeField(
         null=True, help_text='e.g 2021-10-25 14:30:59')
     total_budget = models.PositiveIntegerField(help_text="e.g currency AED")
@@ -159,7 +170,6 @@ class Jobs(models.Model):
         max_length=100, choices=JOB_STATUS, default="cr")
     updated_date = models.DateTimeField(auto_now=True)
     posted_date = models.DateTimeField(auto_now_add=True)
-
 
     @property
     def job(self):
@@ -194,6 +204,9 @@ class MTOJob(models.Model):
                        ('pending', 'pending'),
                        ('paid', 'paid'),
                        ]
+    EVALUATION_CHOICES = [('pending', 'pending'),
+                          ('under review', 'under review'),
+                          ('complete', 'complete')]
 
     job_id = models.ForeignKey(Jobs, on_delete=models.PROTECT, null=True)
     assigned_to = models.IntegerField(help_text='related to MTO')
@@ -210,8 +223,8 @@ class MTOJob(models.Model):
     completed_date = models.DateTimeField(null=True)
     output_path = models.FileField(upload_to=output_directory_path)
     submitted_date = models.DateTimeField(null=True)
-    evaluation_status = models.ForeignKey(
-        EvaluationStatus, on_delete=models.CASCADE)
+    evaluation_status = models.CharField(
+        max_length=50, choices=EVALUATION_CHOICES, default="pending")
 
     @property
     def mto(self):
@@ -223,7 +236,6 @@ class MTOJob(models.Model):
         if self.submitted_date is None:
             time = 0
         else:
-
             time = self.submitted_date - self.assigned_date
         return time
 

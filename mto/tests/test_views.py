@@ -3,6 +3,7 @@ from django.contrib import auth
 from django.test import TestCase, Client
 from django.urls import reverse
 from mto.models import MTO
+from jobs.models import AdminRoles,MTOAdminUser,Jobs,MTOJob,MicroTask
 
 
 class MtoTestDbMixin:
@@ -14,11 +15,26 @@ class MtoTestDbMixin:
 class TestNew(MtoTestDbMixin, TestCase):
 
     def setUp(self):
-        MTO.objects.create(username='admin',email='admin@mail.com',full_name='Shakeel',contact_number='+918989208001',location="Bangalore",paypal_id='Abc123',password='Varal2021',is_mto=True)
+
+        MicroTask.objects.create(microtask_name="NewJob",microtask_category='["cw","de"]',skills="GK",people_required_for_valid_tc=1,tc_type='["M"]')
+        
+        MTO.objects.create(username='admin',email='admin@mail.com',full_name='Shakeel',contact_number='+918989208001',
+            location="Bangalore",paypal_id='Abc123',password='Varal2021',is_mto=True,job_category = '["cw","de"]',token='p0o9i8u7y6')
         data = MTO.objects.get(username='admin')
-        print('Test completed :',data.is_mto)
         data.set_password('Varal456')
         data.save()
+
+        AdminRoles.objects.create(description='Developer')
+        
+        MTOAdminUser.objects.create(username='varalAdmin',email='varal@mail.com',full_name='varalAdmin',is_admin = True,is_active = True,varal_role_id=AdminRoles.objects.get(id=1))
+        mtoadmin = MTOAdminUser.objects.get(full_name='varalAdmin')
+        mtoadmin.set_password('Varal2021')
+        mtoadmin.save()
+        
+        Jobs.objects.create(person_name=MTOAdminUser.objects.get(username='varalAdmin'),output='shak.txt',job_name='NewJob',cat_id='["cw"]',total_budget=5,job_description="na",job_quantity=1,input_folder = 'Shakeel/nawaz/')
+        
+        MTOJob.objects.create(job_id=Jobs.objects.get(id=1),assigned_to=1,due_date='2021-10-25 14:30:59',fees=500,output_path='Nawaz.txt')
+
         return self.client.login(username='admin',password='Varal456')
 
     def test_login_test(self):
@@ -68,111 +84,102 @@ class TestNew(MtoTestDbMixin, TestCase):
         self.assertTemplateUsed(response,"mto/job_deadline.html")
         
     def test_MTOProfileView(self):
-        # Changes to be done:
-        # Comment line 158 to 162 from mto/views.py
-        # Added this """ job_categories = ['cw','de'] """ in line 163
         url = reverse('mto:profile')
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response,"mto/profile.html")
+    
+    def test_view_applied_details(self):
+        mto = MTO.objects.get(id=1)
+        job = MTO.objects.get(id=1)
+        url = reverse('mto:view_applied_details', kwargs={'mto_id':mto.id ,'job_id':job.id})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response,"mto/applied_jobs_details.html")
+
+    def test_job_detail(self):
+        jobsdata = Jobs.objects.get(id=1)
+        url = reverse('mto:job_detail', kwargs={'slug':jobsdata.id})         
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response,"mto/apply_job.html")
+
+    def test_recommended_jobs(self):
+        url = reverse('mto:recommended_jobs')
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response,"mto/recommended_jobs.html")
+
+    def test_verify_valid_token(self):
+        url = reverse('verify',kwargs={'token':'p0o9i8u7y6'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+   
+    def test_verify_invalid_token(self):
+        url = reverse('verify',kwargs={'token':'p0o9i8u'})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+   
+    def test_submit_job(self):
+        url = reverse('mto:submit_job')
+        response = self.client.post(url,data={'job_id':1,'output_path':'Na'})
+        print(response)
+        self.assertEquals(response.status_code,302)
+
+    def test_submit_job_2(self):
+        Jobs.objects.create(person_name=MTOAdminUser.objects.get(username='varalAdmin'),output='shak2.txt',job_name='NewJob2',cat_id='["cw"]',total_budget=5,job_description="na",job_quantity=1,input_folder = 'Shakeel2/nawaz2/team/')
+        MTOJob.objects.create(job_id=Jobs.objects.get(id=2),assigned_to=1,due_date='2021-10-25 14:30:59',fees=500,output_path='Nawaz.txt',job_status='sub')
+        url = reverse('mto:submit_job')
+        response = self.client.post(url,data={'job_id':2,'output_path':'Na'})
+        print(response)
+        self.assertEquals(response.status_code,302)
+    
+    def test_submit_job_3(self):
+        Jobs.objects.create(person_name=MTOAdminUser.objects.get(username='varalAdmin'),output='shak3.txt',job_name='NewJob2',cat_id='["cw"]',total_budget=5,job_description="na",job_quantity=1,input_folder = 'Shakeel2/nawaz2/team/')
+        MTOJob.objects.create(job_id=Jobs.objects.get(id=2),assigned_to=1,due_date='2021-10-25 14:30:59',fees=500,output_path='Nawaz.txt',job_status='co')
+        url = reverse('mto:submit_job')
+        response = self.client.post(url,data={'job_id':2,'output_path':'Na'})
+        self.assertEquals(response.status_code,302)
+
+    def test_apply_jobs(self):
+        url = reverse('mto:apply',kwargs={'id':1})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response,reverse('mto:view'),302,200)
+
+    def test_apply_jobs_2(self):
+        self.client.logout()
+        
+        MTO.objects.create(username='admin2',email='admin2@mail.com',full_name='ShakeelNawaz',contact_number='+918989208999',
+            location="Bangalore",paypal_id='Abc123',password='Varal2021',is_mto=True,job_category = '["cw","de"]')
+        mtoadmin = MTO.objects.get(full_name='ShakeelNawaz')
+        mtoadmin.set_password('Varal456')
+        mtoadmin.save()
+        self.client.login(username='admin2',password='Varal456')
+        
+        Jobs.objects.create(person_name=MTOAdminUser.objects.get(username='varalAdmin'),output='shak3.txt',job_name='NewJob',cat_id='["cw"]',total_budget=5,job_description="na",job_quantity=1,input_folder = 'Shakeel2/nawaz2/team/',target_date='2021-10-25 14:30:59')
+
+        url = reverse('mto:apply',kwargs={'id':2})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 302)
+        self.assertRedirects(response,reverse('mto:view'),302,200)
+
+    def test_MTOProfileView2(self):
+        url = reverse('mto:profile')
+        data = {
+        # 'contact_number': '+918553208001',
+        # 'location':'India',
+        # 'paypal_id':'ABC123',
+        # 'job_category':'["de"]',
+        }
+        response = self.client.post(url,data)
+        self.assertEquals(response.status_code, 302)
+
+    def test_signup_form(self):
+        url = reverse('mto:sign_up')
+        response = self.client.post(url,{})
+        self.assertEquals(response.status_code, 200)
+        # self.assertTemplateNotUsed(response,"mto/profile.html")
 
 
 
-
-
-
-
-# import json
-#
-# from model_bakery import baker
-# from datetime import timedelta
-#
-# from django.conf import settings
-# from django.conf.global_settings import *
-# from django.test import TestCase, Client
-# from django.urls import reverse
-# from django.utils import timezone
-#
-# from jobs.models import MTOJob, Jobs, MicroTask
-# from mto.forms import MTOUpdateProfileForm
-#
-# from mto.models import MTO
-#
-#
-# class MTOTestDbMixin:
-#     databases = {"vendor_os_db", "varal_job_posting_db"}
-#
-#
-# # Demo view test class
-# class TestViews(MTOTestDbMixin, TestCase):
-#
-#     # This will through a 302 error. The url returns a /mto/login/?next=/mto/ path instead of '/'
-#     def test_dummy_home_view(self):
-#         url = reverse('mto:home')
-#         response = self.client.get(url)
-#         self.assertEquals(response.status_code, 302)
-#
-#
-# class TestMTOProfileView(MTOTestDbMixin, TestCase):
-#     def setUp(self):
-#         self.profile_url = reverse('mto:profile')
-#         # MicroTask.objects.create(microtask_name='develop website',
-#         #                          microtask_category='Django',
-#         #                          job_cost=140,
-#         #                          time_required=24,
-#         #                          skills='Django HTML CSS',
-#         #                          people_required_for_valid_tc=2,
-#         #                          job_sample='htmlcov\style.css',
-#         #                          job_instructions='htmlcov\style.css')
-#         baker.make(MicroTask, job_sample="test_py.txt", _quantity=3)
-#         microtask = MicroTask.objects.all().first()
-#         self.job = Jobs(
-#             identification_number=123,
-#             assembly_line_id=45,
-#             assembly_line_name='Assembly line',
-#             person_name='John Doe',
-#             output='media/documents/job_documents/output',
-#             job_name='Django Authentication',
-#             cat_id=microtask,
-#             target_date=timezone.now() + timedelta(days=3),
-#             total_budget=200,
-#             job_description='handle google authentication',
-#             job_sample='Onkar_py.txt',
-#             job_instructions='test_py.txt',
-#             job_quantity=1,
-#             input_folder='media/documents/job_documents/input')
-#         self.mto = MTO(username="DjangoTesting", email='mto@gmail.com', paypal_id='paypal', token='mto-token',
-#                        full_name='My name', contact_number="+2547123456789", location="Kenya",
-#                        job_category=json.dumps(list(self.job)))
-#         self.mto.set_password('password')
-#         self.mto.save()
-#         return
-#
-#     def test_profile_view_redirects_to_login_when_not_authenticated(self):
-#         response = self.client.get(self.profile_url)
-#         self.assertRedirects(response, reverse('login'), 302)
-#
-#     def test_profile_view_GET_response_when_authenticated(self):
-#         self.client.force_login(self.mto)
-#         response = self.client.get(self.profile_url)
-#         self.assertEquals(response.status_code, 200)
-#         self.assertTemplateUsed(response, 'mto/profile.html')
-#
-#     def test_profile_view_context_data(self):
-#         self.client.force_login(self.mto)
-#         response = self.client.get(self.profile_url)
-#         json_dec = json.decoder.JSONDecoder()
-#         mto_preferred_categories = json_dec.decode(self.mto.job_category)
-#         job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
-#         self.assertEquals(response.context['mto'], self.mto)
-#         self.assertEquals(response.context['job_categories', job_categories])
-#         self.assertIsInstance(response.context['form'], MTOUpdateProfileForm)
-#
-#     def test_profile_view_post_method(self):
-#         self.client.force_login(self.mto)
-#         data = {'contact_number': '+2547123456788', 'location': 'India', 'paypal_id': 'payPal',
-#                 'job_category': self.job}
-#         response = self.client.post(self.profile_url, data=data, follow=True)
-#         mto = MTO.objects.get(id=1)
-#         print('MTO DETAILS ARE >>>>>', mto.location, mto.contact_number, mto.paypal_id)
-#         self.assertTrue(True)
