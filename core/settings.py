@@ -103,7 +103,7 @@ DATABASES = {
 
 DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
                     'routers.db_routers.AccountsDBRouter']
-
+UNDER_TESTING = False
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -122,8 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'users.backends.VaralOSDBAuthBackend', 'django.contrib.auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = ['users.backends.VaralOSDBAuthBackend', 'django.contrib.auth.backends.ModelBackend']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
