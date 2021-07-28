@@ -3,7 +3,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
+<<<<<<< HEAD
+    <title>Coverage for routers/db_routers.py: 75%</title>
+=======
     <title>Coverage for routers\db_routers.py: 69%</title>
+>>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -17,14 +21,24 @@
 <body class="pyfile">
 <div id="header">
     <div class="content">
+<<<<<<< HEAD
+        <h1>Coverage for <b>routers/db_routers.py</b> :
+            <span class="pc_cov">75%</span>
+=======
         <h1>Coverage for <b>routers\db_routers.py</b> :
             <span class="pc_cov">69%</span>
+>>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
             59 statements &nbsp;
+<<<<<<< HEAD
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">44 run</button>
+            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">15 missing</button>
+=======
             <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">41 run</button>
             <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">18 missing</button>
+>>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
     </div>
@@ -71,7 +85,11 @@
     <p id="t17" class="run"><span class="n"><a href="#t17">17</a></span><span class="t">    <span class="key">def</span> <span class="nam">db_for_write</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">model</span><span class="op">,</span> <span class="op">**</span><span class="nam">hints</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t18" class="run"><span class="n"><a href="#t18">18</a></span><span class="t">        <span class="key">if</span> <span class="nam">model</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">app_label</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">route_app_labels</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t19" class="run"><span class="n"><a href="#t19">19</a></span><span class="t">            <span class="key">return</span> <span class="str">'vendor_os_db'</span>&nbsp;</span><span class="r"></span></p>
+<<<<<<< HEAD
+    <p id="t20" class="run"><span class="n"><a href="#t20">20</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
+=======
     <p id="t20" class="mis show_mis"><span class="n"><a href="#t20">20</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
+>>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
     <p id="t21" class="pln"><span class="n"><a href="#t21">21</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t22" class="run"><span class="n"><a href="#t22">22</a></span><span class="t">    <span class="key">def</span> <span class="nam">allow_relation</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">obj1</span><span class="op">,</span> <span class="nam">obj2</span><span class="op">,</span> <span class="op">**</span><span class="nam">hints</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t23" class="mis show_mis"><span class="n"><a href="#t23">23</a></span><span class="t">        <span class="key">if</span> <span class="op">(</span>&nbsp;</span><span class="r"></span></p>
@@ -138,8 +156,13 @@
     <p id="t84" class="mis show_mis"><span class="n"><a href="#t84">84</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
     <p id="t85" class="pln"><span class="n"><a href="#t85">85</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t86" class="run"><span class="n"><a href="#t86">86</a></span><span class="t">    <span class="key">def</span> <span class="nam">db_for_write</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">model</span><span class="op">,</span> <span class="op">**</span><span class="nam">hints</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+<<<<<<< HEAD
+    <p id="t87" class="run"><span class="n"><a href="#t87">87</a></span><span class="t">        <span class="key">if</span> <span class="nam">model</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">app_label</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">route_app_labels</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t88" class="run"><span class="n"><a href="#t88">88</a></span><span class="t">            <span class="key">return</span> <span class="str">'accounts_db'</span>&nbsp;</span><span class="r"></span></p>
+=======
     <p id="t87" class="mis show_mis"><span class="n"><a href="#t87">87</a></span><span class="t">        <span class="key">if</span> <span class="nam">model</span><span class="op">.</span><span class="nam">_meta</span><span class="op">.</span><span class="nam">app_label</span> <span class="key">in</span> <span class="nam">self</span><span class="op">.</span><span class="nam">route_app_labels</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t88" class="mis show_mis"><span class="n"><a href="#t88">88</a></span><span class="t">            <span class="key">return</span> <span class="str">'accounts_db'</span>&nbsp;</span><span class="r"></span></p>
+>>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
     <p id="t89" class="mis show_mis"><span class="n"><a href="#t89">89</a></span><span class="t">        <span class="key">return</span> <span class="key">None</span>&nbsp;</span><span class="r"></span></p>
     <p id="t90" class="pln"><span class="n"><a href="#t90">90</a></span><span class="t">&nbsp;</span><span class="r"></span></p>
     <p id="t91" class="run"><span class="n"><a href="#t91">91</a></span><span class="t">    <span class="key">def</span> <span class="nam">allow_relation</span><span class="op">(</span><span class="nam">self</span><span class="op">,</span> <span class="nam">obj1</span><span class="op">,</span> <span class="nam">obj2</span><span class="op">,</span> <span class="op">**</span><span class="nam">hints</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
@@ -159,7 +182,11 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
+<<<<<<< HEAD
+            created at 2021-07-28 10:34 +0300
+=======
             created at 2021-07-27 18:36 +0530
+>>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
         </p>
     </div>
 </div>
