@@ -35,15 +35,12 @@
 /users/tests/__pycache__/
 /media/
 /super_admin/tests/__pycache__/
-<<<<<<< HEAD
 #ignoring htmlcov
 /htmlcov/
 /.coverage/
 
-=======
 # ignoring coverage results
 /htmlcov/
->>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
 
 
 

@@ -5,6 +5,8 @@ from django.conf.global_settings import *
 from django.utils import timezone
 from jobs.models import MTOAdminUser,AdminRoles
 
+
+
 class JobsTestDbMixin:
     settings.UNDER_TESTING = True
     databases = {"varal_job_posting_db", "vendor_os_db"}
