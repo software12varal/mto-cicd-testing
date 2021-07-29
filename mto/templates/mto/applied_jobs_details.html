@@ -36,6 +36,16 @@
             <div class="col-sm-9 text-secondary">{{ details.job_id.target_date }}</div>
         </div>
         <hr>
+        <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Job Sample</h6></div>
+            <div class="col-sm-9 text-secondary"><a href="{{details.job_id.job.sample.url}}">{{details.job_id.sample_filename}}</a></div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-3"><h6 class="mb-0">Job Instructions</h6></div>
+            <div class="col-sm-9 text-secondary"><a href="{{details.job_id.job.instructions.url}}">{{details.job_id.instructions_filename}}</a></div>
+        </div>
+        <hr>
          <div class="row">
             <div class="col-sm-3"><h6 class="mb-0">Due date</h6></div>
             <div class="col-sm-9 text-secondary">{{ details.due_date }}</div>
@@ -55,6 +65,15 @@
             <div class="col-sm-9 text-secondary"><input type="file" name="file1" id="file"></div>
             </div>
             <hr>
+            {% if details.job_status == 'sub' or details.job_status == 'co' %}
+            <div class="row">
+                <div class="col-sm-3"><h6 class="mb-0">Your Submitted job</h6></div>
+                <div class="col-sm-9 text-secondary">
+                <a href="{{ details.output_path.url }}" target="_blank">{{ details.submitted_file_name }}
+            </a></div>
+            </div>
+        <hr>
+{% endif %}
             {% if details.job_status == 'in' %}
             <div class="row">
             <div class="col-sm-3"><h6 class="mb-0"><input type="submit" class="btn btn-primary"></h6></div>

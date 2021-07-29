@@ -36,7 +36,7 @@
             <div class="col-sm-3">
                 <h6 class="mb-0">Assembly Line Number </h6>
             </div>
-            <div class="col-sm-9 text-secondary"></div>
+            <div class="col-sm-9 text-secondary">{{ job.assembly_line_id }}</div>
         </div>
         <hr>
         <div class="row">
@@ -50,15 +50,15 @@
             <div class="col-sm-3">
                 <h6 class="mb-0"> MTO Job Intiation Number</h6>
             </div>
-            <div class="col-sm-9 text-secondary"></div>
+            <div class="col-sm-9 text-secondary">{{ job.identification_number }}</div>
         </div>
         <hr>
-        <div class="row">
-            <div class="col-sm-3">
-                <h6 class="mb-0"> Micro Task Number</h6>
-            </div>
-            <div class="col-sm-9 text-secondary"></div>
-        </div>
+<!--        <div class="row">-->
+<!--            <div class="col-sm-3">-->
+<!--                <h6 class="mb-0"> Micro Task Number</h6>-->
+<!--            </div>-->
+<!--            <div class="col-sm-9 text-secondary"></div>-->
+<!--        </div>-->
         <hr>
         <div class="row">
             <div class="col-sm-3">
@@ -69,7 +69,7 @@
         <hr>
         <div class="row">
             <div class="col-sm-3">
-                <h6 class="mb-0">Total cost of the MTO job</h6>
+                <h6 class="mb-0">Total Budget of the MTO job</h6>
             </div>
             <div class="col-sm-9 text-secondary">{{ job.total_budget }}</div>
         </div>
@@ -84,7 +84,7 @@
             <div class="col-sm-3">
                 <h6 class="mb-0">Type of TC to be done </h6>
             </div>
-            <div class="col-sm-9 text-secondary">{{ job.cat_id.get_tc_type_display }}</div>
+            <div class="col-sm-9 text-secondary">{{ job.job.get_tc_type_display }}</div>
         </div>
         <hr>
         <div class="row">
@@ -98,21 +98,21 @@
             <div class="col-sm-3">
                 <h6 class="mb-0">Name of the folder to which the Output is moved</h6>
             </div>
-            <div class="col-sm-9 text-secondary"></div>
+            <div class="col-sm-9 text-secondary">{{ job.input_folder }}</div>
         </div>
         <hr>
         <div class="row">
             <div class="col-sm-3">
                 <h6 class="mb-0">Job instruction </h6>
             </div>
-            <div class="col-sm-9 text-secondary"><a href="{{ job.cat_id.instructions.url }}">{{job.cat_id.instructions}}</a></div>
+            <div class="col-sm-9 text-secondary"><a href="{{ job.job.instructions.url }}">{{job.instructions_filename}}</a></div>
         </div>
         <hr>
         <div class="row">
             <div class="col-sm-3">
                 <h6 class="mb-0">Job sample</h6>
             </div>
-            <div class="col-sm-9 text-secondary"><a href="{{ job.cat_id.sample.url }}">{{job.cat_id.sample}}</a></div>
+            <div class="col-sm-9 text-secondary"><a href="{{ job.job.sample.url }}" >{{job.sample_filename}}</a></div>
         </div>
         <hr>
         <div class="row">

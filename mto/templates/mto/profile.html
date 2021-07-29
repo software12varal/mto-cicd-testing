@@ -37,8 +37,10 @@
 					<hr class="my-0" />
 					<div class="card-body">
 						<h5 class="h6 card-title">Interests</h5>
-						{% for category in job_categories %}
-						<a href="#" class="badge badge-primary mr-1 my-1">{{ category }}</a>
+						{% for i in job_categories %}
+						<a href="#" class="badge badge-primary mr-1 my-1">
+							<span>{{i.1}} , &nbsp;</span>
+							</a>
 						{% endfor %}
 					</div>
 					<hr class="my-0" />
@@ -49,7 +51,10 @@
 							<li class="mb-1"><span data-feather="briefcase" class="feather-sm mr-1"></span> PayPal ID <a href="#">{{ mto.paypal_id }}</a></li>
 							<li class="mb-1"><span data-feather="home" class="feather-sm mr-1"></span> Location <a href="#">{{ mto.location.name }}</a></li>
 							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Date Joined <a href="#">{{ mto.timestamp }}</a></li>
-							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Job categories <a href="#">{% for i in job_categories %}{{i}},{% endfor %}</a></li>
+							<li class="mb-1"><span data-feather="map-pin" class="feather-sm mr-1"></span> Job categories {% for i in job_categories %}<a href="#">
+								<span>{{i.1}} , &nbsp;</span>
+								
+					</a>{% endfor %}</li>
 						</ul>
 					</div>
 					<hr class="my-0" />
@@ -66,7 +71,14 @@
 						<form method="post">
 							{% csrf_token %}
 							{{ form }}
-
+							<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+							<script>
+							$("#id_job_category").ready(function () {
+								{% for i in job_categories %}
+									$('#id_job_category option[value="{{i.0}}"]').attr("selected", "selected");
+								{% endfor %}	
+							});
+							</script>
 							<button type="submit" class="btn btn-primary mt-3">Submit</button>
 						</form>
 					</div>

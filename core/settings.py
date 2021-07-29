@@ -101,9 +101,10 @@ DATABASES = {
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
+DATABASE_ROUTERS = ['routers.db_routers.VaralJobPostingDBRouter', 'routers.db_routers.VendorOSRouter',
                     'routers.db_routers.AccountsDBRouter']
 UNDER_TESTING = False
+
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -122,14 +123,15 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = ['users.backends.VaralOSDBAuthBackend', 'django.contrib.auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend', 'users.backends.VaralOSDBAuthBackend']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dubai'
 
 USE_I18N = True
 
@@ -157,8 +159,7 @@ LOGIN_URL = reverse_lazy("mto:login")
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "mto:dashboard"
 
-# smpt config
-
+# smut config
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

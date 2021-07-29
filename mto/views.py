@@ -126,7 +126,6 @@ def dashboard(request):
                   ('co', 'Completed'),
 
                   ]
-
     jobs = MTOJob.objects.filter(assigned_to=request.user.mto.id)
     job_progress = MTOJob.objects.filter(
         assigned_to=request.user.mto.id, job_status='in').count()
@@ -134,9 +133,11 @@ def dashboard(request):
         assigned_to=request.user.mto.id, job_status='sub').count()
     jobs_completed = MTOJob.objects.filter(
         assigned_to=request.user.mto.id, job_status='co').count()
-
-    totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
-    total = '{:0.2f}'.format(totals)
+    if MTOJob.objects.filter(job_status='co'):
+        totals = jobs.aggregate(Sum('fees'))['fees__sum'] or 0
+        total = '{:0.2f}'.format(totals)
+    else:
+        total = 0
     context = {'jobs': jobs, 'jobs_submitted': jobs_submitted,
                'jobs_completed': jobs_completed, 'total': total}
 
@@ -153,14 +154,16 @@ class MTOProfileView(View):
     def get(self, *args, **kwargs):
         mto = MTO.objects.get(id=self.request.user.id)
         self.form = MTOUpdateProfileForm(instance=mto)
-
+        job_categories = []
         # we get the items from string type to list type and get the users job categories
         jsonDec = json.decoder.JSONDecoder()
         mto_preferred_categories = jsonDec.decode(mto.job_category)
-        print(mto_preferred_categories)
-        job_categories = [job_id
-                          for job_id in mto_preferred_categories]
+        for i in MicroTask.job_category:
+            for j in mto_preferred_categories:
+                if j in i:
+                    job_categories.append(i)
 
+        print(job_categories)
         context = {self.context_object_name: mto,
                    'form': self.form, 'job_categories': job_categories}
         return render(self.request, self.template_name, context)
@@ -183,85 +186,6 @@ class MTOProfileView(View):
         return redirect(reverse('mto:profile'))
 
 
-# def microtask(request):
-#     if request.method == 'POST':
-#         form = MicroTaskForm(request.POST, request.FILES)
-#         if form.is_valid():
-#
-#             job_name = form.cleaned_data['job_name']
-#
-#             form.save()
-#             messages.success(request, f'Account created for {job_name}! You have to login')
-#             return redirect('/')
-#     else:
-#         form = MicroTaskForm()
-#
-#     return render(request, 'microtask.html', {'form': form})
-#
-#
-# def index(request):
-#     microtask = MicroTask.objects.all()
-#     # category = MAL_Requirements.objects.get(microtask.Category_of_the_microtask)
-#
-#     context = {'microtask':microtask,
-#
-#                 }
-#     return render(request, 'MalForm.html', context)
-#
-# def handleSubmit(request):
-#     if request.method == 'POST':
-#         MAL_Job_Identification_Number = request.POST['malno']
-#         Assembly_line_ID = request.POST['asi']
-#         Name_of_the_Assembly_line = request.POST['nameassembly']
-#         Name_of_the_person_incharge_of_the_MAL = request.POST['personname']
-#         Link_of_the_output_folder = request.POST['link1']
-#         Name_of_the_micro_task = request.POST['microtask']
-#         Category_of_the_Microtask = request.POST['category']
-#         Target_date = request.POST['td']
-#         Total_budget_allocated_for_the_job = request.POST['budget']
-#         Job_description = request.POST['jd']
-#         Upload_job_sample = request.POST['jobsample']
-#         Upload_Job_instructions = request.POST['instruction']
-#         Quantity_of_the_Job = request.POST['quantity']
-#         Link_of_the_Input_folder = request.POST['link2']
-#
-#         job = MicroTask.objects.get(id=Name_of_the_micro_task)
-#         cat = MTOJobCategory.objects.get(id=Category_of_the_Microtask)
-#
-#         data = MALRequirement(MAL_Job_Identification_Number=MAL_Job_Identification_Number, Assembly_line_ID=Assembly_line_ID,
-#                                 Name_of_the_Assembly_line=Name_of_the_Assembly_line, Name_of_the_person_incharge_of_the_MAL=Name_of_the_person_incharge_of_the_MAL, Link_of_the_output_folder=Link_of_the_output_folder,
-#                                 microtask=job, microtask_category=cat, Target_date=Target_date, Total_budget_allocated_for_the_job=Total_budget_allocated_for_the_job,Job_description=Job_description,
-#                                 Uploadjob_sample=Upload_job_sample, UploadJob_instructions=Upload_Job_instructions, Quantity_of_the_Job=Quantity_of_the_Job, Link_of_the_Input_folder=Link_of_the_Input_folder)
-#         data.save()
-#     return redirect('index')
-#
-# def posting_page(request,pk=None):
-#     #if request.user.is_active:
-#     if pk is not None:
-#         try:
-#             data = MicroTask.objects.get(id=pk)
-#         except:
-#             data = "NA"
-#         return render(request,'JobPosting_Page.html', {'datas': data})
-#     return render(request,'JobPosting_Page.html')
-# def jobsmto(request):
-#     if request.user.is_authenticated and request.user.is_mto:# and not request.user.is_admin :
-#         job = Jobs.objects.filter(target_date__gte=datetime.now()).all()
-#         # job = Jobs.objects.filter(target_date__gte=datetime.now() and people_required__lt=MTOJob.objects.filter(job_id=id).Count()).all()
-#         mto = MTOJob.objects.values('job_id').order_by('job_id').annotate(count=Count('job_id'))
-#         ls = []
-#         # print(ls)
-#         for i in job:
-#             for j in range(len(mto)):
-#                 if i.id == mto[j]['job_id']:
-#                     if i.people_required <= mto[j]['count']:
-#                         ls.append(i.id)
-#         job = Jobs.objects.filter(target_date__gte=datetime.now()).exclude(id__in=set(ls)).all()
-#         return render(request,'mto/mtojobs.html',{'data':job})
-#     else:
-#         return redirect('mto:login')
-
-
 def view_jobs(request):  # MTO view all
     # and not request.user.is_admin :
     if request.user.is_authenticated and request.user.is_mto:
@@ -275,7 +199,7 @@ def view_jobs(request):  # MTO view all
 
         ls = list(map(lambda x, y: x if (Jobs.objects.get(id=x).job_quantity * MicroTask.objects.get(
             microtask_name=Jobs.objects.get(id=x).job_name).people_required_for_valid_tc) <= y else 0,
-                      list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+            list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x) <= y else 0,
         #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
@@ -335,11 +259,13 @@ def apply_job(request, id):
         return redirect('mto:view')
     else:
         job_details = Jobs.objects.get(id=id)
+        microtask = MicroTask.objects.get(microtask_name=job_details.job_name)
+        print(microtask)
         assigned_to = request.user.mto.id
         due_date = job_details.target_date
         assigned_date = datetime.now()
-        fees = job_details.total_budget
-        apply = MTOJob(job_id=job_details, assigned_to=assigned_to, evaluation_status_id=2, due_date=due_date,
+        fees = microtask.job_cost
+        apply = MTOJob(job_id=job_details, assigned_to=assigned_to, due_date=due_date,
                        assigned_date=assigned_date,
                        fees=fees)
         apply.save()
@@ -375,7 +301,7 @@ def submit_job(request):
     # jobs = MTOJob.objects.get(assigned_to=request.user.mto.id)
     if request.method == 'POST':
         job_id = request.POST.get("job_id")
-        output_path = request.FILES['file1']
+        output_path = request.FILES.get('file1','NA') #['file1']
         Jobs.objects.filter(id=job_id).first()
         if MTOJob.objects.filter(job_id_id=job_id, job_status='sub', assigned_to=mto.id).exists():
             messages.info(request, f'You already submitted')
@@ -386,7 +312,7 @@ def submit_job(request):
                 job_id_id=job_id, assigned_to=mto.id).first()
             instance.output_path = output_path
             instance.job_status = 'sub'
-            instance.submitted_date = datetime.now()
+            instance.submitted_date = timezone.now()
             instance.save()
             messages.success(request, f'Job successfully submitted')
             email_notification_job_submit(request)

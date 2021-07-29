@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from django.core.validators import RegexValidator
 from .models import MTOAdminUser, Jobs, MicroTask
 from django import forms
+
 job_categories = MicroTask.objects.all()
 
 
@@ -37,10 +38,11 @@ class MTOAdminSignUpForm(UserCreationForm):
         self.fields['password2'].widget.attrs['placeholder'] = 'Confirm password'
 
 
+# updated
 class AdminUpdateProfileForm(forms.ModelForm):
     class Meta:
         model = MTOAdminUser
-        fields = ['full_name', 'varal_role_id']
+        fields = ['full_name', 'varal_role_id', 'contact_number', 'email', 'designation', 'department']
 
 
 class JobsForm(forms.ModelForm):
@@ -63,9 +65,9 @@ class JobsForm(forms.ModelForm):
         # self.fields['tc_type'].widget.attrs['type'] = 'select'
 
 
-class JobForm(ModelForm): 
+class JobForm(ModelForm):
     class Meta:
         model = Jobs
-        fields = ['identification_number','assembly_line_id','assembly_line_name',
-                'person_name','output','job_name','cat_id','target_date','total_budget',
-                'job_description','job_quantity','input_folder','sample','instructions']
+        fields = ['identification_number', 'assembly_line_id', 'assembly_line_name',
+                  'person_name', 'output', 'job_name', 'cat_id', 'target_date', 'total_budget',
+                  'job_description', 'job_quantity', 'input_folder', 'sample', 'instructions']

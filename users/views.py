@@ -7,6 +7,7 @@ from users.forms import MTOAdminAuthenticationForm
 from django.urls import reverse
 from django.shortcuts import render, redirect
 
+
 class MTOAdminLoginView(LoginView):
     template_name = 'admin_login.html'
     authentication_form = MTOAdminAuthenticationForm

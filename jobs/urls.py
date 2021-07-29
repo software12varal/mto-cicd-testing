@@ -1,11 +1,12 @@
 from django.urls import path
 from users.decorators import varal_admin_required
-from .views import create_jobs, home, displaying_categories, mto_admin_signup, admin_dashboard, add_paymentstatus, add_jobstatus, admin_profile, mto_bank, microtask_page, mal_requirement, \
+from .views import create_jobs, home, displaying_categories, mto_admin_login, admin_dashboard, add_paymentstatus, add_jobstatus, admin_profile, mto_bank, microtask_page, mal_requirement, \
     add_job, alljobs, view_mto, deleteMto, appliedjobs,admin_monitoring,view_admin,microtask_job_details,displaying_microtask,displaying_files
 
 urlpatterns = [
 
-    path('admin-registration/', mto_admin_signup, name='admin_register'),
+    # updated
+    path('admin-login/', mto_admin_login, name='admin_register'),
     path('admin_dashboard', varal_admin_required(
         admin_dashboard), name='adminDashboard'),
     path('mto_bank', varal_admin_required(mto_bank), name='mto_bank'),
