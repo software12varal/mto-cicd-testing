@@ -3,6 +3,7 @@
 {% block content %}
 <div class="mt-5">
 			<div class="card-body">
+        <!-- To add welcome for superAdmin -->
 				<h4 class="mt-5">Admin Profile <br>
     Welcome, {{request.user.mtoadminuser.full_name}}<br></h4>
 			</div>
@@ -57,10 +58,10 @@
               <div class="text-danger">
                 {{form.errors.varal_role_id}}
              </div>
-            <label>Department</label> {{form.department|add_class:"form-control"}}
+            <!-- <label>Department</label> {{form.department|add_class:"form-control"}}
               <div class="text-danger">
                 {{form.errors.department}}
-             </div>
+             </div> -->
         </div>
         {% endif %}
         <button type="submit" class="btn btn-primary">submit</button>
