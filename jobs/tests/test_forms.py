@@ -1,9 +1,14 @@
 from django.test import TestCase
-from jobs.forms import JobForm,JobsForm
+from jobs.forms import JobForm,JobsForm,MTOAdminSignUpForm
 from django.conf import settings
 from django.conf.global_settings import *
 from django.utils import timezone
 from jobs.models import MTOAdminUser,AdminRoles
+
+from django.urls import reverse
+from django.test.client import Client
+from django.utils.encoding import force_text
+
 
 
 
@@ -16,10 +21,12 @@ class JobsTestDbMixin:
 class AddJobsTest(JobsTestDbMixin, TestCase):
     @classmethod
     def setUp(cls):
+
         role = AdminRoles.objects.create(description="tester")
         instance = MTOAdminUser.objects.create(email='admin2@gmail.com', is_admin=True, is_active=True,varal_role_id=role,
         full_name='varalsAdmin', username='stl')
-        instance.set_password('1234')
+        instance.set_password('user1234')
+      
         instance.save()
     
     def test_job_form(self):
@@ -42,4 +49,34 @@ class AddJobsTest(JobsTestDbMixin, TestCase):
         print(f"This is executing {form.errors}")
         self.assertTrue(form.is_valid())
 
+# class SignUpPageTests(JobsTestDbMixin, TestCase):
+#     def setUp(self) -> None:
+#         self.full_name = 'StlW'
+#         self.username = 'testuser'
+#         self.email = 'testuser@email.com'
+#         self.varal_role_id = AdminRoles.objects.create(description="tester")
+#         self.password = 'tester123'
+#         self.client = Client()
+       
+
+
+    def test_signup_form_to_instance_user_on_save(self):
+        
+   
+    #     self.assertEqual(response.status_code, 200) 
+        role = AdminRoles.objects.create(description="tester")
+        data = {
+            'full_name':'VaralMtoAdmin4567',
+            'username':'MtoAdmin456',
+            'email':'testing456@gmail.com',
+            'varal_role_id':role,
+            'password1':'testing1293',
+            'password2':'testing1293',
+        }
+        form = MTOAdminSignUpForm(data)
+        self.assertTrue(form.is_valid())
+        form.save()  
+        response = self.client.post('/mto/register/')
+        
+        print(response.status_code)
 
