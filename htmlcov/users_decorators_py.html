@@ -3,11 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7" />
-<<<<<<< HEAD
-    <title>Coverage for users/decorators.py: 53%</title>
-=======
-    <title>Coverage for users\decorators.py: 53%</title>
->>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
+    <title>Coverage for users/decorators.py: 49%</title>
     <link rel="icon" sizes="32x32" href="favicon_32.png">
     <link rel="stylesheet" href="style.css" type="text/css">
     <script type="text/javascript" src="jquery.min.js"></script>
@@ -21,18 +17,14 @@
 <body class="pyfile">
 <div id="header">
     <div class="content">
-<<<<<<< HEAD
         <h1>Coverage for <b>users/decorators.py</b> :
-=======
-        <h1>Coverage for <b>users\decorators.py</b> :
->>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
-            <span class="pc_cov">53%</span>
+            <span class="pc_cov">49%</span>
         </h1>
         <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
         <h2 class="stats">
             53 statements &nbsp;
-            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">28 run</button>
-            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">25 missing</button>
+            <button type="button" class="run shortkey_r button_toggle_run" title="Toggle lines run">26 run</button>
+            <button type="button" class="mis show_mis shortkey_m button_toggle_mis" title="Toggle lines missing">27 missing</button>
             <button type="button" class="exc show_exc shortkey_x button_toggle_exc" title="Toggle lines excluded">0 excluded</button>
         </h2>
     </div>
@@ -79,8 +71,8 @@
     <p id="t17" class="run"><span class="n"><a href="#t17">17</a></span><span class="t">    <span class="key">def</span> <span class="nam">decorator</span><span class="op">(</span><span class="nam">view_func</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
     <p id="t18" class="run"><span class="n"><a href="#t18">18</a></span><span class="t">        <span class="op">@</span><span class="nam">wraps</span><span class="op">(</span><span class="nam">view_func</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t19" class="run"><span class="n"><a href="#t19">19</a></span><span class="t">        <span class="key">def</span> <span class="nam">_wrapped_view</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t20" class="run"><span class="n"><a href="#t20">20</a></span><span class="t">            <span class="key">if</span> <span class="nam">test_func</span><span class="op">(</span><span class="nam">request</span><span class="op">.</span><span class="nam">user</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
-    <p id="t21" class="run"><span class="n"><a href="#t21">21</a></span><span class="t">                <span class="key">return</span> <span class="nam">view_func</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t20" class="mis show_mis"><span class="n"><a href="#t20">20</a></span><span class="t">            <span class="key">if</span> <span class="nam">test_func</span><span class="op">(</span><span class="nam">request</span><span class="op">.</span><span class="nam">user</span><span class="op">)</span><span class="op">:</span>&nbsp;</span><span class="r"></span></p>
+    <p id="t21" class="mis show_mis"><span class="n"><a href="#t21">21</a></span><span class="t">                <span class="key">return</span> <span class="nam">view_func</span><span class="op">(</span><span class="nam">request</span><span class="op">,</span> <span class="op">*</span><span class="nam">args</span><span class="op">,</span> <span class="op">**</span><span class="nam">kwargs</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t22" class="mis show_mis"><span class="n"><a href="#t22">22</a></span><span class="t">            <span class="nam">path</span> <span class="op">=</span> <span class="nam">request</span><span class="op">.</span><span class="nam">build_absolute_uri</span><span class="op">(</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t23" class="mis show_mis"><span class="n"><a href="#t23">23</a></span><span class="t">            <span class="nam">resolved_login_url</span> <span class="op">=</span> <span class="nam">resolve_url</span><span class="op">(</span><span class="nam">login_url</span> <span class="key">or</span> <span class="nam">settings</span><span class="op">.</span><span class="nam">LOGIN_URL</span><span class="op">)</span>&nbsp;</span><span class="r"></span></p>
     <p id="t24" class="pln"><span class="n"><a href="#t24">24</a></span><span class="t">            <span class="com"># If the login url is the same scheme and net location then just</span>&nbsp;</span><span class="r"></span></p>
@@ -187,11 +179,7 @@
     <div class="content">
         <p>
             <a class="nav" href="index.html">&#xab; index</a> &nbsp; &nbsp; <a class="nav" href="https://coverage.readthedocs.io">coverage.py v5.5</a>,
-<<<<<<< HEAD
-            created at 2021-07-18 10:03 +0300
-=======
-            created at 2021-07-27 18:36 +0530
->>>>>>> afb7bc87f574c703b15f0efedc905c2b0a91db53
+            created at 2021-07-29 10:29 +0300
         </p>
     </div>
 </div>
