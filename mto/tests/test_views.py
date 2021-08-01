@@ -17,7 +17,7 @@ class TestNew(MtoTestDbMixin, TestCase):
     def setUp(self):
 
         MicroTask.objects.create(microtask_name="NewJob",microtask_category='["cw","de"]',skills="GK",people_required_for_valid_tc=1,tc_type='["M"]')
-        
+
         MTO.objects.create(username='admin',email='admin@mail.com',full_name='Shakeel',contact_number='+918989208001',
             location="Bangalore",paypal_id='Abc123',password='Varal2021',is_mto=True,job_category = '["cw","de"]',token='p0o9i8u7y6')
         data = MTO.objects.get(username='admin')
@@ -25,14 +25,14 @@ class TestNew(MtoTestDbMixin, TestCase):
         data.save()
 
         AdminRoles.objects.create(description='Developer')
-        
+
         MTOAdminUser.objects.create(username='varalAdmin',email='varal@mail.com',full_name='varalAdmin',is_admin = True,is_active = True,varal_role_id=AdminRoles.objects.get(id=1))
         mtoadmin = MTOAdminUser.objects.get(full_name='varalAdmin')
         mtoadmin.set_password('Varal2021')
         mtoadmin.save()
-        
+
         Jobs.objects.create(person_name=MTOAdminUser.objects.get(username='varalAdmin'),output='shak.txt',job_name='NewJob',cat_id='["cw"]',total_budget=5,job_description="na",job_quantity=1,input_folder = 'Shakeel/nawaz/')
-        
+
         MTOJob.objects.create(job_id=Jobs.objects.get(id=1),assigned_to=1,due_date='2021-10-25 14:30:59',fees=500,output_path='Nawaz.txt')
 
         return self.client.login(username='admin',password='Varal456')
@@ -58,13 +58,13 @@ class TestNew(MtoTestDbMixin, TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response,"mto/mto_viewjob.html")
-  
+
     def test_view_applied_jobs(self):
         url = reverse('mto:applied')
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response,"mto/appliedjobs.html")
-    
+
     def test_notification(self):
         url = reverse('mto:notification')
         response = self.client.get(url)
@@ -82,13 +82,13 @@ class TestNew(MtoTestDbMixin, TestCase):
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response,"mto/job_deadline.html")
-        
+
     def test_MTOProfileView(self):
         url = reverse('mto:profile')
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response,"mto/profile.html")
-    
+
     def test_view_applied_details(self):
         mto = MTO.objects.get(id=1)
         job = MTO.objects.get(id=1)
@@ -99,7 +99,7 @@ class TestNew(MtoTestDbMixin, TestCase):
 
     def test_job_detail(self):
         jobsdata = Jobs.objects.get(id=1)
-        url = reverse('mto:job_detail', kwargs={'slug':jobsdata.id})         
+        url = reverse('mto:job_detail', kwargs={'slug':jobsdata.id})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response,"mto/apply_job.html")
@@ -114,12 +114,12 @@ class TestNew(MtoTestDbMixin, TestCase):
         url = reverse('verify',kwargs={'token':'p0o9i8u7y6'})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 302)
-   
+
     def test_verify_invalid_token(self):
         url = reverse('verify',kwargs={'token':'p0o9i8u'})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 302)
-   
+
     def test_submit_job(self):
         url = reverse('mto:submit_job')
         response = self.client.post(url,data={'job_id':1,'output_path':'Na'})
@@ -133,7 +133,7 @@ class TestNew(MtoTestDbMixin, TestCase):
         response = self.client.post(url,data={'job_id':2,'output_path':'Na'})
         print(response)
         self.assertEquals(response.status_code,302)
-    
+
     def test_submit_job_3(self):
         Jobs.objects.create(person_name=MTOAdminUser.objects.get(username='varalAdmin'),output='shak3.txt',job_name='NewJob2',cat_id='["cw"]',total_budget=5,job_description="na",job_quantity=1,input_folder = 'Shakeel2/nawaz2/team/')
         MTOJob.objects.create(job_id=Jobs.objects.get(id=2),assigned_to=1,due_date='2021-10-25 14:30:59',fees=500,output_path='Nawaz.txt',job_status='co')
@@ -149,14 +149,14 @@ class TestNew(MtoTestDbMixin, TestCase):
 
     def test_apply_jobs_2(self):
         self.client.logout()
-        
+
         MTO.objects.create(username='admin2',email='admin2@mail.com',full_name='ShakeelNawaz',contact_number='+918989208999',
             location="Bangalore",paypal_id='Abc123',password='Varal2021',is_mto=True,job_category = '["cw","de"]')
         mtoadmin = MTO.objects.get(full_name='ShakeelNawaz')
         mtoadmin.set_password('Varal456')
         mtoadmin.save()
         self.client.login(username='admin2',password='Varal456')
-        
+
         Jobs.objects.create(person_name=MTOAdminUser.objects.get(username='varalAdmin'),output='shak3.txt',job_name='NewJob',cat_id='["cw"]',total_budget=5,job_description="na",job_quantity=1,input_folder = 'Shakeel2/nawaz2/team/',target_date='2021-10-25 14:30:59')
 
         url = reverse('mto:apply',kwargs={'id':2})
