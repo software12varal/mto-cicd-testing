@@ -6,12 +6,12 @@ from model_bakery import baker
 from pprint import pprint
 
 # for connecting to Database
-class AccountsTestDbMixin:
-    databases = {"accounts_db", }
+# class AccountsTestDbMixin:
+    #databases = {"accounts_db", }
 
 
 # Testing the models
-class TestNew(AccountsTestDbMixin, TestCase,):
+class TestNew("accounts_db", TestCase,):
 
     '''without baker'''
     def test_model_str(self):
