@@ -1,5 +1,5 @@
 from django.test import TestCase
-from jobs.forms import JobForm,JobsForm
+from jobs.forms import JobForm,JobsForm, MTOAdminSignUpForm
 from django.conf import settings
 from django.conf.global_settings import *
 from django.utils import timezone
@@ -21,14 +21,41 @@ class AddJobsTest(JobsTestDbMixin, TestCase):
         full_name='varalsAdmin', username='stl')
         instance.set_password('1234')
         instance.save()
-    
+
+    def test_admin_save(self):
+        form_data = {'full_name':"D_M_K",
+                     'username':'dmk',
+                     'email':"dmk@varal.com",
+                     'varal_role_id': AdminRoles.objects.get(id=1),
+                     'password1':'testing1234',
+                     'password2': 'testing1234',
+                     }
+        form = MTOAdminSignUpForm(data=form_data)
+        print(form.errors)
+
+        self.assertTrue(form.save(self))
+
+
     def test_job_form(self):
         upload_file = open(str(settings.MEDIA_ROOT) + '/' + 'test_py.txt', 'rb')
-        form_data = {'identification_number':'webdev','assembly_line_id':'webdev','assembly_line_name':'webdev','person_name':1,'output':'media/documents/job_documents/output/requirements.txt','job_name':'website','cat_id':'websites','target_date': timezone.now(),'total_budget':22,'job_description':'develop website','job_quantity':3,'input_folder':'documents','sample':upload_file.read(),'instructions':upload_file.read()
+        form_data = {'identification_number':'webdev',
+                     'assembly_line_id':'webdev',
+                     'assembly_line_name':'webdev',
+                     'person_name':1,
+                     'output':'media/documents/job_documents/output\\requirements.txt',
+                     'job_name':'website',
+                     'cat_id':'websites',
+                     'target_date': timezone.now(),
+                     'total_budget':22,
+                     'job_description':'develop website',
+                     'job_quantity':3,
+                     'input_folder':'documents',
+                     'sample':upload_file.read(),
+                     'instructions':upload_file.read()
         }
         
         form = JobForm(data=form_data)
-        
+        print(f"This is executing {form.errors}")
         self.assertTrue(form.is_valid())
 
 
@@ -39,7 +66,7 @@ class AddJobsTest(JobsTestDbMixin, TestCase):
         form_data = {'microtask_name':'develop website','microtask_category': 'cw','job_cost':22,'time_required':23,'skills':'coding','people_required_for_valid_tc':2,'sample':upload_file.read(),'instructions':upload_file.read(),'tc_type': 'M','updated_date':timezone.now()}
 
         form = JobsForm(data=form_data)
-        print(f"This is executing {form.errors}")
+
         self.assertTrue(form.is_valid())
 
 
