@@ -1,0 +1,9 @@
+{% autoescape off %}
+Hi {{ user.username }},
+We have detected suspicious activity on your account. Maximum login attempts
+have been exceeded, as a result your account has been suspended.
+
+Click the link below to reactivate your account.
+http://{{ domain }}{% url 'activate_account' uidb64=uid token=token %}
+
+{% endautoescape %}

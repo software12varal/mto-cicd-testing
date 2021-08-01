@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -78,6 +79,22 @@ class SignUpView(CreateView):
                 self.request, f"Hi {user.full_name}, your account was created successfully.")
             context['redirect'] = '/mto/login'
         return JsonResponse(context, status=200)
+
+
+class MTOLoginView(View):
+    template_name = 'mto/login.html'
+    form = AuthenticationForm
+
+    def get(self, *args, **kwargs):
+        context = {'form': self.form}
+        return render(self.request, self.template_name, context)
+
+    def post(self, *args, **kwargs):
+        form = self.form
+        request = self.request
+
+
+        return
 
 
 def verify(request, token):

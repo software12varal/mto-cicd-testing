@@ -20,61 +20,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3bb45249-e7c6-4156-91bb-341174417882" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.coverage" beforeDir="false" afterPath="$PROJECT_DIR$/.coverage" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/MTO.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MTO.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/email_account_suspended.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts.db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/migrations/0001_initial.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/core/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0002_auto_20210701_0931.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0003_alter_mtojob_assigned_date.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0004_alter_mtojob_assigned_date.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0005_auto_20210704_1438.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0006_auto_20210704_1511.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0007_jobs_job_status.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0008_alter_jobs_job_status.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0009_auto_20210705_2059.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0009_auto_20210706_1325.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0010_auto_20210706_1524.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0011_auto_20210707_1731.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0012_alter_jobs_person_name.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0013_alter_jobs_person_name.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0014_auto_20210708_0716.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0015_alter_jobs_input_folder.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0016_alter_jobs_cat_id.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0017_auto_20210711_1706.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0018_auto_20210711_1727.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/migrations/0019_auto_20210711_1348.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jobs/templates/jobs/jobs.html" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/templates/jobs/jobs.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/documents/Onkar_py.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/documents/images/job_documents/job_instructions/Instructions_1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/documents/images/job_documents/job_samples/Samples_1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/migrations/0002_mto_token.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/migrations/0003_auto_20210624_1325.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/migrations/0004_auto_20210627_1550.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/migrations/0005_alter_mto_job_category.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/migrations/0006_alter_mto_contact_number.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/migrations/0007_alter_mto_contact_number.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/migrations/0008_alter_mto_location.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/tests/test_views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/tests/test_views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/db_routers.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/db_routers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/super_admin/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0002_auto_20210623_0854.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0003_alter_user_is_admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0003_auto_20210627_1550.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0004_merge_20210628_0544.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0005_alter_user_is_admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/users/migrations/0006_user_is_super_admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/varal_job_posting.db.sqlite3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vendor_os.db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -86,6 +50,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -155,10 +120,10 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="413" y="131" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1626244695312">
+    <state x="413" y="131" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1627550463639">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="413" y="131" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.768@0.0.1366.768" timestamp="1626244695312" />
+    <state x="413" y="131" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.768@0.0.1366.768" timestamp="1627550463639" />
     <state x="321" y="145" key="MultipleFileMergeDialog" timestamp="1626172106166">
       <screen x="0" y="0" width="1366" height="768" />
     </state>

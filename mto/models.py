@@ -18,3 +18,12 @@ class MTO(User):
 
     # def save(self, *args, **kwargs):
     #     super(MTO, self).save(using='vendor_os_db')
+
+
+class MTOLoginAttempt(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    login_attempts = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'user: {}, attempts: {}'.format(self.user.username, self.login_attempts)

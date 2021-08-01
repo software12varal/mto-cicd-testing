@@ -252,3 +252,12 @@ class MTOJob(models.Model):
 
     def __str__(self):
         return f"{self.job_id.job_name} :: {self.mto.full_name}"
+
+
+class AdminLoginAttempt(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    login_attempts = models.IntegerField(default=0)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'user: {}, attempts: {}'.format(self.user.username, self.login_attempts)
