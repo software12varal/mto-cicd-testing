@@ -8,6 +8,7 @@ from pprint import pprint
 # for connecting to Database
 # class AccountsTestDbMixin:
     #databases = {"accounts_db", }
+# Dbmixing is not using as we are only using accounts db now
 
 
 # Testing the models
