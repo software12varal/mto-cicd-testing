@@ -38,9 +38,7 @@
 #ignoring htmlcov
 /htmlcov/
 /.coverage/
-
-# ignoring coverage results
-/htmlcov/
+htmlcov/*
 
 
 
