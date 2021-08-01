@@ -88,7 +88,7 @@ def verify(request, token):
             user.save()
             return redirect('/mto/login')
     except:
-        print("5")
+        # print("5")
         msg = "Invalid token"
         return redirect('error.html', {'msg': msg})
 
@@ -112,8 +112,8 @@ def verify(request, token):
 def dummy_home_view(request):
     mtos = MTO.objects.all()
     jobs_applied = MTOJob.objects.all()
-    for job in jobs_applied:  # testing mto foreignkey
-        print(job.mto.full_name)
+    # for job in jobs_applied:  # testing mto foreignkey
+    #     print(job.mto.full_name)
     context = {'mtos': mtos}
     return render(request, 'mto/index.html', context)
 
@@ -163,7 +163,7 @@ class MTOProfileView(View):
                 if j in i:
                     job_categories.append(i)
 
-        print(job_categories)
+        # print(job_categories)
         context = {self.context_object_name: mto,
                    'form': self.form, 'job_categories': job_categories}
         return render(self.request, self.template_name, context)
@@ -260,7 +260,7 @@ def apply_job(request, id):
     else:
         job_details = Jobs.objects.get(id=id)
         microtask = MicroTask.objects.get(microtask_name=job_details.job_name)
-        print(microtask)
+        # print(microtask)
         assigned_to = request.user.mto.id
         due_date = job_details.target_date
         assigned_date = datetime.now()
@@ -326,16 +326,16 @@ def notification(request):
 
 def recommended_jobs(request):
     mto = MTO.objects.get(id=request.user.id)
-    print(mto.id)
+    # print(mto.id)
     jsonDec = json.decoder.JSONDecoder()
     mto_preferred_categories = jsonDec.decode(mto.job_category)
-    print(mto_preferred_categories)
-    print(type(mto_preferred_categories))
+    # print(mto_preferred_categories)
+    # print(type(mto_preferred_categories))
     # job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
     # print(job_categories)
     all_job = Jobs.objects.filter(cat_id__in=[job_id for job_id in mto_preferred_categories],
                                   target_date__gte=datetime.now())
-    print(all_job)
+    # print(all_job)
     context = {'jobs': all_job}
     return render(request, 'mto/recommended_jobs.html', context)
 

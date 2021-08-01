@@ -65,7 +65,7 @@ def add_paymentstatus(request, job_id):
     instance = MTOJob.objects.filter(id=job_id).first()
 
     if request.method == 'POST':
-        payment_id = request.POST['payment_status']
+        payment_id = request.POST.get('payment_status', 'uninitiated')
         instance.payment_status = payment_id
         instance.save()
         messages.success(request, "Payment Status updated")
@@ -76,7 +76,7 @@ def add_paymentstatus(request, job_id):
 def add_jobstatus(request, job_id):
     instance = MTOJob.objects.filter(id=job_id).first()
     if request.method == 'POST':
-        status_id = request.POST['job_status']
+        status_id = request.POST.get('job_status', 'in')
         instance.job_status = status_id
         instance.save()
         messages.success(request, "Job Status updated")
@@ -133,18 +133,18 @@ def alljobs(request):
 
 def microtask_job_details(request, id):
     job = Jobs.objects.get(id=id)
-    print(job)
+    #print(job)
     mtojob = MTOJob.objects.filter(job_id=id)
-    print(mtojob)
+    #print(mtojob)
     count_mto = MTOJob.objects.filter(job_id=id).count()
-    print(count_mto)
+    #print(count_mto)
 
     context = {'job': job, 'mtojob': mtojob, 'count_mto': count_mto}
     return render(request, 'jobs/microtask_job_details.html', context)
 
 
 def admin_dashboard(request):
-    print(request.user)
+    #print(request.user)
     return render(request, 'jobs/admin_dashboard.html')
 
 
@@ -313,13 +313,13 @@ def create_jobs(request):
     else:
         form = JobForm()
 
-    print(form['person_name'])
+    # print(form['person_name'])
 
     if request.method == 'POST':
         form = JobForm(request.POST, request.FILES)
-        print(form)
-        print(request.FILES.get('sample'))
-        print(request.FILES.get('instructions'))
+        # print(form)
+        # print(request.FILES.get('sample'))
+        # print(request.FILES.get('instructions'))
         if form.is_valid():
             # if
             if request.FILES.get('sample') is None or request.FILES.get('instructions') is None:
