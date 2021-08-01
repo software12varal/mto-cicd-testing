@@ -19,7 +19,19 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3bb45249-e7c6-4156-91bb-341174417882" name="Default Changelist" comment="" />
+    <list default="true" id="3bb45249-e7c6-4156-91bb-341174417882" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/core/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jobs/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/jobs/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/templates/mto/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/mto/templates/mto/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/email_account_suspended.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/email_account_suspended.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/auth_guard.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/auth_guard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +114,14 @@
       <option name="project" value="LOCAL" />
       <updated>1627796095023</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="prepare brute force guard">
+      <created>1627796122719</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1627796122719</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,17 +148,17 @@
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="413" y="131" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.768@0.0.1366.768" timestamp="1627550463639" />
-    <state x="321" y="145" key="MultipleFileMergeDialog" timestamp="1626172106166">
+    <state x="321" y="145" key="MultipleFileMergeDialog" timestamp="1627796202013">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="321" y="145" key="MultipleFileMergeDialog/0.0.1366.768@0.0.1366.768" timestamp="1626172106166" />
+    <state x="321" y="145" key="MultipleFileMergeDialog/0.0.1366.768@0.0.1366.768" timestamp="1627796202013" />
     <state x="275" y="117" key="Vcs.Push.Dialog.v2" timestamp="1626172347313">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
     <state x="275" y="117" key="Vcs.Push.Dialog.v2/0.0.1366.768@0.0.1366.768" timestamp="1626172347313" />
-    <state x="403" y="172" key="git4idea.merge.GitPullDialog" timestamp="1626172065461">
+    <state x="403" y="172" key="git4idea.merge.GitPullDialog" timestamp="1627796141474">
       <screen x="0" y="0" width="1366" height="768" />
     </state>
-    <state x="403" y="172" key="git4idea.merge.GitPullDialog/0.0.1366.768@0.0.1366.768" timestamp="1626172065461" />
+    <state x="403" y="172" key="git4idea.merge.GitPullDialog/0.0.1366.768@0.0.1366.768" timestamp="1627796141474" />
   </component>
 </project>

@@ -12,6 +12,8 @@ from django.core.mail import send_mail, EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+
+from users.auth_guard import handle_user_authentication
 from users.decorators import mto_required
 from django.utils import timezone
 from django.template.context import RequestContext
@@ -90,11 +92,23 @@ class MTOLoginView(View):
         return render(self.request, self.template_name, context)
 
     def post(self, *args, **kwargs):
-        form = self.form
         request = self.request
-
-
-        return
+        form = self.form(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        if username and password:
+            response = handle_user_authentication(username, password, request)
+            if response == "success":
+                return redirect(reverse('mto:dashboard'))
+            elif response == "invalid credentials":
+                messages.error(request, 'Incorrect username or password')
+            elif response == 'first trial':
+                messages.error(request, 'Login failed, please try again')
+            elif response == 'suspended':
+                messages.error(request, 'Account suspended, maximum login attempts exceeded. '
+                                        'Reactivation link has been sent to your email')
+        context = {'form': form}
+        return render(self.request, self.template_name, context)
 
 
 def verify(request, token):
