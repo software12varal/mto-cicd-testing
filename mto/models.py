@@ -16,5 +16,8 @@ class MTO(User):
     def __str__(self):
         return self.full_name
 
-    # def save(self, *args, **kwargs):
-    #     super(MTO, self).save(using='vendor_os_db')
+
+class MTOOTP(models.Model):
+    user = models.ForeignKey(MTO, on_delete=models.CASCADE)
+    otp = models.CharField(max_length=250)
+

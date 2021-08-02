@@ -93,6 +93,11 @@ def verify(request, token):
         return redirect('error.html', {'msg': msg})
 
 
+def otp_email_verification(request, otp):
+
+    return redirect('mto:login')
+
+
 # class SignUpView(View):
 #     template_name = 'mto/register.html'
 #
@@ -199,7 +204,7 @@ def view_jobs(request):  # MTO view all
 
         ls = list(map(lambda x, y: x if (Jobs.objects.get(id=x).job_quantity * MicroTask.objects.get(
             microtask_name=Jobs.objects.get(id=x).job_name).people_required_for_valid_tc) <= y else 0,
-            list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+                      list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x) <= y else 0,
         #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
@@ -353,6 +358,7 @@ def view_job_deadline(request):
     context = {'jobs': due_jobs}
     return render(request, 'mto/job_deadline.html', context)
 
+
 # coded by Gandharv(software2)
 # Forget Password views.py and its corresponding template is 'forget_password.html'
 # and sending the reset link to the user email (currently in terminal)
@@ -402,6 +408,7 @@ def forget_password(request):
         except Exception:
             messages.warning(request, "User Not Found !")
     return render(request, 'mto/forget_password.html')
+
 
 # Reset Password views.py and its corresponding template is 'reset_password.html'
 # changing password and saving to db and redirect to their respective login's
