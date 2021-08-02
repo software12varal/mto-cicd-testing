@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'phonenumber_field',
     'django_countries',
-    'django_filters'
+    'django_filters',
+    'mirage',
 ]
 
 AUTH_USER_MODEL = 'users.User'
