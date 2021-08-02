@@ -10,6 +10,8 @@ from django.dispatch import receiver
 import os
 from django.conf import settings
 from phonenumber_field.modelfields import PhoneNumberField
+from mirage import fields
+
 
 
 def sample_directory_path(instance, filename):
@@ -115,7 +117,7 @@ class AdminRoles(models.Model):
 
 class MTOAdminUser(User):
     varal_role_id = models.ForeignKey(AdminRoles, on_delete=models.PROTECT)
-    contact_number = PhoneNumberField(blank=True)
+    contact_number = fields.EncryptedCharField(blank=True)
     designation = models.CharField(max_length=500, blank=True)
     department = models.CharField(max_length=500, blank=True)
 
