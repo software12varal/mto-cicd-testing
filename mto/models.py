@@ -4,8 +4,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django_countries.fields import CountryField
 from mirage import fields
 
-
-
 User = get_user_model()
 
 
@@ -17,6 +15,7 @@ class MTO(User):
     # paypal_id = models.CharField(max_length=100)
     paypal_id = fields.EncryptedCharField(max_length=100)
     token = fields.EncryptedCharField(max_length=100, null=True)
+
     # token = models.CharField(max_length=100, null=True)
 
     def __str__(self):
@@ -26,4 +25,3 @@ class MTO(User):
 class MTOOTP(models.Model):
     user = models.ForeignKey(MTO, on_delete=models.CASCADE)
     otp = models.CharField(max_length=250)
-
