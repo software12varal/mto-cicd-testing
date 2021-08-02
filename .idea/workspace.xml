@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4a7dfd3-7c53-48f5-8b32-2504e6611aee" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/accounts/tests/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/accounts/tests/model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routers/db_routers.py" beforeDir="false" afterPath="$PROJECT_DIR$/routers/db_routers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +72,7 @@
       <workItem from="1626165406439" duration="3422000" />
       <workItem from="1626243768810" duration="7732000" />
       <workItem from="1626586128632" duration="2805000" />
-      <workItem from="1627880105922" duration="4951000" />
+      <workItem from="1627880105922" duration="5263000" />
     </task>
     <task id="LOCAL-00001" summary="AP,SN,OK-01082021 Added test cases for jobs views.py">
       <created>1627795412067</created>
