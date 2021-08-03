@@ -103,5 +103,8 @@ class AccountsDBRouter:
         if app_label in self.route_app_labels:
             return db == 'accounts_db'
         elif db == 'accounts_db':
-            return False
+            if settings.UNDER_TESTING:
+                return None
+            else:
+                return False
         return None

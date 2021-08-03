@@ -119,7 +119,7 @@ def verify(request, token):
             user.save()
             return redirect('/mto/login')
     except:
-        print("5")
+        # print("5")
         msg = "Invalid token"
         return redirect('error.html', {'msg': msg})
 
@@ -143,8 +143,8 @@ def verify(request, token):
 def dummy_home_view(request):
     mtos = MTO.objects.all()
     jobs_applied = MTOJob.objects.all()
-    for job in jobs_applied:  # testing mto foreignkey
-        print(job.mto.full_name)
+    # for job in jobs_applied:  # testing mto foreignkey
+    #     print(job.mto.full_name)
     context = {'mtos': mtos}
     return render(request, 'mto/index.html', context)
 
@@ -194,7 +194,7 @@ class MTOProfileView(View):
                 if j in i:
                     job_categories.append(i)
 
-        print(job_categories)
+        # print(job_categories)
         context = {self.context_object_name: mto,
                    'form': self.form, 'job_categories': job_categories}
         return render(self.request, self.template_name, context)
@@ -291,7 +291,7 @@ def apply_job(request, id):
     else:
         job_details = Jobs.objects.get(id=id)
         microtask = MicroTask.objects.get(microtask_name=job_details.job_name)
-        print(microtask)
+        # print(microtask)
         assigned_to = request.user.mto.id
         due_date = job_details.target_date
         assigned_date = datetime.now()
@@ -332,7 +332,7 @@ def submit_job(request):
     # jobs = MTOJob.objects.get(assigned_to=request.user.mto.id)
     if request.method == 'POST':
         job_id = request.POST.get("job_id")
-        output_path = request.FILES.get('file1','NA') #['file1']
+        output_path = request.FILES.get('file1', 'NA')  # ['file1']
         Jobs.objects.filter(id=job_id).first()
         if MTOJob.objects.filter(job_id_id=job_id, job_status='sub', assigned_to=mto.id).exists():
             messages.info(request, f'You already submitted')
@@ -357,16 +357,16 @@ def notification(request):
 
 def recommended_jobs(request):
     mto = MTO.objects.get(id=request.user.id)
-    print(mto.id)
+    # print(mto.id)
     jsonDec = json.decoder.JSONDecoder()
     mto_preferred_categories = jsonDec.decode(mto.job_category)
-    print(mto_preferred_categories)
-    print(type(mto_preferred_categories))
+    # print(mto_preferred_categories)
+    # print(type(mto_preferred_categories))
     # job_categories = [Jobs.objects.get(id=job_id) for job_id in mto_preferred_categories]
     # print(job_categories)
     all_job = Jobs.objects.filter(cat_id__in=[job_id for job_id in mto_preferred_categories],
                                   target_date__gte=datetime.now())
-    print(all_job)
+    # print(all_job)
     context = {'jobs': all_job}
     return render(request, 'mto/recommended_jobs.html', context)
 
@@ -383,3 +383,91 @@ def view_job_deadline(request):
     ), due_date__lte=due_date, job_status='in').order_by('-due_date')
     context = {'jobs': due_jobs}
     return render(request, 'mto/job_deadline.html', context)
+
+# coded by Gandharv(software2)
+# Forget Password views.py and its corresponding template is 'forget_password.html'
+# and sending the reset link to the user email (currently in terminal)
+
+
+def forget_password(request):
+    if request.method == 'POST':
+        # taking username from template
+        username = request.POST.get('username')
+        try:
+            # for ADMIN LOGIN forget password
+            if User.objects.using('varal_job_posting_db').filter(username=username).exists():
+                # checking data for that username in User models using varal db
+                user_data = User.objects.using(
+                    'varal_job_posting_db').get(username=username)
+                # taking domain(localhost in our case for now) & saving to variable
+                domain_name = get_current_site(request).domain
+                # creating a reset link to go to reset password page
+                link = f'http://{domain_name}/mto/reset_password/{username}'
+                # sending mail
+                send_mail(
+                    'VARAL MTO Reset Password',
+                    f'Click on this {link} to reset your password.',
+                    settings.EMAIL_HOST_USER,
+                    [user_data.email],
+                    fail_silently=False
+                )
+                messages.info(request, "Check Your Mail To Reset Password !")
+            # for MTO LOGIN forget password
+            elif User.objects.using('vendor_os_db').filter(username=username).exists():
+                # checking data for that username in User models using vendor db
+                user_data = User.objects.using(
+                    'vendor_os_db').get(username=username)
+                # taking domain(localhost in our case for now) & saving to variable
+                domain_name = get_current_site(request).domain
+                # creating a reset link to go to reset password page
+                link = f'http://{domain_name}/mto/reset_password/{username}'
+                # sending mail
+                send_mail(
+                    'VARAL MTO Reset Password',
+                    f'Click on this {link} to reset your password.',
+                    settings.EMAIL_HOST_USER,
+                    [user_data.email],
+                    fail_silently=False
+                )
+                messages.info(request, "Check Your Mail To Reset Password !")
+        except Exception:
+            messages.warning(request, "User Not Found !")
+    return render(request, 'mto/forget_password.html')
+
+# Reset Password views.py and its corresponding template is 'reset_password.html'
+# changing password and saving to db and redirect to their respective login's
+
+
+def reset_password(request, username):
+    if request.method == 'POST':
+        # taking new password getting from template and assigning to variable
+        password1 = request.POST.get('password1')
+        try:
+            # for ADMIN LOGIN reset password
+            if User.objects.using('varal_job_posting_db').filter(username=username).exists():
+                # getting data for that username in User models using varal db
+                user_data = User.objects.using(
+                    'varal_job_posting_db').get(username=username)
+                # updating password in db and using set_password to store password in encrpyted form
+                user_data.set_password(password1)
+                # saving to db
+                user_data.save()
+                messages.success(request, 'Password Reset Successfully !')
+                # redirecting to admin login after successfully reset password
+                return redirect('admin_login')
+
+            # for mto forget password
+            elif User.objects.using('vendor_os_db').filter(username=username).exists():
+                # getting data for that username in User models using varal db
+                user_data = User.objects.using(
+                    'vendor_os_db').get(username=username)
+                # updating password in db and using set_password to store password in encrpyted form
+                user_data.set_password(password1)
+                # saving to db
+                user_data.save()
+                messages.success(request, 'Password Reset Successfully !')
+                # redirecting to mto login after successfully reset password
+                return redirect('mto:login')
+        except Exception:
+            messages.warning(request, 'Unable To Reset Password !')
+    return render(request, 'mto/reset_password.html')
