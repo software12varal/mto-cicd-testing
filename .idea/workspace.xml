@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="c4a7dfd3-7c53-48f5-8b32-2504e6611aee" name="Default Changelist" comment="BM-Adding OTP for email verification">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mto/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mto/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/mto/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +139,14 @@
       <option name="project" value="LOCAL" />
       <updated>1628004847305</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="BM-Adding OTP for email verification">
+      <created>1628005125406</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1628005125406</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

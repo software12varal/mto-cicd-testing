@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -12,8 +11,6 @@ from django.core.mail import send_mail, EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-
-from users.auth_guard import handle_user_authentication
 from users.decorators import mto_required
 from django.utils import timezone
 from django.template.context import RequestContext
@@ -100,8 +97,24 @@ class GenerateKey:
         return str(username) + str(datetime.date(datetime.now())) + settings.SECRET_KEY
 
 
+def email_verification_page(request, username):
+    mto = MTO.objects.get(username=username)
+    keygen = GenerateKey()
+    key = base64.b32encode(keygen.returnValue(username).encode())  # Key is generated
+    otp = pyotp.TOTP(key, interval=settings.EXPIRY_TIME)  # TOTP Model for OTP is created
+    # Using Multi-Threading send the OTP Using Messaging Services like Twilio or Fast2sms
+    send_mail(
+        'Verify your email using otp',
+        f'Use these digits :: {otp.now()} :: to verify your account.',
+        "Varal MTO Project",
+        [mto.email],
+        fail_silently=False
+    )
+    return render(request, 'mto/email-verification.html', {'username': username})
 
-def verify(request, token):
+
+def verifying_otp(request, username):
+    data = {}
     try:
         mto = MTO.objects.get(username=username)
     except ObjectDoesNotExist:
@@ -210,7 +223,7 @@ def view_jobs(request):  # MTO view all
 
         ls = list(map(lambda x, y: x if (Jobs.objects.get(id=x).job_quantity * MicroTask.objects.get(
             microtask_name=Jobs.objects.get(id=x).job_name).people_required_for_valid_tc) <= y else 0,
-            list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+                      list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x) <= y else 0,
         #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
@@ -364,6 +377,7 @@ def view_job_deadline(request):
     context = {'jobs': due_jobs}
     return render(request, 'mto/job_deadline.html', context)
 
+
 # coded by Gandharv(software2)
 # Forget Password views.py and its corresponding template is 'forget_password.html'
 # and sending the reset link to the user email (currently in terminal)
@@ -413,6 +427,7 @@ def forget_password(request):
         except Exception:
             messages.warning(request, "User Not Found !")
     return render(request, 'mto/forget_password.html')
+
 
 # Reset Password views.py and its corresponding template is 'reset_password.html'
 # changing password and saving to db and redirect to their respective login's

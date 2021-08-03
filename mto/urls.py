@@ -1,14 +1,15 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from users.decorators import mto_required
-from mto.views import MTOProfileView, SignUpView, apply_job, dashboard, dummy_home_view, forget_password, job_detail, notification, recommended_jobs, reset_password, submit_job, view_applied_details, view_applied_jobs, view_job_deadline, view_jobs, view_payment_status
+from mto.views import MTOProfileView, SignUpView, apply_job, dashboard, dummy_home_view, forget_password, job_detail, \
+    notification, recommended_jobs, reset_password, submit_job, view_applied_details, view_applied_jobs, \
+    view_job_deadline, view_jobs, view_payment_status, email_verification_page, verifying_otp
 
 urlpatterns = [
     path('', mto_required(dummy_home_view), name='home'),
     path('dashboard/', dashboard, name='dashboard'),
     path('profile/', MTOProfileView.as_view(), name='profile'),
     # verifying email using otp
-    path("email_verify/<username>/", MtoEmailOTPVerification.as_view(), name="email_verify"),
     path("email_verification_page/<username>/", email_verification_page, name="email_verification_page"),
     path("verifying_otp/<username>/", verifying_otp, name="verifying_otp"),
     # authentication patterns
