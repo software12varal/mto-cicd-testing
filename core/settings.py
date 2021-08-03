@@ -103,7 +103,7 @@ DATABASES = {
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VaralJobPostingDBRouter', 'routers.db_routers.VendorOSRouter',
+DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
                     'routers.db_routers.AccountsDBRouter']
 UNDER_TESTING = False
 
@@ -169,3 +169,8 @@ EMAIL_HOST_USER = 'email'
 EMAIL_HOST_PASSWORD = 'password'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'email'
+
+
+LOGIN_ATTEMPTS_TIME_LIMIT = 5
+MAX_LOGIN_ATTEMPTS = 6
+

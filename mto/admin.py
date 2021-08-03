@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MTO
+from .models import MTO,MTOLoginAttempt
 
 
 class MTOAdmin(admin.ModelAdmin):
@@ -33,3 +33,8 @@ class MTOAdmin(admin.ModelAdmin):
 
 
 admin.site.register(MTO, MTOAdmin)
+
+
+@admin.register(MTOLoginAttempt)
+class MTOLoginAttemptsAdmin(admin.ModelAdmin):
+    list_display = ['user', 'login_attempts', 'timestamp']

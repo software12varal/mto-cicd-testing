@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -11,6 +12,8 @@ from django.core.mail import send_mail, EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+
+from users.auth_guard import handle_user_authentication
 from users.decorators import mto_required
 from django.utils import timezone
 from django.template.context import RequestContext
@@ -78,6 +81,34 @@ class SignUpView(CreateView):
                 self.request, f"Hi {user.full_name}, your account was created successfully.")
             context['redirect'] = '/mto/login'
         return JsonResponse(context, status=200)
+
+
+class MTOLoginView(View):
+    template_name = 'mto/login.html'
+    form = AuthenticationForm
+
+    def get(self, *args, **kwargs):
+        context = {'form': self.form}
+        return render(self.request, self.template_name, context)
+
+    def post(self, *args, **kwargs):
+        request = self.request
+        form = self.form(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        if username and password:
+            response = handle_user_authentication(username, password, request)
+            if response == "success":
+                return redirect(reverse('mto:dashboard'))
+            elif response == "invalid credentials":
+                messages.error(request, 'Incorrect username or password')
+            elif response == 'first trial':
+                messages.error(request, 'Login failed, please try again')
+            elif response == 'suspended':
+                messages.error(request, 'Account suspended, maximum login attempts exceeded. '
+                                        'Reactivation link has been sent to your email')
+        context = {'form': form}
+        return render(self.request, self.template_name, context)
 
 
 def verify(request, token):
