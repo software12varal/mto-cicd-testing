@@ -178,3 +178,6 @@ EMAIL_HOST_USER = 'email'
 EMAIL_HOST_PASSWORD = 'password'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'email'
+
+# Time after which OTP will expire
+EXPIRY_TIME = 60  # seconds

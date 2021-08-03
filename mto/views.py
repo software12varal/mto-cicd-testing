@@ -26,6 +26,12 @@ from mto.forms import MTOUpdateProfileForm
 from datetime import datetime, timedelta
 from django.db.models import Count, Sum
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
+import pyotp
+from rest_framework.response import Response
+from rest_framework.views import APIView
+import base64
 
 
 class SignUpView(CreateView):
@@ -65,53 +71,66 @@ class SignUpView(CreateView):
             user.is_active = False
             user.job_category = job_categories_ids
             user.save()
-            link = f'http://{domain_name}/verify/{token}'
-            send_mail(
-                'Verify your email',
-                f'Click on this {link} to verify your account.',
-                settings.EMAIL_HOST_USER,
-                [user.email],
-                fail_silently=False
-
-            )
             messages.success(
                 self.request, f"Hi {user.full_name}, your account was created successfully.")
-            context['redirect'] = '/mto/login'
+            context['redirect'] = reverse('mto:email_verification_page', kwargs={'username': user.username})
         return JsonResponse(context, status=200)
+#
+#
+# def verify(request, token):
+#     try:
+#         user = MTO.objects.get(token=token)
+#         if user:
+#             user.is_active = True
+#             user.save()
+#             return redirect('/mto/login')
+#     except:
+#         # print("5")
+#         msg = "Invalid token"
+#         return redirect('error.html', {'msg': msg})
 
 
-def verify(request, token):
+# This class returns the string needed to generate the key
+class GenerateKey:
+    @staticmethod
+    def returnValue(username):
+        return str(username) + str(datetime.date(datetime.now())) + settings.SECRET_KEY
+
+
+def email_verification_page(request, username):
+    mto = MTO.objects.get(username=username)
+    keygen = GenerateKey()
+    key = base64.b32encode(keygen.returnValue(username).encode())  # Key is generated
+    otp = pyotp.TOTP(key, interval=settings.EXPIRY_TIME)  # TOTP Model for OTP is created
+    # Using Multi-Threading send the OTP Using Messaging Services like Twilio or Fast2sms
+    send_mail(
+        'Verify your email using otp',
+        f'Use these digits :: {otp.now()} :: to verify your account.',
+        "Varal MTO Project",
+        [mto.email],
+        fail_silently=False
+    )
+    return render(request, 'mto/email-verification.html', {'username': username})
+
+
+def verifying_otp(request, username):
+    data = {}
     try:
-        user = MTO.objects.get(token=token)
-        if user:
-            user.is_active = True
-            user.save()
-            return redirect('/mto/login')
-    except:
-        # print("5")
-        msg = "Invalid token"
-        return redirect('error.html', {'msg': msg})
+        mto = MTO.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return JsonResponse(data)  # False Call
 
-
-def otp_email_verification(request, otp):
-
-    return redirect('mto:login')
-
-
-# class SignUpView(View):
-#     template_name = 'mto/register.html'
-#
-#     def get(self, *args, **kwargs):
-#         form = SignUpForm
-#         context = {'form': form}
-#         return render(self.request, self.template_name, context)
-#
-#     def post(self, *args, **kwargs):
-#         # check if there's need to handle race condition when creating users
-#         form = SignUpForm(self.request.POST)
-#         if form.is_valid():
-#             form.save()
-#         return redirect(reverse('account_login'))
+    keygen = GenerateKey()
+    key = base64.b32encode(keygen.returnValue(username).encode())  # Generating Key
+    otp = pyotp.TOTP(key, interval=settings.EXPIRY_TIME)  # TOTP Model
+    if request.method == "POST":
+        sent_otp = request.POST.get('otp')
+        if otp.verify(sent_otp):  # Verifying the OTP
+            mto.is_active = True
+            mto.save()
+            data['message'] = "Email has been verified successfully"
+            data['redirect'] = reverse('mto:login')
+    return JsonResponse(data)
 
 
 def dummy_home_view(request):

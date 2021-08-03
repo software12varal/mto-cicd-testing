@@ -20,8 +20,3 @@ class MTO(User):
 
     def __str__(self):
         return self.full_name
-
-
-class MTOOTP(models.Model):
-    user = models.ForeignKey(MTO, on_delete=models.CASCADE)
-    otp = models.CharField(max_length=250)
