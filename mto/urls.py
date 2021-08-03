@@ -26,4 +26,6 @@ urlpatterns = [
     path('recommended-jobs/', mto_required(recommended_jobs), name='recommended_jobs'),
     path('payment-status/', mto_required(view_payment_status), name='view_payment_status'),
     path('view-job-deadline/', mto_required(view_job_deadline), name='job_deadline'),
+
+    path('forgot-password/', forget_password, name="forget_password"),
 ]
