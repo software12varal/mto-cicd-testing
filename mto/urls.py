@@ -1,9 +1,7 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
 from users.decorators import mto_required
-from mto.views import MTOProfileView, SignUpView, apply_job, dashboard, dummy_home_view, forget_password, job_detail, \
-    notification, recommended_jobs, reset_password, submit_job, view_applied_details, view_applied_jobs, \
-    view_job_deadline, view_jobs, view_payment_status, MtoEmailOTPVerification, email_verification_page, verifying_otp
+from mto.views import MTOProfileView, SignUpView, apply_job, dashboard, dummy_home_view, forget_password, job_detail, notification, recommended_jobs, reset_password, submit_job, view_applied_details, view_applied_jobs, view_job_deadline, view_jobs, view_payment_status
 
 urlpatterns = [
     path('', mto_required(dummy_home_view), name='home'),

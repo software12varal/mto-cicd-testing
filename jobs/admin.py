@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from jobs.models import MTOAdminUser, AdminRoles,  MicroTask, MTOJob, EvaluationStatus, Jobs
+from jobs.models import MTOAdminUser, AdminRoles, MicroTask, MTOJob, EvaluationStatus, Jobs, AdminLoginAttempt
 
 
 class MTOJobCategoryAdmin(admin.ModelAdmin):
@@ -55,6 +55,11 @@ class MTORolesAdmin(admin.ModelAdmin):
         # Tell Django to populate ManyToMany widgets using a query
         # on the 'other' database.
         return super().formfield_for_manytomany(db_field, request, using=self.using, **kwargs)
+
+
+@admin.register(AdminLoginAttempt)
+class MTOLoginAttemptsAdmin(admin.ModelAdmin):
+    list_display = ['user', 'login_attempts', 'timestamp']
 
 
 admin.site.register(EvaluationStatus)

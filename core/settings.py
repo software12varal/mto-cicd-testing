@@ -150,6 +150,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media/documents"
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
 # Google configurations
 if not DEBUG:
@@ -178,6 +179,11 @@ EMAIL_HOST_USER = 'email'
 EMAIL_HOST_PASSWORD = 'password'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'email'
+
+
+LOGIN_ATTEMPTS_TIME_LIMIT = 5
+MAX_LOGIN_ATTEMPTS = 6
+
 
 # Time after which OTP will expire
 EXPIRY_TIME = 60  # seconds

@@ -60,13 +60,13 @@
     <!-- Begin page content -->
     <main role="main" class="container mt-5">
       {% if messages %}
-                  {% for message in messages %}
-                      <div class="alert alert-{{ message.tags }} mt-3">
-                        <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
-                        <span data-notify="message">{{ message }}</span>
-                      </div>
-                  {% endfor %}
-              {% endif %}
+          {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} mt-3">
+                <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
+                <span data-notify="message">{{ message }}</span>
+              </div>
+          {% endfor %}
+      {% endif %}
 		{% block content %}{% endblock content%}
     </main>
 
