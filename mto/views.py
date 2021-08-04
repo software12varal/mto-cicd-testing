@@ -71,8 +71,8 @@ class SignUpView(CreateView):
             user.is_active = False
             user.job_category = job_categories_ids
             user.save()
-            messages.success(
-                self.request, f"Hi {user.full_name}, your account was created successfully.")
+            context['message'] = f"Hi {user.full_name}, your account was created successfully." \
+                                 f" Please Enter OTP Sent to your mail to activate your account"
             context['redirect'] = reverse('mto:email_verification_page', kwargs={'username': user.username})
         return JsonResponse(context, status=200)
 #
@@ -102,7 +102,6 @@ def email_verification_page(request, username):
     keygen = GenerateKey()
     key = base64.b32encode(keygen.returnValue(username).encode())  # Key is generated
     otp = pyotp.TOTP(key, interval=settings.EXPIRY_TIME)  # TOTP Model for OTP is created
-    # Using Multi-Threading send the OTP Using Messaging Services like Twilio or Fast2sms
     send_mail(
         'Verify your email using otp',
         f'Use these digits :: {otp.now()} :: to verify your account.',
@@ -130,6 +129,9 @@ def verifying_otp(request, username):
             mto.save()
             data['message'] = "Email has been verified successfully"
             data['redirect'] = reverse('mto:login')
+        else:
+            data['info'] = f'Sorry, OTP {sent_otp}, is invalid or probably expired try again.'
+            data['otp'] = 'otp is invalid or expired'
     return JsonResponse(data)
 
 

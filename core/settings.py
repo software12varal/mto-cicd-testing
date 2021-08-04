@@ -186,4 +186,4 @@ MAX_LOGIN_ATTEMPTS = 6
 
 
 # Time after which OTP will expire
-EXPIRY_TIME = 60  # seconds
+EXPIRY_TIME = 50  # seconds

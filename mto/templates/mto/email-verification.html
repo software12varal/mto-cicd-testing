@@ -3,22 +3,19 @@
 {% block title %} MTO Email Verification{%endblock title %}
 {% block content %}
 <div class="card-body">
-  <h4 class="card-title">Login</h4>
+  <h2 class="card-title text-primary"><b>Email Verification</b></h2>
   <form method="POST" action="{% url 'mto:verifying_otp' username=username %}" id="email-verification">
     {% csrf_token %}
     <div class="form-group">
-      <label>OTP</label>
-      <input type="number" name="otp" class="form-control" id="id_otp" placeholder="Enter OTP">
+      <label>OTP Code</label>
+      <input type="number" name="otp" class="form-control" id="id_otp" placeholder="Type OTP here">
     </div>
     <div class="form-group">
-      <a href="{% url 'mto:email_verification_page' username=username %}">Try Again</a>
+      Didn't receive?<a href="{% url 'mto:email_verification_page' username=username %}" style="color: grey;"> <small> Send OTP Again!</small></a>
     </div>
     <div class="form-group m-0">
       <button type="submit" class="btn btn-primary btn-block">Verify</button>
     </div>
-<!--    <div class="mt-4 text-center">-->
-<!--      New to our platform? <a href="{% url 'mto:sign_up' %}">Register</a>-->
-<!--    </div>-->
   </form>
 </div>
 {% endblock content %}
