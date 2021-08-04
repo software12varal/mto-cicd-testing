@@ -21,11 +21,12 @@
     <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Category :</strong> {{job_details.cat_id}}</label><br><br>
     <label style="color: white;margin-left: 350px; font-size: large;"><strong>Target Date :</strong> {{job_details.target_date}}</label><br><br>
     <label style="color: white;margin-left: 350px; font-size: large;"><strong>Job Description : </strong>{{job_details.job_description}}</label><br><br>
-    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Sample :</strong> {{job_details.job_sample}}</label><br><br>
+            <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Sample :</strong><a href="{{ job_details.job.sample.url }}" >{{job_details.sample_filename}}</a></label><br><br>
+            <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Instructions :</strong><a href="{{ job_details.job.instructions.url }}">{{job_details.instructions_filename}}</a></label><br><br>
     <label style="color: white;margin-left: 350px; font-size: large;"><strong>Job Quantity :</strong> {{job_details.job_quantity}}</label><br><br>
-    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Number of People Required : </strong>{{job_details.people_required}}</label><br><br>
-    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Skills : </strong>{{job_details.skills}}</label><br><br>
-    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Cost :</strong> {{job_details.job_cost}}</label><br><br>
+    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Number of People Required : </strong>{{job_details.job.people_required_for_valid_tc}}</label><br><br>
+    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Skills : </strong>{{job_details.job.skills}}</label><br><br>
+    <label  style="color: white;margin-left: 350px; font-size: large;"><strong>Job Cost :</strong> {{job_details.job.job_cost}}</label><br><br>
     <a href="{% url 'mto:apply' id=job_details.id %}"  class="btn btn-success" style="margin-left: 1000px;">Apply</a>
         </form>
     </div>

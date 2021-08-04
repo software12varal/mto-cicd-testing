@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from jobs.models import MTOAdminUser, AdminRoles, MTOJobCategory, MicroTask, MTOJob, EvaluationStatus,MALRequirement,Jobs, PaymentStatus, Jobstatus
+from jobs.models import MTOAdminUser, AdminRoles, MicroTask, MTOJob, EvaluationStatus, Jobs, AdminLoginAttempt
 
 
 class MTOJobCategoryAdmin(admin.ModelAdmin):
@@ -57,14 +57,17 @@ class MTORolesAdmin(admin.ModelAdmin):
         return super().formfield_for_manytomany(db_field, request, using=self.using, **kwargs)
 
 
+@admin.register(AdminLoginAttempt)
+class MTOLoginAttemptsAdmin(admin.ModelAdmin):
+    list_display = ['user', 'login_attempts', 'timestamp']
+
+
 admin.site.register(EvaluationStatus)
 admin.site.register(MTOAdminUser)
 admin.site.register(MTOJob)
-admin.site.register(MTOJobCategory, MTOJobCategoryAdmin)
-admin.site.register(AdminRoles,MTORolesAdmin)
+# admin.site.register(MTOJobCategory, MTOJobCategoryAdmin)
+admin.site.register(AdminRoles, MTORolesAdmin)
 admin.site.register(MicroTask)
-admin.site.register(MALRequirement),
+# admin.site.register(MALRequirement),
 admin.site.register(Jobs),
-admin.site.register(PaymentStatus),
-admin.site.register(Jobstatus)
-
+# admin.site.register(Jobstatus)

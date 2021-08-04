@@ -4,16 +4,34 @@ from django import forms
 from django_countries.widgets import CountrySelectWidget
 
 from .models import MTO
-from jobs.models import MALRequirement
+from jobs.models import Jobs, MicroTask
 
 User = get_user_model()
 
-job_categories = MALRequirement.objects.all()
+job_categories = [
+
+    ('cw', 'Content Writing'),
+    ('da', 'Document Analysis'),
+    ('de', 'Data Entry'),
+    ('cr', 'Combining Rules from Semi-Legal documents'),
+    ('df', 'Data Entry(Fields)'),
+    ('cd', 'Collecting copies of documents'),
+    ('cp', 'Content Copy & Paste'),
+    ('cf', 'Combining Data Entry Fields'),
+    ('fn', 'Find Non-Copyrighted Images and Uploading'),
+    ('ac', 'Apply Compliance to Fields'),
+    ('ng', 'Naming'),
+    ('ce', 'Compliance Extraction'),
+    ('id', 'Identifying One Line Decision'),
+    ('ab', 'A+B TC For Document Extraction'),
+    ('tc', 'TC For One Line Decision'),
+]
 
 
 class SignUpForm(UserCreationForm):
-    job_category = forms.ModelMultipleChoiceField(
-        job_categories, widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+
+    job_category = forms.MultipleChoiceField(
+                                            widget=forms.SelectMultiple(attrs={'class': 'form-control'}),choices=job_categories)
 
     class Meta(UserCreationForm.Meta):
         model = MTO
@@ -39,6 +57,7 @@ class SignUpForm(UserCreationForm):
     #         user.job_category = job_categories_ids
     #         user.save()
     #         return user
+    #hai.save()
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
@@ -64,8 +83,8 @@ class SignUpForm(UserCreationForm):
 
 
 class MTOUpdateProfileForm(forms.ModelForm):
-    job_category = forms.ModelMultipleChoiceField(job_categories,
-                                                  widget=forms.SelectMultiple(attrs={'class': 'form-control'}))
+    job_category = forms.MultipleChoiceField(
+                                            widget=forms.SelectMultiple(attrs={'class': 'form-control'}),choices=job_categories)
 
     class Meta:
         model = MTO
@@ -73,45 +92,7 @@ class MTOUpdateProfileForm(forms.ModelForm):
         widgets = {
             'contact_number': forms.NumberInput(attrs={'placeholder': 'Enter contact number', 'class': 'form-control'}),
             'location': CountrySelectWidget(attrs={'class': 'form-control'}, layout='{widget}'
-),
+                                            ),
             'paypal_id': forms.TextInput(attrs={'placeholder': 'Enter PayPal ID', 'class': 'form-control'}),
         }
 
-#
-#
-# class SignUpForm(forms.Form):
-#     full_name = forms.CharField(widget=TextInput(attrs={'class': 'form-control', 'placeholder': 'first middle last'}))
-#     email = forms.EmailField(widget=EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter email'}))
-#     username = forms.CharField(widget=TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter username'}))
-#     paypal_id = forms.CharField(widget=TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter paypal ID'}))
-#     password = forms.CharField(widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Enter password'}))
-#     password2 = forms.CharField(
-#         widget=PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm password'}))
-#
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         email = cleaned_data['email']
-#         password = cleaned_data['password']
-#         password2 = cleaned_data['password2']
-#         if password != password2:
-#             raise forms.ValidationError('Passwords did not match', code='invalid password')
-#         if User.objects.using('vendor_os_db').filter(username=email).exists():
-#             raise forms.ValidationError('A user with that username already exists', code='invalid username')
-#         return
-#
-#     def save(self):
-#         cleaned_data = super().clean()
-#         full_name = cleaned_data['full_name']
-#         email = cleaned_data['email']
-#         paypal_id = cleaned_data['paypal_id']
-#         password = cleaned_data['password']
-#
-#         mto = MTO(full_name=full_name, email=email, paypal_id=paypal_id,
-#                   username=email)  # lets use email as username meanwhile
-#         mto.set_password(password)
-#         mto.save(using='vendor_os_db')
-#         # user = User(email=email, username=email) # let us use email as username meanwhile
-#         # user.set_password(password)
-#         # user.save(using='vendor_os_db')
-#         # MTO.objects.create(full_name=full_name, paypal_id=paypal_id, user=user)
-#         return

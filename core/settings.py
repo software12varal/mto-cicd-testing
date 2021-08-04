@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 from django.urls import reverse_lazy
+from google.oauth2 import service_account
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,10 +32,13 @@ INSTALLED_APPS = [
     'jobs.apps.JobsConfig',
     'users.apps.UsersConfig',
     'mto.apps.MtoConfig',
+    'super_admin.apps.SuperAdminConfig',
     # third party apps
     'widget_tweaks',
     'phonenumber_field',
     'django_countries',
+    'django_filters',
+    'mirage',
 ]
 
 AUTH_USER_MODEL = 'users.User'
@@ -81,27 +86,28 @@ DATABASES = {
         'NAME': BASE_DIR / 'vendor_os.db.sqlite3',
         'TEST': {
             'DEPENDENCIES': [],
-        } 
+        }
     },
     'varal_job_posting_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'varal_job_posting.db.sqlite3',
         'TEST': {
             'DEPENDENCIES': [],
-        } 
+        }
     },
     'accounts_db': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'accounts.db.sqlite3',
         'TEST': {
             'DEPENDENCIES': [],
-        } 
+        }
     },
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
+DATABASE_ROUTERS = ['routers.db_routers.VaralJobPostingDBRouter', 'routers.db_routers.VendorOSRouter',
                     'routers.db_routers.AccountsDBRouter']
+UNDER_TESTING = False
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -121,15 +127,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'users.backends.VaralOSDBAuthBackend', 'django.contrib.auth.backends.ModelBackend']
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend', 'users.backends.VaralOSDBAuthBackend']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dubai'
 
 USE_I18N = True
 
@@ -145,8 +150,17 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media/documents"
-#MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
+# Google configurations
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = 'mto-demo'
+    STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        "google-credentials.json"
+    )
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -157,8 +171,7 @@ LOGIN_URL = reverse_lazy("mto:login")
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_REDIRECT_URL = "mto:dashboard"
 
-# smpt config
-
+# smut config
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -166,3 +179,11 @@ EMAIL_HOST_USER = 'email'
 EMAIL_HOST_PASSWORD = 'password'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'email'
+
+
+LOGIN_ATTEMPTS_TIME_LIMIT = 5
+MAX_LOGIN_ATTEMPTS = 6
+
+
+# Time after which OTP will expire
+EXPIRY_TIME = 50  # seconds

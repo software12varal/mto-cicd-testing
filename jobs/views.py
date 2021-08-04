@@ -1,42 +1,51 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import CreateView
 
-from jobs.models import MTOJob, Jobs,MALRequirement
-from .forms import MTOAdminSignUpForm, MALRequirementForm
+from jobs.models import MTOJob, Jobs
+from .forms import MTOAdminSignUpForm, JobForm
 from django.contrib import messages
 from jobs.forms import JobsForm
 
-from jobs.models import MTOJob, MicroTask, MTOAdminUser,PaymentStatus
+from jobs.models import MTOJob, MicroTask, MTOAdminUser
 from .forms import MTOAdminSignUpForm, AdminUpdateProfileForm
-from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from mto.models import MTO
-from .models import Jobstatus
 from functools import reduce
+import json
+from django.db.models import Count, Sum
+from .filters import JobsFilterForSuperadmin, JobsFilterForVaraladmin, OngoingJobsFilterForSuperadmin, OngoingJobsFilterForadmin
+
 
 def home(request):
     context = {'jobs': MTOJob.objects.all(), }
+    # solves Bug: can see a home page without logout options(when url is put directly), solved by redirecting to
+    # adminDashboard
+    if request.user.is_authenticated and request.user.is_admin and not request.user.is_mto:
+        return redirect(reverse('jobs:adminDashboard'))
     return render(request, 'jobs/index.html', context)
 
 
-def mto_admin_signup(request):
-    if request.method == 'POST':
-        f = MTOAdminSignUpForm(request.POST)
-        if f.is_valid():
-            instance = f.save(commit=False)
-            instance.is_admin = True
-            instance.is_active = True
-            instance.is_mto = False
-            instance.save()
-            f.save()
-            return redirect('/admin-login')  # Redirect to Dashboard Page
-        else:
-            return render(request, 'jobs/admin-register.html', {'form': f})
-    context = {
-        'jobs': MTOJob.objects.all(),
-        'form': MTOAdminSignUpForm()
-    }
-    return render(request, 'jobs/admin-register.html', context)
+# updated
+def mto_admin_login(request):
+    # if request.method == 'POST':
+    #     f = MTOAdminSignUpForm(request.POST)
+    #     if f.is_valid():
+    #         instance = f.save(commit=False)
+    #         instance.is_admin = True
+    #         instance.is_active = True
+    #         instance.is_mto = False
+    #         instance.save()
+    #         f.save()
+    #         return redirect('/admin-login')  # Redirect to Dashboard Page
+    #     else:
+    #         return render(request, 'jobs/admin-register.html', {'form': f})
+    # context = {
+    #     'jobs': MTOJob.objects.all(),
+    #     'form': MTOAdminSignUpForm()
+    # }
+    return render(request, 'jobs/admin-register.html')
 
 
 def add_job(request):
@@ -51,57 +60,91 @@ def add_job(request):
     context = {'form': JobsForm()}
     return render(request, 'jobs/jobsform.html', context)
 
-def add_paymentstatus(request,job_id):
-    instance = MTOJob.objects.filter(id = job_id).first()
-    
-    if request.method == 'POST':
-        payment_id = request.POST.get('payment_id')
-        instance.payment_status_id = payment_id
-        instance.save()
-        messages.success(request,"Payment Status updated")
-    context = {'form':PaymentStatus.objects.all()}
-    return render(request,'jobs/jobpaymentstatus.html',context)
 
-def add_jobstatus(request,job_id):
-    instance = MTOJob.objects.filter(id = job_id).first()
+def add_paymentstatus(request, job_id):
+    instance = MTOJob.objects.filter(id=job_id).first()
+
     if request.method == 'POST':
-        status_id = request.POST.get('status_id')
-        instance.job_status_id = status_id
+        payment_id = request.POST.get('payment_status', 'uninitiated')
+        instance.payment_status = payment_id
         instance.save()
-        messages.success(request,"Job Status updated")
-    
-    context = {'form':Jobstatus.objects.all()}
-    return render(request,'jobs/jobstatus.html',context)   
+        messages.success(request, "Payment Status updated")
+
+    return redirect('jobs:appliedjobs')
+
+
+def add_jobstatus(request, job_id):
+    instance = MTOJob.objects.filter(id=job_id).first()
+    if request.method == 'POST':
+        status_id = request.POST.get('job_status', 'in')
+        instance.job_status = status_id
+        instance.save()
+        messages.success(request, "Job Status updated")
+
+    return redirect('jobs:appliedjobs')
+
 
 def appliedjobs(request):
-    job = MTOJob.objects.all().order_by('-id')
-    p = Paginator(job, 5)
-    page_num = request.GET.get('page')
+
+    if request.user.is_super_admin:
+        jobs = MTOJob.objects.all().order_by('-id')
+        myFilter = OngoingJobsFilterForSuperadmin(request.GET, queryset=jobs)
+        job = myFilter.qs
+        p = Paginator(job, 5)
+        page_num = request.GET.get('page')
+    else:
+        jobs = MTOJob.objects.filter(
+            job_id__person_name=request.user.id).order_by('-id')
+        myFilter = OngoingJobsFilterForadmin(request.GET, queryset=jobs)
+        job = myFilter.qs
+        p = Paginator(job, 5)
+        page_num = request.GET.get('page')
     try:
         data = p.page(page_num)
     except PageNotAnInteger:
         data = p.page(1)
     except EmptyPage:
         data = p.page(p.num_pages)
-    return render(request, 'jobs/appliedjobs.html', {'data': data})
-
+    return render(request, 'jobs/appliedjobs.html', {'myFilter': myFilter, 'data': data})
 
 
 def alljobs(request):
-    jobs = Jobs.objects.all().order_by('-id')
-    p = Paginator(jobs, 5)
-    page_num = request.GET.get('page')
+
+    if request.user.is_super_admin:
+        jobs = Jobs.objects.all().order_by('-id')
+        myFilter = JobsFilterForSuperadmin(request.GET, queryset=jobs)
+        job = myFilter.qs
+        p = Paginator(job, 5)
+        page_num = request.GET.get('page')
+    else:
+        jobs = Jobs.objects.filter(person_name=request.user.id).order_by('-id')
+        myFilter = JobsFilterForVaraladmin(request.GET, queryset=jobs)
+        job = myFilter.qs
+        p = Paginator(job, 5)
+        page_num = request.GET.get('page')
     try:
         data = p.page(page_num)
     except PageNotAnInteger:
         data = p.page(1)
     except EmptyPage:
         data = p.page(p.num_pages)
-    return render(request, 'jobs/jobs.html', {'data': data})
+    return render(request, 'jobs/jobs.html', {'myFilter': myFilter, 'data': data})
+
+
+def microtask_job_details(request, id):
+    job = Jobs.objects.get(id=id)
+    #print(job)
+    mtojob = MTOJob.objects.filter(job_id=id)
+    #print(mtojob)
+    count_mto = MTOJob.objects.filter(job_id=id).count()
+    #print(count_mto)
+
+    context = {'job': job, 'mtojob': mtojob, 'count_mto': count_mto}
+    return render(request, 'jobs/microtask_job_details.html', context)
 
 
 def admin_dashboard(request):
-    print(request.user)
+    #print(request.user)
     return render(request, 'jobs/admin_dashboard.html')
 
 
@@ -126,7 +169,7 @@ def convert_seconds(performance):
             else:
                 time = f"{round(hours)} hours"
     else:
-        time = performance
+        time = f"{round(performance)} seconds"
     return time
 
 
@@ -162,7 +205,7 @@ def view_mto(request, id):
     days_list = [0]
     seconds_list = [0]
     for i in mto_job:
-        if i.average_time is not 0:
+        if i.average_time != 0:
             days_list.append(i.average_time.days)
             seconds_list.append(i.average_time.seconds)
     length = len(days_list) - 1
@@ -204,23 +247,17 @@ def view_mto(request, id):
         accept_seconds = 0
     mto_job = MTOJob.objects.filter(assigned_to=id).count()
     total_completed = MTOJob.objects.filter(
-        completed_date__isnull=False, assigned_to=id).count()
+        job_status="co", assigned_to=id).count()
     total_job = Jobs.objects.all().count()
 
-    # cat_list = []
-    # list(
-    #     map(lambda i: i if i == '[' or i == ',' or i == ']' or i == " " else cat_list.append(int(i)), mto.job_category))
-    # print(cat_list)
-    # jobs = list(map(lambda i: i if i == '[' or i == ',' or i == ']' or i == " " else {
-    #     'name': Jobs.objects.filter(cat_id=i).first()}, cat_list))
-    # print(jobs.count('name'))
-
     try:
-        percentage_acceptance = percentage(mto_job=mto_job, total_job=total_job, total_completed=None)
+        percentage_acceptance = percentage(
+            mto_job=mto_job, total_job=total_job, total_completed=None)
     except ZeroDivisionError:
         percentage_acceptance = 0
     try:
-        percentage_completeness = percentage(mto_job=mto_job, total_job=None, total_completed=total_completed)
+        percentage_completeness = percentage(
+            mto_job=mto_job, total_job=None, total_completed=total_completed)
     except ZeroDivisionError:
         percentage_completeness = 0
     context = {'mto': mto, 'mto_job': mto_job, 'completed': total_completed,
@@ -245,7 +282,7 @@ def microtask_page(request):
 
 
 def mal_requirement(request):
-    context = {'jobs': MALRequirement.objects.all(), }
+    context = {'jobs': Jobs.objects.all(), }
     return render(request, 'jobs/MAL_requirement.html', context)
 
 
@@ -253,38 +290,117 @@ def admin_profile(request):
     data = {}
     form = AdminUpdateProfileForm(instance=request.user.mtoadminuser)
     if request.method == "POST":
-        form = AdminUpdateProfileForm(request.POST, instance=request.user.mtoadminuser)
+        form = AdminUpdateProfileForm(
+            request.POST, instance=request.user.mtoadminuser)
         if form.is_valid():
             form.save()
             messages.success(request, "Your Profile has been updated!")
-            # return redirect(request, 'jobs/admin_profile.html')
         else:
             messages.info(request, "sorry profile is not updated!")
-            # return redirect(request, 'jobs/admin_profile.html')
     data['form'] = form
     return render(request, 'jobs/admin_profile.html', data)
 
 
-class MALRequirementCreateView(CreateView):
-    form_class = MALRequirementForm
-    template_name = 'jobs/mal_requirement_creation.html'
+def create_jobs(request):
+    context = {}
+    abc = MicroTask.objects.values('microtask_category').all()
+    xyz = {i['microtask_category'] for i in abc}
+    context["jobs"] = list(xyz)
 
-    def get_form_kwargs(self):
-        kwargs = super(MALRequirementCreateView, self).get_form_kwargs()
-        return kwargs
+    if request.user.is_admin and not request.user.is_super_admin:
+        form = JobForm(
+            initial={'person_name': MTOAdminUser.objects.get(id=request.user.id)})
+    else:
+        form = JobForm()
 
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
+    # print(form['person_name'])
+
+    if request.method == 'POST':
+        form = JobForm(request.POST, request.FILES)
+        # print(form)
+        # print(request.FILES.get('sample'))
+        # print(request.FILES.get('instructions'))
         if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+            # if
+            if request.FILES.get('sample') is None or request.FILES.get('instructions') is None:
+                mic_ojbs = MicroTask.objects.filter(
+                    microtask_name=request.POST.get('job_name')).first()
+                instance = form.save(commit=False)
+                if request.FILES.get('sample') is None:
+                    instance.sample = mic_ojbs.sample
+                if request.FILES.get('instructions') is None:
+                    instance.instructions = mic_ojbs.instructions
+                instance.save()
+            else:
+                form.save()
+            messages.success(request, 'Form Has Been Submited Successfully !')
+            return redirect('jobs:alljobs')
+    context["form"] = form
+    return render(request, 'jobs/mal_requirement_creation.html', context)
 
-    def form_invalid(self, form):
-        return JsonResponse(form.errors, status=200)
 
-    def form_valid(self, form):
-        instance = form.save(commit=False)
-        instance.save()
-        context = {'message': f" {instance.micro_task}, has been created successfully."}
-        return JsonResponse(context, status=200)
+def displaying_categories(request):
+    context = {}
+    data = json.loads(request.body.decode("utf-8"))
+    cat_id = data['cat_id']
+    try:
+        cat_id = int(cat_id)
+        category = MicroTask.objects.filter(id=cat_id).first()
+        context['sample'] = category.sample.url
+        context['instructions'] = category.instructions.url
+        context['message'] = f"{category.microtask_name}, has been selected"
+    except ValueError:
+        print("Select something please")
+    return JsonResponse(context)
+
+
+def admin_monitoring(request):
+    admin = MTOAdminUser.objects.all()
+
+    context = {'admin': admin}
+
+    return render(request, 'jobs/admin_monitoring.html', context)
+
+
+def view_admin(request, id):
+    job_admin = MTOAdminUser.objects.get(id=id)
+    Total_Jobs_Posted = Jobs.objects.filter(person_name=job_admin.id).count()
+    No_of_Jobs_Allocated = Jobs.objects.filter(
+        person_name=job_admin.id, job_status='as').count()
+    Total_Jobs_Completed = Jobs.objects.filter(
+        person_name=job_admin.id, job_status='co').count()
+
+    jobs = Jobs.objects.filter(person_name=job_admin.id)
+    total_Jobs_Posted_by_admin = Jobs.objects.filter(person_name=job_admin.id)
+    Number_of_MTOs_working_on_a_Job = MTOJob.objects.filter(
+        job_id__in=[job.id for job in jobs]).count()
+    Number_of_Ongoing_Jobs = MTOJob.objects.filter(
+        job_id__in=[job.id for job in jobs]).count()
+
+    # these line for total amount spent
+    totals = jobs.aggregate(Sum('total_budget'))['total_budget__sum'] or 0
+    total = '{:0.2f}'.format(totals)
+
+    # to show acceptance date
+    total_jobs = MTOJob.objects.filter(job_id__in=[job.id for job in jobs])
+
+    context = {'Total_Jobs_Posted': Total_Jobs_Posted, 'No_of_Jobs_Allocated': No_of_Jobs_Allocated,
+               'Total_Jobs_Completed': Total_Jobs_Completed,
+               'Number_of_MTOs_working_on_a_Job': Number_of_MTOs_working_on_a_Job,
+               'Number_of_Ongoing_Jobs': Number_of_Ongoing_Jobs, 'total': total_Jobs_Posted_by_admin, 'totals': total,
+               'total_jobs': total_jobs}
+
+    return render(request, 'jobs/view_admin.html', context)
+
+
+def displaying_microtask(request):
+    cat_idw = request.GET.get('cat_ide')
+    mctsk = MicroTask.objects.filter(
+        microtask_category__icontains=cat_idw).all()
+    return render(request, 'jobs/cat_name.html', {'mctsk': mctsk})
+
+
+def displaying_files(request):
+    jb_namw = request.GET.get('jb_name')
+    namee = MicroTask.objects.filter(microtask_name=jb_namw).first()
+    return render(request, 'jobs/cat_name.html', {'namee': namee})

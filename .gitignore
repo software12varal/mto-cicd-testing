@@ -1,3 +1,45 @@
 # Project exclude paths
-/venv/
-/env/
+/venv/*
+/env/*
+#ignoring idea
+/.idea/*
+/.vscode/*
+# ignoring databases
+/varal_job_posting.db.sqlite3
+/vendor_os.db.sqlite3
+/accounts.db.sqlite3
+#ignoring migrations
+/jobs/migrations/*
+/mto/migrations/*
+/users/migrations/*
+/accounts/migrations/*
+/super_admin/migrations/*
+#ignoring pycache
+/jobs/migrations/__pycache__/*
+/mto/migrations/__pycache__/*
+/users/migrations/__pycache__/*
+/accounts/migrations/__pycache__/*
+/super_admin/migrations/__pycache__/*
+/jobs/__pycache__/*
+/mto/__pycache__/*
+/users/__pycache__/*
+/accounts/__pycache__/*
+/super_admin/__pycache__/*
+/super_admin/migrations/__pycache__/*
+/routers/__pycache__/*
+/.idea/workspace.xml
+/core/__pycache__/*
+/accounts/tests/__pycache__/*
+/jobs/tests/__pycache__/*
+/mto/tests/__pycache__/*
+/users/tests/__pycache__/*
+/media/*
+/super_admin/tests/__pycache__/*
+#ignoring htmlcov
+/htmlcov/*
+/.coverage
+htmlcov/*
+super_admin/migrations/*
+
+
+

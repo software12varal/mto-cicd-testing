@@ -32,11 +32,12 @@ const csrftoken = getCookie('csrftoken');
         </div>
         <div class="card">
           <div class="card-body">
-            <form action="{% url 'jobs:add_mal' %}" method="post" id="add-mal-form" enctype="multipart/form-data">
+            <form action="{% url 'jobs:add_mal' %}" method="post" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
+                {{form.non_field_errors}}
                  <div class="form-group">
                     <label>identification number</label> {{form.identification_number|add_class:"form-control"}}
-                     <div class="text-danger" id="error-identification-number"></div>
+                     <div class="text-danger" id="error-identification-number">{{form.errors.identification_number}}</div>
                 </div>
                  <div class="form-group">
                     <label>assembly line id</label> {{form.assembly_line_id|add_class:"form-control"}}
@@ -48,52 +49,83 @@ const csrftoken = getCookie('csrftoken');
                 </div>
                  <div class="form-group">
                     <label>person_name</label> {{form.person_name|add_class:"form-control"}}
-                      <div class="text-danger" id="error-person-name"></div>
-                </div>
-                <div class="form-group">
-                    <label>person email</label> {{form.person_email|add_class:"form-control"}}
-                     <div class="text-danger" id="error-person-email"></div>
+                      <div class="text-danger" id="error-person-name">{{form.errors.person_name}}</div>
                 </div>
                  <div class="form-group">
                     <label>output folder link</label> {{form.output|add_class:"form-control"}}
                       <div class="text-danger" id="error-output"></div>
                 </div>
                 <div class="form-group">
-                    <label>Name of micro task</label> {{form.micro_task|add_class:"form-control"}}
-                     <div class="text-danger" id="error-micro-task"></div>
+                    <label>Name of microtask_category</label>
+                    <select name="cat_id" class="form-control" required="" id="id_cat_id">
+                        <option value="" selected="">---------</option>
+                        {% for i in jobs %}
+                            {% if i == 'cw' %}
+                                <option value="{{i}}"> Content Writing</option>
+                            {% elif i == 'da' %}
+                                <option value="{{i}}"> Document Analysis</option>
+                            {% elif i == 'de' %}
+                                <option value="{{i}}"> Data Entry</option>
+                            {% elif i == 'cr' %}
+                                <option value="{{i}}"> Combining Rules from Semi-Legal documents</option>
+                            {% elif i == 'df' %}
+                                <option value="{{i}}"> Data Entry(Fields)</option>
+                            {% elif i == 'cd' %}
+                                <option value="{{i}}"> Collecting copies of documents</option>
+                            {% elif i == 'cp' %}
+                                <option value="{{i}}"> Content Copy & Paste</option>
+                            {% elif i == 'cf' %}
+                                <option value="{{i}}"> Combining Data Entry Fields</option>
+                            {% elif i == 'fn' %}
+                                <option value="{{i}}"> Find Non-Copyrighted Images and Uploading</option>
+                            {% elif i == 'ac' %}
+                                <option value="{{i}}"> Apply Compliance to Fields</option>
+                            {% elif i == 'ng' %}
+                                <option value="{{i}}"> Naming</option>
+                            {% elif i == 'ce' %}
+                                <option value="{{i}}"> Compliance Extraction</option>
+                            {% elif i == 'id' %}
+                                <option value="{{i}}"> Identifying One Line Decision</option>
+                            {% elif i == 'ab' %}
+                                <option value="{{i}}"> A+B TC For Document Extraction</option>
+                            {% elif i == 'c' %}
+                                <option value="{{i}}"> TC For One Line Decision</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
                 </div>
-                 <div class="form-group">
-                    <label>micro task category</label> {{form.micro_task_category|add_class:"form-control"}}
-                      <div class="text-danger" id="error-micro-task-category"></div>
-                </div>
+                
                 <div class="form-group">
-                    <label>target date</label> {{form.target_date|add_class:"form-control"}}
+                    <label>Name of micro task</label>
+                    <select name="job_name" class="mic_name form-control" required="" id="id_job_name"></select>
+                <div class="text-danger" id="error-microtask_name"></div>
+                </div>
+
+                <div id="jobs-category"></div>  
+
+                <div class="form-group">
+                    <label>target date</label>
+                      {% render_field form.target_date type='datetime-local' class+="form-control" %} 
                      <div class="text-danger" id="error-target-date"></div>
                 </div>
                  <div class="form-group">
                     <label>total_budget</label> {{form.total_budget|add_class:"form-control"}}
-                      <div class="text-danger" id="error-total-budget"></div>
+                      <div class="text-danger" id="error-total_budget"></div>
                 </div>
                 <div class="form-group">
                     <label>job description</label> {{form.job_description|add_class:"form-control"}}
-                     <div class="text-danger" id="error-job-description"></div>
+                     <div class="text-danger" id="error-job_description"></div>
                 </div>
-                 <div class="form-group">
-                    <label>job sample</label> {{form.job_sample|add_class:"form-control"}}
-                      <div class="text-danger" id="error-job-sample"></div>
-                </div>
-                 <div class="form-group">
-                    <label>job instructions</label> {{form.job_instructions|add_class:"form-control"}}
-                      <div class="text-danger" id="error-job-instructions"></div>
-                </div>
+                
                 <div class="form-group">
                     <label>job quantity</label> {{form.job_quantity|add_class:"form-control"}}
-                     <div class="text-danger" id="error-job-quantity"></div>
+                     <div class="text-danger" id="error-job_quantity"></div>
                 </div>
                  <div class="form-group">
                     <label>input folder</label> {{form.input_folder|add_class:"form-control"}}
-                      <div class="text-danger" id="error-input-folder"></div>
+                      <div class="text-danger" id="error-input_folder"></div>
                 </div>
+                
                 <button type="submit" class="btn btn-primary">submit</button>
             </form>
           </div>
@@ -101,5 +133,40 @@ const csrftoken = getCookie('csrftoken');
 {% endblock %}
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="{% static 'jobs/add-mal.js' %}"></script>
+    {% comment %} <script src="{% static 'jobs/add-mal.js' %}"></script>
+    <script src="{% static 'jobs/displaying-category.js' %}"></script>
+    <script>
+        let get_cat_url = "{% url 'jobs:displaying_categories' %}"
+    </script> {% endcomment %}
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $("#id_cat_id").change(function () {
+            const cat_id = $(this).val();  
+            console.log(cat_id)
+            $.ajax({                       
+                url: "/ajax_url/",                    
+                data: {
+                    'cat_ide': cat_id       
+                },
+                success: function (data) {   
+                    console.log(data)
+                    $(".mic_name").html(data);  
+                }
+            });
+        });
+        $("#id_job_name").change(function () {
+            const jb_name = $(this).val();
+            console.log(jb_name)
+            $.ajax({
+                url: "/ajax_url2/",
+                data: {
+                    'jb_name': jb_name
+                },
+                success: function (data) {   
+                    console.log(data)
+                    $("#jobs-category").html(data);
+                }
+            });
+        });
+    </script>
 {% endblock %}

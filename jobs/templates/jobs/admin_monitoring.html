@@ -1,0 +1,31 @@
+{% extends 'jobs/base.html' %}
+{% block title %} Admin Monitoring {% endblock %}
+{% block content %}
+<div class="container">
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Admin Name</th>
+            <th scope="col">VIEW</th>
+            <th scope="col">DELETE</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in admin %}
+        <tr>
+            <td>{{ m.full_name }}</td>
+            <td><a class="btn btn-success" href="{% url 'jobs:viewAdmin' m.id %}" role="button">View</a></td>
+            <td>
+                <form action='#' method="Post" class="d-inline">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </tbody>
+</table></div>
+{% endblock %}
+
+    

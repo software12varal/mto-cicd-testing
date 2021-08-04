@@ -1,33 +1,35 @@
-{% extends 'base.html' %} {% block title %}MTO Login{% endblock title %} {% load widget_tweaks %} {% block content %}
+{% extends 'base.html' %} {% load widget_tweaks %}{% block title %}MTO Login
+{%endblock title %} {% block content %}
 <div class="card-body">
-    <h4 class="card-title">MTO Admin Login</h4>
-    <form method="POST">
-        {% csrf_token %}
+  <h4 class="card-title">MTO Admin Login</h4>
+  <form method="POST">
+    {% csrf_token %}
 
-        <div class="form-group">
-            <label>Username</label> {{ form.username|add_class:"form-control" }}
-        </div>
+    <div class="form-group">
+      <label>Username</label> {{ form.username|add_class:"form-control" }}
+    </div>
 
-        <div class="form-group">
-            <label>Password</label> {{ form.password|add_class:"form-control" }}
-        </div>
+    <div class="form-group">
+      <label>Password</label> {{ form.password|add_class:"form-control" }}
+    </div>
+    
+    {% comment %}
+        Added forget password '<a>' tag by Gandharv 
+    {% endcomment %}
+    <div class="form-group">
+      <a href="{% url 'mto:forget_password' %}">Forget Password</a>
+    </div>
+    
+    <div class="form-group m-0">
+      <button type="submit" class="btn btn-primary btn-block">Login</button>
+    </div>
 
-        <div class="form-group m-0">
-            <button type="submit" class="btn btn-primary btn-block">
-				Login
-			</button>
-        </div>
-
-        {% if form.non_field_errors %} {% for error in form.non_field_errors %}
-        <div class="alert alert-danger mt-3">
-            <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
-            <span data-notify="message">{{ error }}</span>
-        </div>
-        {% endfor %} {% endif %}
-
-        <div class="mt-4 text-center">
-            New to our platform? <a href="{% url 'jobs:admin_register' %}">Register</a>
-        </div>
-    </form>
+    {% if form.non_field_errors %} {% for error in form.non_field_errors %}
+    <div class="alert alert-danger mt-3">
+      <span data-notify="icon" class="tim-icons icon-alert-circle-exc"></span>
+      <span data-notify="message">{{ error }}</span>
+    </div>
+    {% endfor %} {% endif %}
+  </form>
 </div>
 {% endblock content %}

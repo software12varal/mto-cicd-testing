@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.test import TestCase
 # from model_bakery import baker
 
@@ -5,8 +6,9 @@ from mto.models import MTO
 
 
 class MtoTestDbMixin:
-    # maps to the vendor_os_db
-    databases = {"vendor_os_db", }
+    settings.UNDER_TESTING = True
+    databases = {"vendor_os_db", "varal_job_posting_db"}
+
 
 # Mixin should always come first
 class TestNew(MtoTestDbMixin, TestCase):
