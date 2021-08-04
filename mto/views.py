@@ -105,7 +105,7 @@ def email_verification_page(request, username):
     send_mail(
         'Verify your email using otp',
         f'Use these digits :: {otp.now()} :: to verify your account.',
-        "Varal MTO Project",
+        "Varal Habot MTO Project",
         [mto.email],
         fail_silently=False
     )

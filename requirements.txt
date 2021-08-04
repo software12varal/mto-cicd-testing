@@ -9,7 +9,6 @@ Django==3.2.4
 django-countries==7.2.1
 django-filter==2.4.0
 django-mirage-field==1.1.8
-django-otp==1.0.6
 django-phonenumber-field==5.2.0
 django-storages==1.11.1
 django-widget-tweaks==1.4.8
