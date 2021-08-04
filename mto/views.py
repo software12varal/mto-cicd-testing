@@ -1,5 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -12,8 +11,6 @@ from django.core.mail import send_mail, EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-
-from users.auth_guard import handle_user_authentication
 from users.decorators import mto_required
 from django.utils import timezone
 from django.template.context import RequestContext
@@ -29,6 +26,12 @@ from mto.forms import MTOUpdateProfileForm
 from datetime import datetime, timedelta
 from django.db.models import Count, Sum
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
+import pyotp
+from rest_framework.response import Response
+from rest_framework.views import APIView
+import base64
 
 
 class SignUpView(CreateView):
@@ -68,76 +71,68 @@ class SignUpView(CreateView):
             user.is_active = False
             user.job_category = job_categories_ids
             user.save()
-            link = f'http://{domain_name}/verify/{token}'
-            send_mail(
-                'Verify your email',
-                f'Click on this {link} to verify your account.',
-                settings.EMAIL_HOST_USER,
-                [user.email],
-                fail_silently=False
-
-            )
-            messages.success(
-                self.request, f"Hi {user.full_name}, your account was created successfully.")
-            context['redirect'] = '/mto/login'
+            context['message'] = f"Hi {user.full_name}, your account was created successfully." \
+                                 f" Please Enter OTP Sent to your mail to activate your account"
+            context['redirect'] = reverse('mto:email_verification_page', kwargs={'username': user.username})
         return JsonResponse(context, status=200)
+#
+#
+# def verify(request, token):
+#     try:
+#         user = MTO.objects.get(token=token)
+#         if user:
+#             user.is_active = True
+#             user.save()
+#             return redirect('/mto/login')
+#     except:
+#         # print("5")
+#         msg = "Invalid token"
+#         return redirect('error.html', {'msg': msg})
 
 
-class MTOLoginView(View):
-    template_name = 'mto/login.html'
-    form = AuthenticationForm
-
-    def get(self, *args, **kwargs):
-        context = {'form': self.form}
-        return render(self.request, self.template_name, context)
-
-    def post(self, *args, **kwargs):
-        request = self.request
-        form = self.form(request.POST)
-        username = request.POST['username']
-        password = request.POST['password']
-        if username and password:
-            response = handle_user_authentication(username, password, request)
-            if response == "success":
-                return redirect(reverse('mto:dashboard'))
-            elif response == "invalid credentials":
-                messages.error(request, 'Incorrect username or password')
-            elif response == 'first trial':
-                messages.error(request, 'Login failed, please try again')
-            elif response == 'suspended':
-                messages.error(request, 'Account suspended, maximum login attempts exceeded. '
-                                        'Reactivation link has been sent to your email')
-        context = {'form': form}
-        return render(self.request, self.template_name, context)
+# This class returns the string needed to generate the key
+class GenerateKey:
+    @staticmethod
+    def returnValue(username):
+        return str(username) + str(datetime.date(datetime.now())) + settings.SECRET_KEY
 
 
-def verify(request, token):
+def email_verification_page(request, username):
+    mto = MTO.objects.get(username=username)
+    keygen = GenerateKey()
+    key = base64.b32encode(keygen.returnValue(username).encode())  # Key is generated
+    otp = pyotp.TOTP(key, interval=settings.EXPIRY_TIME)  # TOTP Model for OTP is created
+    send_mail(
+        'Verify your email using otp',
+        f'Use these digits :: {otp.now()} :: to verify your account.',
+        "Varal Habot MTO Project",
+        [mto.email],
+        fail_silently=False
+    )
+    return render(request, 'mto/email-verification.html', {'username': username})
+
+
+def verifying_otp(request, username):
+    data = {}
     try:
-        user = MTO.objects.get(token=token)
-        if user:
-            user.is_active = True
-            user.save()
-            return redirect('/mto/login')
-    except:
-        # print("5")
-        msg = "Invalid token"
-        return redirect('error.html', {'msg': msg})
+        mto = MTO.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return JsonResponse(data)  # False Call
 
-
-# class SignUpView(View):
-#     template_name = 'mto/register.html'
-#
-#     def get(self, *args, **kwargs):
-#         form = SignUpForm
-#         context = {'form': form}
-#         return render(self.request, self.template_name, context)
-#
-#     def post(self, *args, **kwargs):
-#         # check if there's need to handle race condition when creating users
-#         form = SignUpForm(self.request.POST)
-#         if form.is_valid():
-#             form.save()
-#         return redirect(reverse('account_login'))
+    keygen = GenerateKey()
+    key = base64.b32encode(keygen.returnValue(username).encode())  # Generating Key
+    otp = pyotp.TOTP(key, interval=settings.EXPIRY_TIME)  # TOTP Model
+    if request.method == "POST":
+        sent_otp = request.POST.get('otp')
+        if otp.verify(sent_otp):  # Verifying the OTP
+            mto.is_active = True
+            mto.save()
+            data['message'] = "Email has been verified successfully"
+            data['redirect'] = reverse('mto:login')
+        else:
+            data['info'] = f'Sorry, OTP {sent_otp}, is invalid or probably expired try again.'
+            data['otp'] = 'otp is invalid or expired'
+    return JsonResponse(data)
 
 
 def dummy_home_view(request):
@@ -230,7 +225,7 @@ def view_jobs(request):  # MTO view all
 
         ls = list(map(lambda x, y: x if (Jobs.objects.get(id=x).job_quantity * MicroTask.objects.get(
             microtask_name=Jobs.objects.get(id=x).job_name).people_required_for_valid_tc) <= y else 0,
-            list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
+                      list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
 
         # ls = list(map(lambda x, y: x if Jobs.objects.get(id=x) <= y else 0,
         #               list(map(lambda x: x['job_id'], mt)), list(map(lambda x: x['count'], mt))))
@@ -384,6 +379,7 @@ def view_job_deadline(request):
     context = {'jobs': due_jobs}
     return render(request, 'mto/job_deadline.html', context)
 
+
 # coded by Gandharv(software2)
 # Forget Password views.py and its corresponding template is 'forget_password.html'
 # and sending the reset link to the user email (currently in terminal)
@@ -433,6 +429,7 @@ def forget_password(request):
         except Exception:
             messages.warning(request, "User Not Found !")
     return render(request, 'mto/forget_password.html')
+
 
 # Reset Password views.py and its corresponding template is 'reset_password.html'
 # changing password and saving to db and redirect to their respective login's

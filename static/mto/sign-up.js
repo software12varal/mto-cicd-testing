@@ -19,8 +19,15 @@ $(document).ready(function() {
       },
       success: function(response) {
         console.log(response);
-        if (response["redirect"]) {
-          location.href = response["redirect"];
+        if(response['message']) {
+         iziToast.success({
+            title: 'Account Created:',
+            message: response['message'],
+            position: 'topRight'
+          });
+         setTimeout(function () {
+         location.href = response['redirect']
+        }, 5500);
         }
         if (response["info"]) {
           iziToast.info({

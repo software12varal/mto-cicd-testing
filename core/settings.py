@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 from django.urls import reverse_lazy
+from google.oauth2 import service_account
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -103,7 +105,7 @@ DATABASES = {
 
 }
 
-DATABASE_ROUTERS = ['routers.db_routers.VendorOSRouter', 'routers.db_routers.VaralJobPostingDBRouter',
+DATABASE_ROUTERS = ['routers.db_routers.VaralJobPostingDBRouter', 'routers.db_routers.VendorOSRouter',
                     'routers.db_routers.AccountsDBRouter']
 UNDER_TESTING = False
 
@@ -125,8 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend', 'users.backends.VaralOSDBAuthBackend']
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend', 'users.backends.VaralOSDBAuthBackend']
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
@@ -151,6 +152,15 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media/documents"
 # MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
+# Google configurations
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = 'mto-demo'
+    STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        "google-credentials.json"
+    )
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -174,3 +184,6 @@ DEFAULT_FROM_EMAIL = 'email'
 LOGIN_ATTEMPTS_TIME_LIMIT = 5
 MAX_LOGIN_ATTEMPTS = 6
 
+
+# Time after which OTP will expire
+EXPIRY_TIME = 50  # seconds
